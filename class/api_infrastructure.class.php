@@ -98,13 +98,13 @@
 				throw new RestException(500, 'Module infrastructure not activated');
 			}
 
-			$TRights	= array(
-				self::TYPE_PROPAL			=> array('propal', 'lire'),
-				self::TYPE_ORDER			=> array('commande', 'lire'),
-				self::TYPE_ORDER_SUPPLIER	=> array('fournisseur', 'commande', 'lire'),
-				self::TYPE_INVOICE			=> array('facture', 'lire'),
-				self::TYPE_INVOICE_SUPPLIER	=> array('fournisseur', 'facture', 'lire'),
-			);
+			$TRights	= [
+				self::TYPE_PROPAL			=> ['propal', 'lire'],
+				self::TYPE_ORDER			=> ['commande', 'lire'],
+				self::TYPE_ORDER_SUPPLIER	=> ['fournisseur', 'commande', 'lire'],
+				self::TYPE_INVOICE			=> ['facture', 'lire'],
+				self::TYPE_INVOICE_SUPPLIER	=> ['fournisseur', 'facture', 'lire'],
+			];
 			if (empty($TRights[$elementtype])) {
 				throw new RestException(500, 'elementType '.$elementtype.' not supported');
 			}
@@ -164,7 +164,7 @@
 				$resMaster	= $obj->fetch($objDet->{$this->_getFkFieldName($objectLine)});
 				if ($resMaster > 0) {
 					// la ligne est elle une ligne de Total ?
-					if (TInfrastructure::isInfrastructure($objDet)) {
+					if (TInfrastructure::isTotal($objDet)) {
 						// lib  return SUM for this Total
 						return infrastructure_getTotalLineFromObject($obj, $objDet);
 					} else {

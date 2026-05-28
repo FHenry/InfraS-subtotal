@@ -35,7 +35,7 @@
 	**/
 	function infrastructure_migrateFromSubtotal($db, $conf, $dryRun = true, $logger = null)
 	{
-		$result		= array('success' => true, 'errors' => array());
+		$result		= ['success' => true, 'errors' => []];
 		$entity		= (int) $conf->entity;
 		$error		= 0;
 
@@ -106,15 +106,15 @@
 		// 2) ExtraField subtotal_show_qty → infrastructure_show_qty
 		if (! $error) {
 			$log('[2/3] ExtraField subtotal_show_qty → infrastructure_show_qty');
-			$TElementType		= array('propaldet', 'commandedet', 'facturedet', 'supplier_proposaldet', 'commande_fournisseurdet', 'facture_fourn_det');
-			$TTablePerElement	= array(
+			$TElementType		= ['propaldet', 'commandedet', 'facturedet', 'supplier_proposaldet', 'commande_fournisseurdet', 'facture_fourn_det'];
+			$TTablePerElement	= [
 				'propaldet'					=> MAIN_DB_PREFIX.'propaldet_extrafields',
 				'commandedet'				=> MAIN_DB_PREFIX.'commandedet_extrafields',
 				'facturedet'				=> MAIN_DB_PREFIX.'facturedet_extrafields',
 				'supplier_proposaldet'		=> MAIN_DB_PREFIX.'supplier_proposaldet_extrafields',
 				'commande_fournisseurdet'	=> MAIN_DB_PREFIX.'commande_fournisseurdet_extrafields',
 				'facture_fourn_det'			=> MAIN_DB_PREFIX.'facture_fourn_det_extrafields',
-			);
+			];
 
 			foreach ($TElementType as $elementtype) {
 				if ($error) {
@@ -376,10 +376,10 @@
 	**/
 	function infrastructure_migrateSpecialCode($db, $conf, $dryRun = true, $logger = null)
 	{
-		$result			= array('success' => true, 'errors' => array(), 'updated' => 0);
+		$result			= ['success' => true, 'errors' => [], 'updated' => 0];
 		$oldCode		= 104777;
 		$newCode		= 550090;
-		$tables			= array('propaldet', 'commandedet', 'facturedet', 'supplier_proposaldet', 'commande_fournisseurdet', 'facture_fourn_det');
+		$tables			= ['propaldet', 'commandedet', 'facturedet', 'supplier_proposaldet', 'commande_fournisseurdet', 'facture_fourn_det'];
 		$error			= 0;
 
 		$log	= function ($m) use ($logger) {
