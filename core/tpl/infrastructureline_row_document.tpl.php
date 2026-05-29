@@ -75,7 +75,7 @@
 	$TNonAffectedByMarge	= ['order_supplier', 'invoice_supplier', 'supplier_proposal'];
 	$affectedByMarge		= in_array($object->element, $TNonAffectedByMarge) ? 0 : 1;
 	$colspan				= 5;
-	if ($object->element == 'order_supplier') {$colspan = 6;}
+	if ($object->element == 'order_supplier') {$colspan = 7;}
 	if ($object->element == 'invoice_supplier') {$colspan = 4;}
 	if ($object->element == 'supplier_proposal') {$colspan = 3;}
 	if (empty(getDolGlobalString('MAIN_NO_INPUT_PRICE_WITH_TAX'))) {
@@ -259,7 +259,7 @@
 		$ex_element			= $line->element;
 		$line->element		= 'tr_extrafield_title '.$line->element;	// Pour pouvoir manipuler ces tr
 		$isExtraSelected	= false;
-		$colspan			+= 3;
+		$colspan			+= 5;
 		print $line->showOptionals($extrafieldsline, $mode, ['style' => ' style="background:#eeffee;" ', 'colspan' => $colspan]);
 		foreach ($line->array_options as $option) {
 			if (!empty($option) && $option != "-1") {
