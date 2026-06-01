@@ -244,7 +244,7 @@
 		if (getDolGlobalInt('INFRASTRUCTURE_MANAGE_OL')) {
 			$num	= infrastructure_print_input('INFRASTRUCTURE_OL_REDUCE_PA', 'on_off', $langs->trans('InfrastructureOlReducePa'), 'InfrastructureOlReducePaInfo', [], 2, 1, '', $num);
 		}
-		// num = 7
+		// num = 6
 		infrastructure_print_subTitle(4, 'InfrastructureSetupForExtrafields');
 		$metas	= ['class' => 'flat infrastructurewidth270 infrastructurefontsizeinherit'];
 		$num	= infrastructure_print_input('INFRASTRUCTURE_ALLOW_EXTRAFIELDS_ON_TITLE', 'on_off', $langs->trans('InfrastructureAllowExtrafieldsOnTitle'), '', [], 2, 1, '', $num);
@@ -254,14 +254,13 @@
 		$num	= infrastructure_print_input('', 'select', $langs->trans('InfrastructureListOfExtrafieldsCommandedet'), '', $metas, 1, 2, '', $num);
 		$metas	= $form->multiselectarray('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_FACTUREDET', $extrafields->fetch_name_optionals_label('facturedet'), $invoiceSelected, 0, 0, 'flat infrastructurewidth270 infrastructurefontsizeinherit', 0, 0, '', '', '');
 		$num	= infrastructure_print_input('', 'select', $langs->trans('InfrastructureListOfExtrafieldsFacturedet'), '', $metas, 1, 2, '', $num);
-		// num = 11
+		// num = 10
 		infrastructure_print_subTitle(4, 'InfrastructureSetupForShipping');
 		$num	= infrastructure_print_input('INFRASTRUCTURE_NO_TITLE_SHOW_ON_EXPED_GENERATION', 'on_off', $langs->trans('InfrastructureNoTitleShowOnExpedGeneration'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_DEFAULT_CHECK_SHIPPING_LIST_FOR_TITLE_DESC', 'on_off', $langs->trans('InfrastructureDefaultCheckShippingListForTitleDesc'), 'InfrastructureDefaultCheckShippingListForTitleDescInfo', [], 2, 1, '', $num);
 		infrastructure_print_subTitle(4, 'InfrastructureSetupForSubBlocs');
 		$num	= infrastructure_print_input('INFRASTRUCTURE_HIDE_PRICE_DEFAULT_CHECKED', 'on_off', $langs->trans('InfrastructureHidePriceDefaultChecked'), '', [], 2, 1, '', $num);
-		$num	= infrastructure_print_input('INFRASTRUCTURE_HIDE_DOCUMENT_TOTAL', 'on_off', $langs->trans('InfrastructureHideDocumentTotal'), '', [], 2, 1, '', $num);
-		// num = 15
+		// num = 13
 	}
 	print '		</table>';
 	print '	</div>';
@@ -302,13 +301,13 @@
 		// num = 17
 		$metas	= $form->selectarray('INFRASTRUCTURE_BLOC_FOLD_MODE', ['default' => $langs->trans('InfrastructureHideSubtitleOnFold'), 'keepTitle' => $langs->trans('InfrastructureKeepSubtitleDisplayOnFold'), 'hideAll' => $langs->trans('InfrastructureHideAllOnFold')], getDolGlobalString('INFRASTRUCTURE_BLOC_FOLD_MODE'), 0, 0, 0, '', 1, 0, 0, '', 'infrastructurewidth270 infrastructurefontsizeinherit');
 		$num	= infrastructure_print_input('', 'select', $langs->trans('InfrastructureBlocFoldMode'), '', $metas, 2, 1, '', $num);
-		$TFieldScreen	= ['propal'			=> $langs->trans('Proposal'),
-								'commande'			=> $langs->trans('Order'),
-								'facture'			=> $langs->trans('Invoice'),
-								'supplier_proposal'	=> $langs->trans('SupplierProposal'),
-								'order_supplier'	=> $langs->trans('SupplierOrder'),
-								'invoice_supplier'	=> $langs->trans('SupplierInvoice'),
-							];
+		$TFieldScreen	= ['propal'				=> $langs->trans('Proposal'),
+							'commande'			=> $langs->trans('Order'),
+							'facture'			=> $langs->trans('Invoice'),
+							'supplier_proposal'	=> $langs->trans('SupplierProposal'),
+							'order_supplier'	=> $langs->trans('SupplierOrder'),
+							'invoice_supplier'	=> $langs->trans('SupplierInvoice'),
+						];
 		$metas	= $form->multiselectarray('INFRASTRUCTURE_DEFAULT_DISPLAY_QTY_FOR_TOTAL_ON_ELEMENTS', $TFieldScreen, $selected, 0, 0, 'infrastructurewidth270 infrastructurefontsizeinherit', 0, 0, '', '', '');
 		$num	= infrastructure_print_input('', 'select', $langs->trans('InfrastructureDefaultDisplayQtyForInfrastructureOnElements'), '', $metas, 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TITLE_BACKGROUND_COLOR', 'color', $langs->trans('InfrastructureTitleBackgroundcolor'), '', [], 2, 1, '', $num);
@@ -369,13 +368,13 @@
 			$num	+= 2;
 		}
 		// num = 17
-		$TField	= ['propal'			=> $langs->trans('Proposal'),
-						'commande'			=> $langs->trans('Order'),
-						'facture'			=> $langs->trans('Invoice'),
-						'supplier_proposal'	=> $langs->trans('SupplierProposal'),
-						'order_supplier'	=> $langs->trans('SupplierOrder'),
-						'invoice_supplier'	=> $langs->trans('SupplierInvoice'),
-					];
+		$TField	= ['propal'				=> $langs->trans('Proposal'),
+					'commande'			=> $langs->trans('Order'),
+					'facture'			=> $langs->trans('Invoice'),
+					'supplier_proposal'	=> $langs->trans('SupplierProposal'),
+					'order_supplier'	=> $langs->trans('SupplierOrder'),
+					'invoice_supplier'	=> $langs->trans('SupplierInvoice'),
+				];
 		$metas	= $form->multiselectarray('INFRASTRUCTURE_DEFAULT_DISPLAY_QTY_FOR_TOTAL_ON_ELEMENTS_PDF', $TField, $selectedPdf, 0, 0, 'centpercent', 0, 0, '', '', '');
 		$num	= infrastructure_print_input('', 'select', $langs->trans('InfrastructureDefaultDisplayQtyForInfrastructureOnElementsPdf'), 'InfrastructureDefaultDisplayQtyForInfrastructureOnElementsPdfInfo', $metas, 1, 2, '', $num);
 		if (empty($titleWithTotal)) {

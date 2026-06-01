@@ -210,10 +210,10 @@
 		/**
 		* Overloading the formObjectOptions function : replacing the parent's function with the one below
 		*
-		* @param 	array			$parameters  array           meta datas of the hook (context, etc...)
-		* @param 	CommonObject	$object      CommonObject    the object you want to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
-		* @param 	string			$action      string          current action (if set). Generally create or edit or null
-		* @param 	HookManager 	$hookmanager HookManager     current hook manager
+		* @param 	array			$parameters		meta datas of the hook (context, etc...)
+		* @param 	CommonObject	$object			the object you want to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+		* @param 	string			$action			current action (if set). Generally create or edit or null
+		* @param 	HookManager		$hookmanager	current hook manager
 		* @return	int
 		*/
 		public function formObjectOptions($parameters, &$object, &$action, HookManager $hookmanager)
@@ -907,7 +907,6 @@
 		*/
 		public function pdfAddTitle(&$pdf, &$object, &$line, $label, $description, $posx, $posy, $w, $h)
 		{
-
 			global $hidedesc;
 
 			// Show table header before this title (option show_table_header_before)
@@ -943,28 +942,28 @@
 			$backgroundCellPosYOffset	= $bgStyle['posYOffset'];
 			// User-configured text color override (takes precedence over auto white-on-dark from infrastructure_getPdfBackgroundStyle).
 			infrastructure_setPdfTextColor($pdf, 'INFRASTRUCTURE_PDF_TITLE_COLOR');
-			//$pdf->SetTextColor('text', 0, 0, 0);
+			$pdf->SetTextColor(0, 0, 0);
 			// Réservation d'espace : pour tout titre infrastructure (avec ou sans totaux stockés via INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL), si le couple « libellé du titre + description optionnelle + (ligne de totaux si applicable) » ne tient pas sur la page courante, on force un AddPage propre AVANT le rendu. Sans cette précaution, le writeHTMLCell du libellé déclenche un auto-page-break TCPDF en plein milieu du titre — le label se retrouve à cheval ou perdu entre les deux pages, une page parasite vide est créée, et le MultiCell du bandeau de fond (appelé après le writeHTMLCell, avec SetXY à $posy + offset) est dessiné sur la page d'arrivée à la position Y de l'ancienne page : on observe alors un bandeau vide sans texte en haut de la page suivante. Pour le mode INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL actif, on ajoute en plus la hauteur de la ligne de totaux redessinée par infrastructure_drawTitleColumnsAtPosY.
 			// Compat. modèles natifs Dolibarr (pdf_crabe, pdf_azur, etc.) : ces modèles entourent l'appel à pdf_writelinedesc d'un startTransaction / rollbackTransaction(true) et, en cas de pagebreak détecté au 1er essai, ils réduisent temporairement la marge basse via setPageOrientation('', true, $heightforfooter) (~12 mm au lieu des 80-120 mm initiaux pour la zone footer + totaux + freetext + QR) avant un 2e appel. Conséquence : notre AddPage du 1er essai est annulé par le rollback, et au 2e essai notre check $posy + $reservedH > getPageHeight() - getBreakMargin() ne se déclencherait plus (marge basse trop courte) — le titre serait rendu en débordement en bas de page courante puis les lignes suivantes se dessineraient par-dessus le footer. On applique donc un plancher conservatif de 25 mm à la marge basse pour le calcul du pageBreakTrigger, ce qui garantit que notre AddPage explicite se redéclenche correctement au 2e essai hors transaction. De plus, on désactive l'auto-page-break TCPDF pendant le rendu du couple writeHTMLCell + MultiCell pour le rendre atomique (sinon l'auto-page-break interne pourrait toujours fragmenter le titre dans des cas non couverts par notre estimation de hauteur).
-			$reservedSizeTitle	= (float) (getDolGlobalString('INFRASTRUCTURE_PDF_TITLE_SIZE') ? getDolGlobalString('INFRASTRUCTURE_PDF_TITLE_SIZE') : 9);
-			$reservedLabelH		= max((float) $h, $reservedSizeTitle * 0.6);
-			$reservedDescH		= !empty($description) && empty($hidedesc) ? max((float) $h, ($reservedSizeTitle - 1) * 0.5) + 1 : 0;
-			$reservedTotalsRowH	= isset($line->infrastructure_title_total_ht) ? 5 : 0;	// heightline 3mm + paddings ~2mm dans infrastructure_drawTitleColumnsAtPosY (option INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL active)
-			$reservedH			= $reservedLabelH + $reservedDescH + $reservedTotalsRowH;
-			$savedAutoPageBreak	= $pdf->getAutoPageBreak();
-			$savedBreakMargin	= (float) $pdf->getBreakMargin();
+			$reservedSizeTitle		= (float) (getDolGlobalString('INFRASTRUCTURE_PDF_TITLE_SIZE') ? getDolGlobalString('INFRASTRUCTURE_PDF_TITLE_SIZE') : 9);
+			$reservedLabelH			= max((float) $h, $reservedSizeTitle * 0.6);
+			$reservedDescH			= !empty($description) && empty($hidedesc) ? max((float) $h, ($reservedSizeTitle - 1) * 0.5) + 1 : 0;
+			$reservedTotalsRowH		= isset($line->infrastructure_title_total_ht) ? 5 : 0;	// heightline 3mm + paddings ~2mm dans infrastructure_drawTitleColumnsAtPosY (option INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL active)
+			$reservedH				= $reservedLabelH + $reservedDescH + $reservedTotalsRowH;
+			$savedAutoPageBreak		= $pdf->getAutoPageBreak();
+			$savedBreakMargin		= (float) $pdf->getBreakMargin();
 			$effectiveBreakMargin	= max($savedBreakMargin, 25.0);
-			$pageBreakTrigger	= $pdf->getPageHeight() - $effectiveBreakMargin;
+			$pageBreakTrigger		= $pdf->getPageHeight() - $effectiveBreakMargin;
 			if ($posy + $reservedH > $pageBreakTrigger) {
 				$pdf->AddPage('', '', true);
-				$newPageMargins	= $pdf->getMargins();
-				$posy			= isset($newPageMargins['top']) && $newPageMargins['top'] > 0 ? (float) $newPageMargins['top'] : 10.0;
+				$newPageMargins		= $pdf->getMargins();
+				$posy				= isset($newPageMargins['top']) && $newPageMargins['top'] > 0 ? (float) $newPageMargins['top'] : 10.0;
 			}
 			$pdf->SetAutoPageBreak(false, 0);
 			$infrastructure_last_title_posy	= $posy;
 			$pdf->SetXY($titleBlockX, $posy);
-			$hideInnerLines				= GETPOST('hideInnerLines', 'int');
-			$style						= getDolGlobalString('INFRASTRUCTURE_PDF_TITLE_STYLE');
+			$hideInnerLines			= GETPOST('hideInnerLines', 'int');
+			$style					= getDolGlobalString('INFRASTRUCTURE_PDF_TITLE_STYLE');
 			$size_title = 9;
 			if (getDolGlobalString('INFRASTRUCTURE_PDF_TITLE_SIZE')) {
 				$size_title = getDolGlobalString('INFRASTRUCTURE_PDF_TITLE_SIZE');
@@ -1379,7 +1378,7 @@
 		*/
 		public function pdf_getlineupexcltax($parameters = [], &$object, &$action = '')
 		{
-			global $conf, $hideqtys, $hideprices, $hidedetails, $hookmanager, $langs;
+			global $conf, $pdf, $hideprices, $hidedetails, $hookmanager, $langs;
 
 			$i		= intval($parameters['i']);
 			$line	= isset($object->lines[$i]) ? $object->lines[$i] : null;
@@ -1396,6 +1395,7 @@
 						$TTotal					= TInfrastructure::getTotalBlockFromTitle($object, $parentTitle);
 						$useMulticurrency		= isModEnabled('multicurrency') && isset($object->multicurrency_tx) && $object->multicurrency_tx != 1;
 						$valueToDisplay			= $useMulticurrency ? $TTotal['multicurrency_total_unit_subprice'] : $TTotal['total_unit_subprice'];
+						infrastructure_setPdfTextColor($pdf, 'INFRASTRUCTURE_PDF_TOTAL_COLOR');
 						$this->resprints		= price($valueToDisplay, 0, '', 1, 0, getDolGlobalString('MAIN_MAX_DECIMALS_TOT'));
 					}
 				}
@@ -1942,7 +1942,6 @@
 		}
 
 		/**
-		/**
 		*	Restaure les libellés des lignes titres Infrastructure perdus lors de la conversion
 		*	devis fournisseur → commande fournisseur.
 		*
@@ -2002,7 +2001,6 @@
 				$sql	.= ' WHERE rowid = '.((int) $orderLine->id);
 				$this->db->query($sql);
 			}
-
 			return 0;
 		}
 

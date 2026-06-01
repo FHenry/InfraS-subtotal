@@ -1959,6 +1959,27 @@
 			$linesToHide[$idx]	= true;
 		}
 		if (!empty($linesToHide)) {
+			// Sauvegarde des sous-totaux retirés dans le contexte — utilisé par InfraSPackPlus pour construire la page récap même quand INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL est actif.
+			if (!isset($object->context) || !is_array($object->context)) {
+				$object->context	= [];
+			}
+			if (!isset($object->context['infrastructureCache']) || !is_array($object->context['infrastructureCache'])) {
+				$object->context['infrastructureCache']	= [];
+			}
+			$removedTotals	= [];
+			foreach ($linesToHide as $idx => $bool) {
+				$total				= $object->lines[$idx];
+				$parentTitleRang	= 0;
+				$niveau				= TInfrastructure::getNiveau($total);
+				for ($j = $idx - 1; $j >= 0; $j--) {
+					if (TInfrastructure::isTitle($object->lines[$j]) && TInfrastructure::getNiveau($object->lines[$j]) == $niveau) {
+						$parentTitleRang	= $object->lines[$j]->rang;
+						break;
+					}
+				}
+				$removedTotals[]	= ['total' => $total, 'parentTitleRang' => $parentTitleRang, 'level' => $niveau];
+			}
+			$object->context['infrastructureCache']['removedTotals']	= $removedTotals;
 			$newLines	= [];
 			foreach ($object->lines as $idx => $line) {
 				if (empty($linesToHide[$idx])) {

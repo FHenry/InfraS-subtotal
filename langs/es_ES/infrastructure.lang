@@ -40,7 +40,6 @@ Infrastructure_HideAll                                            = Ocultar toda
 Infrastructure_Hide                                               = Ocultar las líneas
 InfrastructureHideSubtitleOnFold                                  = Un botón: oculta todo el contenido del bloque (líneas de artículo, títulos e infrastructures hijos)
 InfrastructureHidePriceDefaultChecked                             = Por defecto, marcar la casilla "Ocultar el precio de las líneas de los conjuntos" al generar los PDF
-InfrastructureHideDocumentTotal                                   = Ocultar totales
 Infrastructure_ShowAll                                            = Mostrar todas las líneas
 Infrastructure_Hide                                               = Ocultar las líneas
 Infrastructure_Show                                               = Mostrar las líneas

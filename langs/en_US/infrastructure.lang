@@ -40,7 +40,6 @@ Infrastructure_HideAll                                            = Hide all lin
 Infrastructure_Hide                                               = Hide lines
 InfrastructureHideSubtitleOnFold                                  = One button: hides all block content (article lines, child titles and infrastructures)
 InfrastructureHidePriceDefaultChecked                             = By default, check the box "Hide the price of lines in sets" when generating PDFs
-InfrastructureHideDocumentTotal                                   = Hide totals
 Infrastructure_ShowAll                                            = Show all lines
 Infrastructure_Hide                                               = Hide lines
 Infrastructure_Show                                               = Show lines

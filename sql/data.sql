@@ -43,7 +43,6 @@ INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRAS
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_DISABLE_SUMMARY',											'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_DISPLAY_MARGIN_ON_TOTAL',									'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_FORCE_EXPLODE_ACTION_BTN',									'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
-INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_HIDE_DOCUMENT_TOTAL',										'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_HIDE_FOLDERS_BY_DEFAULT',									'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_HIDE_OPTIONS_BREAK_PAGE_BEFORE',							'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_HIDE_OPTIONS_BUILD_DOC',									'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
@@ -55,8 +54,8 @@ INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRAS
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_COMMANDEDET',							'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_FACTUREDET',							'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_PROPALDET',							'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
-INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_MANAGE_OL',								'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
-INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_OL_REDUCE_PA',									'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
+INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_MANAGE_OL',								                '__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
+INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_OL_REDUCE_PA',									            '__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_NO_TITLE_SHOW_ON_EXPED_GENERATION',						'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_PDF_TITLE_AND_TOTAL_BRIGHTNESS_PERCENTAGE',				'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_PDF_TITLE_BACKGROUND_CELL_HEIGHT_OFFSET',					'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
@@ -76,8 +75,8 @@ INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRAS
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_SHOW_TVA_ON_TOTAL_LINES',									'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_TEXT_FOR_TITLE_ORDERS_TO_INVOICE',							'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_TEXT_LINE_STYLE',											'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
-INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_COL_2_KEEP_WITH_OL',									'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
-INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_TITLE_AND_TOTAL_BRIGHTNESS_PERCENTAGE',			        '__ENTITY__', '10',		'chaine', '0', 'Infrastructure module');
+INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_COL_2_KEEP_WITH_OL',										'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
+INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_TITLE_AND_TOTAL_BRIGHTNESS_PERCENTAGE',					'__ENTITY__', '10',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_TITLE_BACKGROUND_COLOR',									'__ENTITY__', '6b2c6b',	'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_TITLE_COLOR',												'__ENTITY__', '000000',	'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_TITLE_COLOR_BLOC',											'__ENTITY__', 'be3535',	'chaine', '0', 'Infrastructure module');
