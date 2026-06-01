@@ -568,7 +568,7 @@
 			foreach ($object->lines as &$line) {
 				$orderline	= new OrderLine($this->db);
 				$orderline->fetch($line->origin_line_id);
-				if (getDolGlobalString('NO_TITLE_SHOW_ON_EXPED_GENERATION')) {
+				if (getDolGlobalString('INFRASTRUCTURE_NO_TITLE_SHOW_ON_EXPED_GENERATION')) {
 					if (!isset($line->special_code) && $cmd) {
 						foreach ($cmd->lines as $cmdLine) {
 							if ($cmdLine->id == $line->origin_line_id) {
