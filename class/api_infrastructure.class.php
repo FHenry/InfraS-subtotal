@@ -98,13 +98,12 @@
 				throw new RestException(500, 'Module infrastructure not activated');
 			}
 
-			$TRights	= [
-				self::TYPE_PROPAL			=> ['propal', 'lire'],
-				self::TYPE_ORDER			=> ['commande', 'lire'],
-				self::TYPE_ORDER_SUPPLIER	=> ['fournisseur', 'commande', 'lire'],
-				self::TYPE_INVOICE			=> ['facture', 'lire'],
-				self::TYPE_INVOICE_SUPPLIER	=> ['fournisseur', 'facture', 'lire'],
-			];
+			$TRights	= [self::TYPE_PROPAL			=> ['propal', 'lire'],
+							self::TYPE_ORDER			=> ['commande', 'lire'],
+							self::TYPE_ORDER_SUPPLIER	=> ['fournisseur', 'commande', 'lire'],
+							self::TYPE_INVOICE			=> ['facture', 'lire'],
+							self::TYPE_INVOICE_SUPPLIER	=> ['fournisseur', 'facture', 'lire'],
+						];
 			if (empty($TRights[$elementtype])) {
 				throw new RestException(500, 'elementType '.$elementtype.' not supported');
 			}

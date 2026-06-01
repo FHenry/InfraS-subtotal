@@ -1,7 +1,5 @@
 <?php
 	/*************************************************
-	* <one line to give the program's name and a brief idea of what it does.>
-	*
 	* Copyright (C) 2025-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
 	* Copyright (C) 2025-2026	Fallinah Ranasolonirina	- <contact@infras.fr>	InfraS - <https://www.infras.fr>
 	*
@@ -46,9 +44,9 @@
 	$content	= dolMd2Html(file_get_contents(dol_buildpath('infrastructure/README.md', 0)),
 							'parsedown',
 							['doc/'		=> dol_buildpath('infrastructure/doc/', 1),
-													'img/'		=> dol_buildpath('infrastructure/img/', 1),
-													'images/'	=> dol_buildpath('infrastructure/images/', 1)
-													]
+							'img/'		=> dol_buildpath('infrastructure/img/', 1),
+							'images/'	=> dol_buildpath('infrastructure/images/', 1)
+							]
 							);
 	// View *********************************
 	$page_name  = $langs->trans('Infrastructure').' - '.$langs->trans('About');

@@ -42,11 +42,11 @@
 		{
 			// Default field style for content
 			$this->defaultContentsFieldsStyle	= ['align'		=> 'R',						// R,C,L
-														'padding'	=> [1, 0.5, 1, 0.5],	// Like css 0 => top , 1 => right, 2 => bottom, 3 => left
+													'padding'	=> [1, 0.5, 1, 0.5],	// Like css 0 => top , 1 => right, 2 => bottom, 3 => left
 													];
 			// Default field style for content
 			$this->defaultTitlesFieldsStyle		= ['align'		=> 'C',						// R,C,L
-														'padding'	=> [0.5, 0, 0.5, 0],	// Like css 0 => top , 1 => right, 2 => bottom, 3 => left
+													'padding'	=> [0.5, 0, 0.5, 0],	// Like css 0 => top , 1 => right, 2 => bottom, 3 => left
 													];
 		}
 	}

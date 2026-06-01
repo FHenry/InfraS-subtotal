@@ -1,7 +1,5 @@
 <?php
 	/*************************************************
-	* Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
-	* Copyright (C) 2022 SuperAdmin <maxime@gmail.com>
 	* Copyright (C) 2025-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
 	*
 	* This program is free software: you can redistribute it and/or modify
@@ -243,6 +241,8 @@
 		// Options dépendant de la gestion des lignes optionnelles : masquées si la fonctionnalité est désactivée
 		if (getDolGlobalInt('INFRASTRUCTURE_MANAGE_OL')) {
 			$num	= infrastructure_print_input('INFRASTRUCTURE_OL_REDUCE_PA', 'on_off', $langs->trans('InfrastructureOlReducePa'), 'InfrastructureOlReducePaInfo', [], 2, 1, '', $num);
+		} else {
+			$num++;
 		}
 		// num = 6
 		infrastructure_print_subTitle(4, 'InfrastructureSetupForExtrafields');
@@ -260,7 +260,8 @@
 		$num	= infrastructure_print_input('INFRASTRUCTURE_DEFAULT_CHECK_SHIPPING_LIST_FOR_TITLE_DESC', 'on_off', $langs->trans('InfrastructureDefaultCheckShippingListForTitleDesc'), 'InfrastructureDefaultCheckShippingListForTitleDescInfo', [], 2, 1, '', $num);
 		infrastructure_print_subTitle(4, 'InfrastructureSetupForSubBlocs');
 		$num	= infrastructure_print_input('INFRASTRUCTURE_HIDE_PRICE_DEFAULT_CHECKED', 'on_off', $langs->trans('InfrastructureHidePriceDefaultChecked'), '', [], 2, 1, '', $num);
-		// num = 13
+		$num	= infrastructure_print_input('INFRASTRUCTURE_HIDE_DOCUMENT_TOTAL', 'on_off', $langs->trans('InfrastructureHideDocumentTotal'), '', [], 2, 1, '', $num);
+		// num = 14
 	}
 	print '		</table>';
 	print '	</div>';

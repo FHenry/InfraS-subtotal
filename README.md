@@ -27,7 +27,6 @@
 
 ***InfraStructure*** est distribué sous les termes de la licence GNU General Public License v3+ ou supérieure.
 
-Copyright (C) 2013-2026 ATM Consulting
 Copyright (C) 2025-2026 Sylvain Legrand - InfraS
 
 voir le fichier LICENSE pour plus d'informations
@@ -80,17 +79,18 @@ Les options sont regroupées en trois sections dans la page d'administration du 
 		* ***3*** Texte des titres lors de la facturation via onglet client → bouton « Facturer commandes » (clés `__REFORDER__`, `__REFCUSTOMER__`)
 		* Gestion des lignes optionnelles
 			* ***4*** Permettre de marquer des lignes ou des blocs comme « Optionnel(le)s » : leurs montants restent affichés mais sont exclus des sous-totaux parents et du total général
-			* ***5*** La gestion des lignes / blocs optionnel(le)s vide aussi le prix de revient
+			* ***5*** Colonnes à conserver visibles sur les lignes « Optionnelles » (Qté, TVA, PU HT, Total HT, Total TTC, Unité, Remise)
+			* ***6*** La gestion des lignes / blocs optionnel(le)s vide aussi le prix de revient
 		* Paramètres liés aux champs complémentaires (ExtraFields)
-			* ***6*** Autoriser l'affichage des ExtraFields sur les titres
-			* ***7*** ExtraFields disponibles sur les titres dans les propositions commerciales clients
-			* ***8*** ExtraFields disponibles sur les titres dans les commandes clients
-			* ***9*** ExtraFields disponibles sur les titres dans les factures clients
+			* ***7*** Autoriser l'affichage des ExtraFields sur les titres
+			* ***8*** ExtraFields disponibles sur les titres dans les propositions commerciales clients
+			* ***9*** ExtraFields disponibles sur les titres dans les commandes clients
+			* ***10*** ExtraFields disponibles sur les titres dans les factures clients
 		* Paramètres liés aux expéditions
-			* ***10*** Ne pas reporter les lignes de titre lors de la génération d'expédition
-			* ***11*** Cocher par défaut « Inclure la liste des expéditions » à l'ajout d'un titre
+			* ***11*** Ne pas reporter les lignes de titre lors de la génération d'expédition
+			* ***12*** Cocher par défaut « Inclure la liste des expéditions » à l'ajout d'un titre
 		* Paramétrage de l'option "Cacher le prix des lignes des ensembles"
-			* ***12*** Par défaut, cocher la case « Cacher le prix des lignes des ensembles » lors de la génération des PDF
+			* ***13*** Par défaut, cocher la case « Cacher le prix des lignes des ensembles » lors de la génération des PDF
 	* PARAMÈTRES D'AFFICHAGE DU MODULE INFRASTRUCTURE
 		* ***1*** Autoriser l'ajout de titres et sous-totaux
 		* ***2*** Autoriser l'édition des titres et sous-totaux

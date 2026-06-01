@@ -210,10 +210,10 @@
 		/**
 		* Overloading the formObjectOptions function : replacing the parent's function with the one below
 		*
-		* @param 	array			$parameters		meta datas of the hook (context, etc...)
-		* @param 	CommonObject	$object			the object you want to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
-		* @param 	string			$action			current action (if set). Generally create or edit or null
-		* @param 	HookManager		$hookmanager	current hook manager
+		* @param 	array			$parameters  array           meta datas of the hook (context, etc...)
+		* @param 	CommonObject	$object      CommonObject    the object you want to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+		* @param 	string			$action      string          current action (if set). Generally create or edit or null
+		* @param 	HookManager 	$hookmanager HookManager     current hook manager
 		* @return	int
 		*/
 		public function formObjectOptions($parameters, &$object, &$action, HookManager $hookmanager)
@@ -289,7 +289,7 @@
 						infrastructure_printNewFormat($object, $conf, $langs, $idvar);
 					}
 				}
-			} elseif ((!empty($parameters['currentcontext']) && $parameters['currentcontext'] == 'orderstoinvoice') || in_array('orderstoinvoice', $contexts) || in_array('orderstoinvoicesupplier', $contexts) || in_array('supplierorderlist', $contexts)) {
+			} elseif ((!empty($parameters['currentcontext']) && $parameters['currentcontext'] == 'orderstoinvoice') || in_array('orderstoinvoice', $contexts) || in_array('orderstoinvoicesupplier', $contexts)) {
 				infrastructure_billOrdersAddCheckBoxForTitleBlocks();
 			}
 			return 0;
@@ -557,7 +557,7 @@
 				}
 				header('Location: ?id='.$object->id);
 				exit;
-			} elseif ((!empty($parameters['currentcontext']) && $parameters['currentcontext'] == 'orderstoinvoice') || in_array('orderstoinvoice', $contextArray) || in_array('orderstoinvoicesupplier', $contextArray) || in_array('orderlist', $contextArray) || in_array('supplierorderlist', $contextArray)) {
+			} elseif ((!empty($parameters['currentcontext']) && $parameters['currentcontext'] == 'orderstoinvoice') || in_array('orderstoinvoice', $contextArray) || in_array('orderstoinvoicesupplier', $contextArray) || in_array('orderlist', $contextArray)) {
 				infrastructure_billOrdersAddCheckBoxForTitleBlocks();
 			} else {
 				// when automatic generate is enabled : keep last selected options from last "builddoc" action (ganerate document manually)
