@@ -1,6 +1,6 @@
 <?php
 	/************************************************
-	* Copyright (C) 2016-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
+	* Copyright (C) 2025-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
 	*
 	* This program is free software; you can redistribute it and/or modify
 	* it under the terms of the GNU General Public License as published by
@@ -58,21 +58,20 @@
 <!-- BEGIN PHP TEMPLATE infrastructureline_edit.tpl.php -->
 <?php
 	print '	<td colspan="'.$colspan.'" style="'.(TInfrastructure::isFreeText($line) ? '' : 'font-weight:bold;').(($line->qty > 90) ? 'text-align:right' : '').'">';
-	$params		= array('line' => $line);
+	$params		= ['line' => $line];
 	$reshook	= $hookmanager->executeHooks('formEditProductOptions', $params, $object, $action);
 	print '		<div id="line_'.$line->id.'"></div>
 					<input type="hidden" value="'.$line->id.'" name="lineid">
 					<input id="product_type" type="hidden" value="'.$line->product_type.'" name="type">
-					<input id="product_id" type="hidden" value="'.$line->fk_product.'" name="type">
-					<input id="special_code" type="hidden" value="'.$line->special_code.'" name="type">';
+					<input id="product_id" type="hidden" value="'.((int) $line->fk_product).'" name="productid">
+					<input id="special_code" type="hidden" value="'.((int) $line->special_code).'" name="special_code">';
 	$isFreeText		= false;
 	$qty_displayed	= 0;
 	if (TInfrastructure::isTitle($line)) {
 		$qty_displayed = $line->qty;
-		print img_picto('', 'subinfrastructure@infrastructure').'<span style="font-size:9px;margin-left:-3px;color:#0075DE;">'.$qty_displayed.'</span>&nbsp;&nbsp;';
-	} elseif (TInfrastructure::isInfrastructure($line)) {
+		print '<i class="'.getDolGlobalString('MAIN_FONTAWESOME_ICON_STYLE').' fa-tenge" aria-hidden="true"></i>'.$qty_displayed.'&nbsp;&nbsp;';
+	} elseif (TInfrastructure::isTotal($line)) {
 		$qty_displayed = 100 - $line->qty;
-		print img_picto('', 'subinfrastructure2@infrastructure').'<span style="font-size:9px;margin-left:-1px;color:#0075DE;">'.$qty_displayed.'</span>&nbsp;&nbsp;';
 	} else {
 		$isFreeText = true;
 	}
@@ -82,7 +81,7 @@
 	}
 	$newlabel = $line->label;
 	if ($line->label == '' && !$isFreeText) {
-		if (TInfrastructure::isInfrastructure($line)) {
+		if (TInfrastructure::isTotal($line)) {
 			$newlabel			= $line->description.' '.infrastructure_getTitle($object, $line);
 			$line->description	= '';
 		}
@@ -97,7 +96,7 @@
 	if (!$isFreeText) {
 		print '		<input type="text" name="line-title" id-line="'.((int) $line->id).'" value="'.dol_escape_htmltag($newlabel).'" size="80" '.$readonlyForSituation.'/>&nbsp;';
 	}
-	if (getDolGlobalString('INFRASTRUCTURE_USE_NEW_FORMAT') && (TInfrastructure::isTitle($line) || TInfrastructure::isInfrastructure($line))) {
+	if (TInfrastructure::isTitle($line) || TInfrastructure::isTotal($line)) {
 		$select	= '	<select name="infrastructure_level">';
 		for ($j = 1; $j < 10; $j++) {
 			if (!empty($readonlyForSituation)) {
@@ -119,12 +118,24 @@
 						</div>';
 	}
 	if (TInfrastructure::isTitle($line) && !getDolGlobalString('INFRASTRUCTURE_HIDE_OPTIONS_TITLE')) {
-		if (!empty(isModEnabled('infraspackplus')) && in_array($object->element, array('propal', 'commande', 'facture'))) {
-			print '		<div>
+		if (in_array($object->element, ['propal', 'commande', 'facture'])) {
+			// showTableHeaderBefore : visible uniquement si le module infraspackplus est actif, sur un titre de niveau 1, et si aucun autre titre (tous niveaux) ne le précède dans le document.
+			$showTableHeaderBeforeAvailable	= isModEnabled('infraspackplus') && TInfrastructure::getNiveau($line) == 1;
+			if ($showTableHeaderBeforeAvailable && !empty($object->lines)) {
+				foreach ($object->lines as $previousLine) {
+					if ($previousLine->rang < $line->rang && TInfrastructure::isTitle($previousLine)) {
+						$showTableHeaderBeforeAvailable	= false;
+						break;
+					}
+				}
+			}
+			if ($showTableHeaderBeforeAvailable) {
+				print '	<div>
 							<input style="vertical-align:sub;" type="checkbox" name="line-showTableHeaderBefore" id="infrastructure-showTableHeaderBefore" value="10" '.((!empty($line->array_options['options_show_table_header_before']) && $line->array_options['options_show_table_header_before'] > 0) ? 'checked="checked"' : '').' />&nbsp;
 							<label for="infrastructure-showTableHeaderBefore">'.$langs->trans('InfrastructureShowTableHeaderBefore').'</label>
-						</div>
-						<div>
+						</div>';
+			}
+			print '		<div>
 							<input style="vertical-align:sub;" type="checkbox" onclick="if($(this).is(\':checked\')) { $(\'#infrastructure-printCondensed\').prop(\'checked\', false) }" name="line-printAsList" id="infrastructure-printAsList" value="20" '.((!empty($line->array_options['options_print_as_list']) && $line->array_options['options_print_as_list'] > 0) ? 'checked="checked"' : '').' />&nbsp;
 							<label for="infrastructure-printAsList">'.$langs->trans('InfrastructurePrintAsList').'</label>
 						</div>
@@ -158,9 +169,11 @@
 	} elseif ($isFreeText) {
 		echo TInfrastructure::getFreeTextHtml($line, (bool) $readonlyForSituation);
 	}
-	if (TInfrastructure::isInfrastructure($line) && $show_qty_bu_deault = TInfrastructure::showQtyForObject($object)) {
+	if (TInfrastructure::isTotal($line) && ($show_qty_bu_deault = TInfrastructure::showQtyForObject($object))) {
 		$line_show_qty = TInfrastructure::showQtyForObjectLine($line, $show_qty_bu_deault);
+		// Marqueur indiquant à infrastructure_updateInfrastructureLine() que la case est bien présente dans le formulaire ; sans ce marqueur, la valeur en BDD n'est plus écrasée à -1 lorsque la case n'est pas rendue (constante globale vide).
 		print '			<div>
+							<input type="hidden" name="line-showQty-present" value="1" />
 							<input style="vertical-align:sub;" type="checkbox" name="line-showQty" id="infrastructure-showQty" value="1" '.($line_show_qty ? 'checked="checked"' : '').' />&nbsp;
 							<label for="infrastructure-showQty">'.$langs->trans('InfrastructureLineShowQty').'</label>
 						</div>';
@@ -196,11 +209,7 @@
 					if (in_array($code, $TKey) && $extrafields->attributes[$line->element]['list'][$code] > 0) {
 						print '	<div class="sub-'.$code.'">
 									<label class="">'.$extrafields->attributes[$line->element]['label'][$code].'</label>';
-						if (floatval(DOL_VERSION) >= 17) {
-							print $extrafields->showInputField($code, $line->array_options['options_'.$code], '', '', 'infrastructure_', '', 0, $object->table_element_line);
-						} else {
-							print $extrafields->showInputField($code, $line->array_options['options_'.$code], '', '', 'infrastructure_');
-						}
+						print $extrafields->showInputField($code, $line->array_options['options_'.$code], '', '', 'infrastructure_', '', 0, $object->table_element_line);
 						print '</div>';
 					}
 				}

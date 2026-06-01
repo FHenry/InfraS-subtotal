@@ -2,8 +2,8 @@
 	/*************************************************
 	* <one line to give the program's name and a brief idea of what it does.>
 	*
-	* Copyright (C) 2015 ATM Consulting <support@atm-consulting.fr>
-	* Copyright (C) 2016-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
+	* Copyright (C) 2025-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
+	* Copyright (C) 2025-2026	Fallinah Ranasolonirina	- <contact@infras.fr>	InfraS - <https://www.infras.fr>
 	*
 	* This program is free software: you can redistribute it and/or modify
 	* it under the terms of the GNU General Public License as published by
@@ -45,16 +45,16 @@
 	// init variables *******************************
 	$content	= dolMd2Html(file_get_contents(dol_buildpath('infrastructure/README.md', 0)),
 							'parsedown',
-							array ('doc/'		=> dol_buildpath('infrastructure/doc/', 1),
+							['doc/'		=> dol_buildpath('infrastructure/doc/', 1),
 													'img/'		=> dol_buildpath('infrastructure/img/', 1),
 													'images/'	=> dol_buildpath('infrastructure/images/', 1)
-													)
+													]
 							);
 	// View *********************************
-	$page_name  = $langs->trans('InfrastructureSetup').' - '.$langs->trans('About');
+	$page_name  = $langs->trans('Infrastructure').' - '.$langs->trans('About');
 	llxHeader('', $page_name);
 	$newToken   = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
-	$linkback   = '<a href="' . DOL_URL_ROOT . '/admin/modules.php&token='.$newToken.'">'. $langs->trans("BackToModuleList") . '</a>';
+	$linkback	= !empty($user->admin) ? '<a href = "'.DOL_URL_ROOT.'/admin/modules.php?restore_lastsearch_values=1">'.$langs->trans('BackToModuleList').'</a>' : '';
 	print load_fiche_titre($page_name, $linkback);
 
 	// Configuration header *************************

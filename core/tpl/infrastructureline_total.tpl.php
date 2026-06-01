@@ -1,0 +1,136 @@
+<?php
+	/************************************************
+	* Copyright (C) 2025-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
+	*
+	* This program is free software; you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published by
+	* the Free Software Foundation; either version 3 of the License, or
+	* (at your option) any later version.
+	*
+	* This program is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	* GNU General Public License for more details.
+	*
+	* You should have received a copy of the GNU General Public License
+	* along with this program. If not, see <https://www.gnu.org/licenses/>.
+	*
+	* SPDX-License-Identifier: GPL-3.0-or-later
+	* This file is part of Dolibarr module Infrastructure
+	**************************************************/
+
+	/************************************************
+	* 	\file		./infrastructure/core/tpl/infrastructureline_total.tpl.php
+	* 	\ingroup	infrastructure
+	* 	\brief		Template d'affichage d'une ligne sous-total (qty 90-99) en mode vue
+	*
+	* Inclus depuis infrastructureline_view.tpl.php quand TInfrastructure::isTotal($line) est vrai.
+	* Gère : bloc quantité cumulée, bloc marge, cellule libellé alignée à droite avec séparateur ' : '.
+	*
+	* Variables disponibles via le scope local de la méthode appelante :
+	*
+	*   @var	CommonObject		$object			Document parent (propal, commande, facture...)
+	*   @var	CommonObjectLine	$line			La ligne sous-total courante
+	*   @var	string				$action			Action courante
+	*   @var	int					$colspan		Colspan calculé (déjà ajusté par printObjectLine)
+	*   @var	bool				$line_show_qty	Afficher la quantité cumulée
+	*   @var	float				$total_qty		Quantité totale du bloc
+	*   @var	float				$total_line		Montant total HT du bloc
+	*   @var	DoliDB				$db				Handler base de données
+	*   @var	Conf				$conf			Configuration globale
+	*   @var	Translate			$langs			Traductions
+	*   @var	User				$user			Utilisateur courant (utilisé pour les permissions margins)
+	*   @var	ActionsInfrastructure		$this			Instance de la classe hook
+	************************************************/
+
+	// Protection contre l'appel direct
+	if (empty($conf) || ! is_object($conf)) {
+		print "Error, template page can't be called as URL";
+		exit;
+	}
+
+	// Libraries ************************************
+	dol_include_once('/infrastructure/class/infrastructure.class.php');
+	dol_include_once('/infrastructure/core/lib/infrastructure.lib.php');
+
+	// View *****************************************
+	?>
+<!-- BEGIN PHP TEMPLATE infrastructureline_total.tpl.php -->
+<?php
+	// Détermine si la cellule marge sera rendue (juste avant Total HT, dans la colonne Marge native)
+	// Aligné sur les permissions Dolibarr standard (cf. core/tpl/objectline_view.tpl.php) : module margin actif, utilisateur interne, droit margins.liretous, pas de masquage par le module affmarges.
+	$displayMargin			= getDolGlobalString('INFRASTRUCTURE_DISPLAY_MARGIN_ON_TOTAL') && isModEnabled('margin') && empty($user->socid) && !(isset($margins_hidden_by_module) && $margins_hidden_by_module) && !empty($user) && $user->hasRight('margins', 'liretous');
+	// Styles communs du libellé
+	$style					= getDolGlobalString('INFRASTRUCTURE_TOTAL_STYLE', '');
+	$titleStyleItalic		= strpos($style, 'I') === false ? '' : ' font-style: italic;';
+	$titleStyleBold			= strpos($style, 'B') === false ? '' : ' font-weight:bold;';
+	$titleStyleUnderline	= strpos($style, 'U') === false ? '' : ' text-decoration: underline;';
+	// Construction du HTML du libellé "Sous-total :" (réutilisé dans les deux modes de rendu)
+	ob_start();
+	if (empty($line->label)) {
+		if (getDolGlobalInt('INFRASTRUCTURE_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL')) {
+			print $line->description.' <span class="infrastructure_label" style="'.$titleStyleItalic.$titleStyleBold.$titleStyleUnderline.'">'.infrastructure_getTitle($object, $line).'</span>';
+		} else {
+			print '	<span class="infrastructure_label" style="'.$titleStyleItalic.$titleStyleBold.$titleStyleUnderline.'">'.$line->description.'</span>';
+		}
+	} else {
+		if (getDolGlobalString('PRODUIT_DESC_IN_FORM') && !empty($line->description)) {
+			$lineLabel	= $line->description != $line->label ? $line->label.'</span><br><div class="infrastructure_desc">'.dol_htmlentitiesbr($line->description) : $line->label;
+			print '	<span class="infrastructure_label" style="'.$titleStyleItalic.$titleStyleBold.$titleStyleUnderline.'">'.$lineLabel.'</div>';
+		} else {
+			print '	<span class="infrastructure_label classfortooltip" style=" '.$titleStyleItalic.$titleStyleBold.$titleStyleUnderline.'" title="'.$line->description.'">'.$line->label.'</span>';
+		}
+	}
+	print ' : ';
+	if ($line->info_bits > 0) {
+		echo img_picto($langs->trans('Pagebreak'), 'pagebreak@infrastructure');
+	}
+	$labelHtml		= ob_get_clean();
+	$alignedMode	= $line_show_qty && isset($colsBeforeQty) && $colsBeforeQty > 0 && ($colsBeforeQty + 1) <= $colspan;
+	if ($alignedMode) {
+		$colsAfterQty	= $colspan - $colsBeforeQty - 1 - ($displayMargin ? 1 : 0);
+		print '	<td colspan="'.$colsBeforeQty.'" style="font-weight:bold;text-align:right;">'.$labelHtml.'</td>';
+		print '	<td class="linecolqty nowraponall right" style="font-weight:bold;">'.price($total_qty, 0, '', 0, 0).'</td>';
+		// Cellule(s) vide(s) entre la colonne Qté et la colonne Marge / Total HT
+		if ($colsAfterQty > 0) {
+			print '	<td colspan="'.$colsAfterQty.'">&nbsp;</td>';
+		}
+	} else {
+		// Mode legacy (fallback) : grosse cellule "Qty : valeur" à gauche puis libellé "Sous-total :" à droite
+		if ($line_show_qty) {
+			$colspan	-= 2;
+			$qtyStyleItalic		= strpos(getDolGlobalString('INFRASTRUCTURE_TITLE_STYLE', ''), 'I') === false ? '' : ' font-style: italic;';
+			$qtyStyleBold		= strpos(getDolGlobalString('INFRASTRUCTURE_TITLE_STYLE', ''), 'B') === false ? '' : ' font-weight:bold;';
+			$qtyStyleUnderline	= strpos(getDolGlobalString('INFRASTRUCTURE_TITLE_STYLE', ''), 'U') === false ? '' : ' text-decoration: underline;';
+			print '	<td colspan="'.$colspan.'" style="text-align:right;'.$qtyStyleBold.'">
+						<span class="infrastructure_label" style="'.$qtyStyleItalic.$qtyStyleBold.$qtyStyleUnderline.'">'.$langs->trans('Qty').' : </span>&nbsp;&nbsp;'.price($total_qty, 0, '', 0, 0);
+			print '</td>';
+			$colspan = 2;
+		}
+		$labelColspan	= $displayMargin ? $colspan - 1 : $colspan;
+		if ($labelColspan < 1) {
+			$labelColspan	= 1;
+		}
+		print '	<td colspan="'.$labelColspan.'" style="font-weight:bold;text-align:right">';
+		print $labelHtml;
+		print '</td>';
+	}
+	// Cellule marge (rendue uniquement si activée + module margin actif), juste avant Total HT, sans libellé « Marge : »
+	if ($displayMargin) {
+		$parentTitleLine	= TInfrastructure::getParentTitleOfLine($object, $line->rang);
+		$productLines		= TInfrastructure::getLinesFromTitleId($object, $parentTitleLine->id);
+		$totalCostPrice		= 0;
+		if (!empty($productLines)) {
+			foreach ($productLines as $l) {
+				$product	= new Product($db);
+				$res		= $product->fetch($l->fk_product);
+				if ($res) {
+					$totalCostPrice	+= $product->cost_price * $l->qty;
+				}
+			}
+		}
+		$marge	= $total_line - $totalCostPrice;
+		print '	<td nowrap="nowrap" class="margininfos right" style="text-align:right;font-weight:bold;">'.price($marge).'</td>';
+	}
+	?>
+<!-- END PHP TEMPLATE infrastructureline_total.tpl.php -->

@@ -30,7 +30,7 @@
 
 	$selected	= 1;
 	// If this is a infrastructure line: we don't print the row from the core tpl: we override it completely because we don't want to show qty etc.
-	if (($this->tpl['infrastructure'] ?? '') == $this->tpl['id'] && in_array($this->tpl['sub-type'] ?? '', array('title', 'total', 'freetext'))) {
+	if (($this->tpl['infrastructure'] ?? '') == $this->tpl['id'] && in_array($this->tpl['sub-type'] ?? '', ['title', 'total', 'freetext'])) {
 		print '<tr class="oddeven'.(empty($this->tpl['strike']) ? '' : ' strikefordisabled').(!empty($this->tpl['sub-tr-class']) ? ' '.dol_escape_htmltag($this->tpl['sub-tr-class']) : '').'" '.(!empty($this->tpl['sub-tr-style']) ? 'style="'.$this->tpl['sub-tr-style'].'"' : '').'>';
 		// We only use the overridden HTML to compute the colspan, but we don't print it
 		$colspan	= 1;

@@ -1,7 +1,7 @@
 <?php
 	/**************************************************
-	* Copyright (C) 2025 ATM Consulting <support@atm-consulting.fr>
 	* Copyright (C) 2025-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
+	* Copyright (C) 2025-2026	Fallinah Ranasolonirina	- <contact@infras.fr>	InfraS - <https://www.infras.fr>
 	*
 	* This program is free software; you can redistribute it and/or modify
 	* it under the terms of the GNU General Public License as published by
@@ -41,12 +41,12 @@
 		public function defineColumnField($object, $outputlangs, $hidedetails = 0, $hidedesc = 0, $hideref = 0)
 		{
 			// Default field style for content
-			$this->defaultContentsFieldsStyle	= array('align'		=> 'R',						// R,C,L
-														'padding'	=> array(1, 0.5, 1, 0.5),	// Like css 0 => top , 1 => right, 2 => bottom, 3 => left
-													);
+			$this->defaultContentsFieldsStyle	= ['align'		=> 'R',						// R,C,L
+														'padding'	=> [1, 0.5, 1, 0.5],	// Like css 0 => top , 1 => right, 2 => bottom, 3 => left
+													];
 			// Default field style for content
-			$this->defaultTitlesFieldsStyle		= array('align'		=> 'C',						// R,C,L
-														'padding'	=> array(0.5, 0, 0.5, 0),	// Like css 0 => top , 1 => right, 2 => bottom, 3 => left
-													);
+			$this->defaultTitlesFieldsStyle		= ['align'		=> 'C',						// R,C,L
+														'padding'	=> [0.5, 0, 0.5, 0],	// Like css 0 => top , 1 => right, 2 => bottom, 3 => left
+													];
 		}
 	}

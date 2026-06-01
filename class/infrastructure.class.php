@@ -1,7 +1,7 @@
 <?php
 	/***************************************************
-	* Copyright (C) 2025 ATM Consulting <support@atm-consulting.fr>
 	* Copyright (C) 2025-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
+	* Copyright (C) 2025-2026	Fallinah Ranasolonirina	- <contact@infras.fr>	InfraS - <https://www.infras.fr>
     *
 	* This program is free software; you can redistribute it and/or modify
 	* it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@
 		static function initInfrastructureQtyForObject($object, $level = 0)
 		{
 			if (!isset($object->TInfrastructureQty)) {
-				$object->TInfrastructureQty = array();
+				$object->TInfrastructureQty = [];
 			}
 			if (!isset($object->TInfrastructureQty[$level])) {
 				$object->TInfrastructureQty[$level] = 0;
@@ -93,14 +93,20 @@
 		/**
 		* Determine to show infrastructure line qty by default for this object
 		*
-		* @param   CommonObject    $object Object
-		* @return  bool            False no show infrastructure qty for this object else True
+		* @param	CommonObject	$object		Object
+		* @param	string			$context	'screen' (défaut) ou 'pdf'. En contexte 'pdf' la constante INFRASTRUCTURE_DEFAULT_DISPLAY_QTY_FOR_TOTAL_ON_ELEMENTS_PDF prime ; si vide, fallback sur la constante écran (compat. installations existantes).
+		* @return	bool						False no show infrastructure qty for this object else True
 		*/
-		static function showQtyForObject($object)
+		static function showQtyForObject($object, $context = 'screen')
 		{
 			$show = false;
-			if (getDolGlobalString('INFRASTRUCTURE_DEFAULT_DISPLAY_QTY_FOR_INFRASTRUCTURE_ON_ELEMENTS') && in_array($object->element, explode(',', getDolGlobalString('INFRASTRUCTURE_DEFAULT_DISPLAY_QTY_FOR_INFRASTRUCTURE_ON_ELEMENTS')))) {
-				$show = true;
+			if ($context === 'pdf') {
+				$value	= getDolGlobalString('INFRASTRUCTURE_DEFAULT_DISPLAY_QTY_FOR_TOTAL_ON_ELEMENTS_PDF');
+			} else {
+				$value	= getDolGlobalString('INFRASTRUCTURE_DEFAULT_DISPLAY_QTY_FOR_TOTAL_ON_ELEMENTS');
+			}
+			if ($value !== '' && in_array($object->element, explode(',', $value))) {
+				$show	= true;
 			}
 			return $show;
 		}
@@ -142,7 +148,7 @@
 		{
 			$res	= 0;
 			$desc	= '';
-			$TNotElements = array ('invoice_supplier', 'order_supplier');
+			$TNotElements = ['invoice_supplier', 'order_supplier'];
 			if ($qty == 50 && !in_array($object->element, $TNotElements)) {
 				$desc	= $label;
 				$label	= '';
@@ -151,7 +157,7 @@
 				$res	=  $object->addline($desc, 0, $qty, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 'HT', 0, 9, $rang, TInfrastructure::getModuleNumber(), '', 0, 0, null, 0, $label);
 			} elseif ($object->element=='invoice_supplier') {
 				$object->special_code	= TInfrastructure::getModuleNumber();
-				$res					= $object->addline($label, 0, 0, 0, 0, $qty, 0, 0, 0, 0, 0, 0, 'HT', 9, $rang, false, array(), null, 0, 0, '', TInfrastructure::getModuleNumber());
+				$res					= $object->addline($label, 0, 0, 0, 0, $qty, 0, 0, 0, 0, 0, 0, 'HT', 9, $rang, false, [], null, 0, 0, '', TInfrastructure::getModuleNumber());
 			} elseif ($object->element=='propal') {
 				$res	= $object->addline($desc, 0, $qty, 0, 0, 0, 0, 0, 'HT', 0, 0, 9, $rang, TInfrastructure::getModuleNumber(), 0, 0, 0, $label);
 			} elseif ($object->element=='supplier_proposal') {
@@ -313,7 +319,7 @@
 			foreach ($object->lines as &$line) {
 				if ($line->rang <= $title_line->rang) continue;
 				if (self::isTitle($line) && self::getNiveau($line) <= $title_niveau) return false; // Oups on croise un titre d'un niveau inférieur ou égale (exemple : je croise un titre niveau 2 alors que je suis sur un titre de niveau 3) pas lieu de continuer car un nouveau bloc commence
-				if (!self::isInfrastructure($line)) continue;
+				if (!self::isTotal($line)) continue;
 				$infrastructure_niveau	= self::getNiveau($line);
 				// Comparaison du niveau de la ligne de sous-total avec celui du titre
 				if ($infrastructure_niveau == $title_niveau) {
@@ -337,22 +343,23 @@
 		*/
 		public static function getAllTitleFromDocument(&$object, $get_block_total = false)
 		{
-			$TRes = array();
+			$TRes = [];
 			if (!empty($object->lines)) {
 				foreach ($object->lines as $k => &$line) {
 					if (self::isTitle($line)) {
 						if ($get_block_total) {
-							$TTot							= self::getTotalBlockFromTitle($object, $line);
-							$line->total_pa_ht				= $TTot['total_pa_ht'];
-							$line->total_options			= $TTot['total_options'];
-							$line->total_ht					= $TTot['total_ht'];
-							$line->total_tva				= $TTot['total_tva'];
-							$line->total_ttc				= $TTot['total_ttc'];
-							$line->TTotal_tva				= $TTot['TTotal_tva'];
-							$line->multicurrency_total_ht	= $TTot['multicurrency_total_ht'];
-							$line->multicurrency_total_tva	= $TTot['multicurrency_total_tva'];
-							$line->multicurrency_total_ttc	= $TTot['multicurrency_total_ttc'];
-							$line->TTotal_tva_multicurrency	= $TTot['TTotal_tva_multicurrency'];
+							$TTot								= self::getTotalBlockFromTitle($object, $line);
+							$line->total_pa_ht					= $TTot['total_pa_ht'];
+							$line->total_options				= $TTot['total_options'];
+							$line->total_ht						= $TTot['total_ht'];
+							$line->total_tva					= $TTot['total_tva'];
+							$line->total_ttc					= $TTot['total_ttc'];
+							$line->TTotal_tva					= $TTot['TTotal_tva'];
+							$line->multicurrency_total_options	= $TTot['multicurrency_total_options'];
+							$line->multicurrency_total_ht		= $TTot['multicurrency_total_ht'];
+							$line->multicurrency_total_tva		= $TTot['multicurrency_total_tva'];
+							$line->multicurrency_total_ttc		= $TTot['multicurrency_total_ttc'];
+							$line->TTotal_tva_multicurrency		= $TTot['TTotal_tva_multicurrency'];
 						}
 						$TRes[]	= $line;
 					}
@@ -370,22 +377,26 @@
 		public static function getTotalBlockFromTitle(&$object, &$line, $breakOnTitle = false)
 		{
 			dol_include_once('/core/lib/price.lib.php');
-			$TTot = array('total_pa_ht' => 0, 'total_options' => 0, 'total_ht' => 0, 'total_tva' => 0, 'total_ttc' => 0, 'TTotal_tva' => array(), 'multicurrency_total_ht' => 0, 'multicurrency_total_tva' => 0, 'multicurrency_total_ttc' => 0, 'TTotal_tva_multicurrency' => array());
+			$TTot = ['total_pa_ht' => 0, 'total_options' => 0, 'total_subprice' => 0, 'total_unit_subprice' => 0, 'total_ht' => 0, 'total_tva' => 0, 'total_ttc' => 0, 'TTotal_tva' => [], 'multicurrency_total_options' => 0, 'multicurrency_total_subprice' => 0, 'multicurrency_total_unit_subprice' => 0, 'multicurrency_total_ht' => 0, 'multicurrency_total_tva' => 0, 'multicurrency_total_ttc' => 0, 'TTotal_tva_multicurrency' => []];
 			foreach ($object->lines as &$l) {
 				if ($l->rang <= $line->rang) {
 					continue;
-				} elseif (self::isInfrastructure($l) && self::getNiveau($l) <= self::getNiveau($line)) {
+				} elseif (self::isTotal($l) && self::getNiveau($l) <= self::getNiveau($line)) {
 					break;
 				} elseif ($breakOnTitle && self::isTitle($l) && self::getNiveau($l) <= self::getNiveau($line)) {
 					break;
 				}
-				if (!empty($l->array_options['options_infrastructure_nc'])) {
+				if (!empty($l->array_options['options_infrastructure_ol'])) {
 					$tabprice				= calcul_price_total($l->qty, $l->subprice, $l->remise_percent, $l->tva_tx, $l->localtax1_tx, $l->localtax2_tx, 0, 'HT', $l->info_bits, $l->product_type);
 					$TTot['total_options']	+= $tabprice[0]; // total ht
+					if (!empty($l->multicurrency_subprice)) {
+						$tabpriceMc									= calcul_price_total($l->qty, $l->multicurrency_subprice, $l->remise_percent, $l->tva_tx, $l->localtax1_tx, $l->localtax2_tx, 0, 'HT', $l->info_bits, $l->product_type);
+						$TTot['multicurrency_total_options']		+= $tabpriceMc[0];
+					}
 				} else {
 					// Fix DA020000 : exlure les sous-totaux du calcul (calcul pété)
 					// sinon ça compte les ligne de produit puis les sous-totaux qui leurs correspondent...
-					if (!self::isInfrastructure($l)) {
+					if (!self::isTotal($l)) {
 						$TTot['total_pa_ht']							+= $l->pa_ht * $l->qty;
 						$TTot['total_subprice']							+= $l->subprice * $l->qty;
 						$TTot['total_unit_subprice']					+= $l->subprice; // Somme des prix unitaires non remisés
@@ -393,6 +404,8 @@
 						$TTot['total_tva']								+= $l->total_tva;
 						$TTot['total_ttc']								+= $l->total_ttc;
 						$TTot['TTotal_tva'][$l->tva_tx]					+= $l->total_tva;
+						$TTot['multicurrency_total_subprice']			+= $l->multicurrency_subprice * $l->qty;
+						$TTot['multicurrency_total_unit_subprice']		+= $l->multicurrency_subprice; // Somme des prix unitaires multicurrency non remisés
 						$TTot['multicurrency_total_ht']					+= $l->multicurrency_total_ht;
 						$TTot['multicurrency_total_tva']				+= $l->multicurrency_total_tva;
 						$TTot['multicurrency_total_ttc']				+= $l->multicurrency_total_ttc;
@@ -477,7 +490,7 @@
 					}
 					//@INFO J'ai ma ligne titre qui contient ma ligne, par contre je check pas s'il y a un sous-total
 					return $line;
-				} elseif (self::isInfrastructure($line)) {
+				} elseif (self::isTotal($line)) {
 					// Il s'agit d'un sous-total, ça veut dire que le prochain titre théoriquement doit être ignorer (je travail avec un incrément au cas ou je croise plusieurs sous-totaux)
 					$skip_title++;
 				}
@@ -504,7 +517,7 @@
 					if ($line->rang <= $rang || ($lvl > 0 && self::getNiveau($line) < $lvl)) continue;
 					if (self::isTitle($line)) {
 						$skip_title++;
-					} elseif (self::isInfrastructure($line)) {
+					} elseif (self::isTotal($line)) {
 						if ($skip_title) {
 							$skip_title--;
 							continue;
@@ -546,7 +559,7 @@
 		* @param	int					$level	Level of infrastructure line to check (if -1 just check if it's a infrastructure line without checking level)
 		* @return	bool
 		*/
-		public static function isInfrastructure(&$line, $level = -1)
+		public static function isTotal(&$line, $level = -1)
 		{
 			$res = !empty($line->special_code) && $line->special_code == self::getModuleNumber() && $line->product_type == 9 && $line->qty >= 90;
 			if ($res && $level > -1) {
@@ -571,7 +584,7 @@
 		*/
 		public static function isModInfrastructureLine(&$line)
 		{
-			return self::isTitle($line) || self::isInfrastructure($line) || self::isFreeText($line);
+			return self::isTitle($line) || self::isTotal($line) || self::isFreeText($line);
 		}
 
 		/**
@@ -624,7 +637,7 @@
 					}
 				}
 				if (!empty($duplicateLine) && !self::isModInfrastructureLine($duplicateLine)) {
-					$TLine = array($duplicateLine);
+					$TLine = [$duplicateLine];
 				} else {
 					$TLine = self::getLinesFromTitleId($object, $lineid, $withBlockLine);
 				}
@@ -632,7 +645,7 @@
 					$object->db->begin();
 					$res										= 1;
 					$object->context['infrastructureDuplicateLines']	= true;
-					$TLineAdded									= array();
+					$TLineAdded									= [];
 					foreach ($TLine as $line) {
 						// TODO refactore avec un doAddLine sur le même schéma que le doUpdateLine
 						switch ($object->element) {
@@ -669,7 +682,7 @@
 						foreach ($TLineAdded as &$line) {
 							// ça peut paraitre non optimisé de déclancher la fonction sur toutes les lignes mais ceci est nécessaire pour réappliquer l'état exact de chaque ligne
 							//En gros ça met à jour le sous total
-							if (!empty($line->array_options['options_infrastructure_nc'])) infrastructure_updateLineNC($object->element, $object->id, $line->id, $line->array_options['options_infrastructure_nc']);
+							if (!empty($line->array_options['options_infrastructure_ol'])) infrastructure_updateLineOL($object->element, $object->id, $line->id, $line->array_options['options_infrastructure_ol']);
 						}
 						return count($TLineAdded);
 					} else {
@@ -697,13 +710,13 @@
 
 			// Besoin de comparer sur les 2 formes d'écriture
 			if (!$key_is_id) {
-				$TTitle_search	= array($langs->trans($key_trad), $langs->transnoentitiesnoconv($key_trad));
+				$TTitle_search	= [$langs->trans($key_trad), $langs->transnoentitiesnoconv($key_trad)];
 			}
-			$TTitle_under_search	= array();
+			$TTitle_under_search	= [];
 			if (!empty($under_title)) {
-				$TTitle_under_search	= array($langs->trans($under_title), $langs->transnoentitiesnoconv($under_title));
+				$TTitle_under_search	= [$langs->trans($under_title), $langs->transnoentitiesnoconv($under_title)];
 			}
-			$TLine				= array();
+			$TLine				= [];
 			$add_line			= false;
 			$under_title_found	= false;
 			foreach ($object->lines as $key => &$line) {
@@ -722,7 +735,7 @@
 						}
 						continue;
 					} elseif ($add_line && static::isModInfrastructureLine($line) && static::getNiveau($line) == $level) { // Si on tombe sur un sous-total, il faut que ce soit un du même niveau que le titre.
-						if (self::isInfrastructure($line)) {
+						if (self::isTotal($line)) {
 							if ($withBlockLine) {
 								$TLine[] = $line;
 							}
@@ -730,7 +743,7 @@
 						break;
 					}
 					if ($add_line) {
-						if (!$withBlockLine && (self::isTitle($line) || self::isInfrastructure($line))) {
+						if (!$withBlockLine && (self::isTitle($line) || self::isTotal($line))) {
 							continue;
 						} else {
 							$TLine[] = $line;
@@ -843,10 +856,10 @@
 		{
 			global $db;
 
-			$TTitle			= array();
+			$TTitle			= [];
 			$current_object	= null;
 			// Get the parent object if needed
-			if (!empty($GLOBALS['object']->id) && in_array($GLOBALS['object']->element, array('propal', 'commande', 'facture'))) {
+			if (!empty($GLOBALS['object']->id) && in_array($GLOBALS['object']->element, ['propal', 'commande', 'facture'])) {
 				$current_object = $GLOBALS['object'];
 			} else {
 				if ($origin_line->element == 'propaldet') {
@@ -877,7 +890,7 @@
 				$next_title_lvl_to_skip = 0;
 				for ($y = $i; $y >= 0; $y--) {
 					// Si je tombe sur un sous-total, je récupère son niveau pour savoir quel est le prochain niveau de titre que doit ignorer
-					if (self::isInfrastructure($current_object->lines[$y])) {
+					if (self::isTotal($current_object->lines[$y])) {
 						$next_title_lvl_to_skip = self::getNiveau($current_object->lines[$y]);
 					} elseif (self::isTitle($current_object->lines[$y])) {
 						if ($current_object->lines[$y]->qty == $next_title_lvl_to_skip) {
@@ -906,7 +919,7 @@
 		{
 			if (self::isTitle($line)) {
 				return $line->qty;
-			} elseif (self::isInfrastructure($line)) {
+			} elseif (self::isTotal($line)) {
 				return 100 - $line->qty;
 			} else {
 				return 0;
@@ -926,9 +939,11 @@
 			global $user, $conf, $langs;
 
 			$langs->load('infrastructure@infrastructure');
+
 			$objmarge				= new stdClass();
 			$origin_file			= $parameters['file'];
 			$outputlangs			= $parameters['outputlangs'];
+			$outputlangs->load('infrastructure@infrastructure');	// Toutes les clés transnoentities() de la page récap (titres, "AmountInCurrency...", "Lot summary", etc.) sont dans le fichier infrastructure.lang. Sans ce load, $outputlangs ne le connaît pas quand le tiers a une langue propre (Dolibarr crée alors un Translate dédié pour le PDF).
 			$object					= $parameters['object'];
 			$objmarge->page_hauteur	= 297;
 			$objmarge->page_largeur	= 210;
@@ -936,7 +951,11 @@
 			$objmarge->marge_haute	= 10;
 			$objmarge->marge_droite	= 10;
 			$objectref				= dol_sanitizeFileName($object->ref);
-			if ($object->element == 'propal') {
+			// Fallback sur dir_output uniquement si $origin_file est absent (cas théorique).
+			$dirFromOrigin			= !empty($origin_file) ? dirname($origin_file) : '';
+			if (!empty($dirFromOrigin) && dol_is_dir($dirFromOrigin)) {
+				$dir	= $dirFromOrigin;
+			} elseif ($object->element == 'propal') {
 				$dir	= $conf->propal->dir_output.'/'.$objectref;
 			} elseif ($object->element == 'commande') {
 				$dir	= $conf->commande->dir_output.'/'.$objectref;
@@ -948,8 +967,13 @@
 				setEventMessage($langs->trans('InfrastructureWarningRecapObjectElementUnknown', $object->element), 'warnings');
 				return -1;
 			}
+			// Crée le dossier si absent (sécurité : si $object->ref contient des caractères sanitizés en _ par dol_sanitizeFileName — typiquement '/N' devenant '_N' — le dossier reconstruit peut ne pas exister).
+			if (!dol_is_dir($dir) && dol_mkdir($dir) < 0) {
+				setEventMessage($langs->trans('ErrorCanNotCreateDir', $dir), 'errors');
+				return -1;
+			}
 			$file				= $dir.'/'.$objectref.'_recap.pdf';
-			$pdf				= pdf_getInstance(array(210, 297)); // Format A4 Portrait
+			$pdf				= pdf_getInstance([210, 297]); 		// Format A4 Portrait
 			$default_font_size	= pdf_getPDFFontSize($outputlangs);	// Must be after pdf_getInstance
 			$pdf->SetAutoPageBreak(1, 0);
 			if (class_exists('TCPDF')) {
@@ -959,24 +983,21 @@
 			$pdf->SetFont(pdf_getPDFFont($outputlangs));
 			// Set path to the background PDF File
 			if (!getDolGlobalString('MAIN_DISABLE_FPDI') && getDolGlobalString('MAIN_ADD_PDF_BACKGROUND')) {
-				$pagecount	= $pdf->setSourceFile($conf->mycompany->dir_output.'/'.getDolGlobalString('MAIN_ADD_PDF_BACKGROUND'));
+				$pdf->setSourceFile($conf->mycompany->dir_output.'/'.getDolGlobalString('MAIN_ADD_PDF_BACKGROUND'));
 				$tplidx		= $pdf->importPage(1);
 			}
 			$pdf->Open();
-			$pagenb	= 0;
 			$pdf->SetDrawColor(128, 128, 128);
 			$pdf->SetTitle($outputlangs->convToOutputCharset($object->ref));
-			$pdf->SetSubject($outputlangs->transnoentities("infrastructureRecap"));
+			$pdf->SetSubject($outputlangs->transnoentities("InfrastructureRecap"));
 			$pdf->SetCreator("Dolibarr ".DOL_VERSION);
 			$pdf->SetAuthor($outputlangs->convToOutputCharset($user->getFullName($outputlangs)));
-			$pdf->SetKeyWords($outputlangs->convToOutputCharset($object->ref)." ".$outputlangs->transnoentities("infrastructureRecap")." ".$outputlangs->convToOutputCharset($object->thirdparty->name));
+			$pdf->SetKeyWords($outputlangs->convToOutputCharset($object->ref)." ".$outputlangs->transnoentities("InfrastructureRecap")." ".$outputlangs->convToOutputCharset($object->thirdparty->name));
 			if (getDolGlobalString('MAIN_DISABLE_PDF_COMPRESSION')) {
 				$pdf->SetCompression(false);
 			}
 			$pdf->SetMargins($objmarge->marge_gauche, $objmarge->marge_haute, $objmarge->marge_droite);   // Left, Top, Right
 			$pagenb	= 0;
-			$pdf->SetDrawColor(128, 128, 128);
-			// New page
 			$pdf->AddPage();
 			if (! empty($tplidx)) {
 				$pdf->useTemplate($tplidx);
@@ -987,23 +1008,34 @@
 			$pdf->MultiCell(0, 3, '');		// Set interline to 3
 			$pdf->SetTextColor(0, 0, 0);
 			$heightforinfotot	= 25;	// Height reserved to output the info and total part
-			$heightforfooter	= $objmarge->marge_basse + 8;	// Height reserved to output the footer (value include bottom margin)
+			$heightforfooter	= ($objmarge->marge_basse ?? 0) + 8;	// Height reserved to output the footer (value include bottom margin)
 			$posx_designation	= 25;
 			$posx_options		= 150;
 			$posx_montant		= 170;
 			$tab_top			= 72;
-			$tab_top_newpage	= (!getDolGlobalString('MAIN_PDF_DONOTREPEAT_HEAD')?72:20); // TODO à vérifier
-			$TTot				= array('total_ht' => 0, 'total_ttc' => 0, 'TTotal_tva' => array());
-			$TLine				= self::getAllTitleFromDocument($object, true);
+			$repeatHead			= !getDolGlobalString('MAIN_PDF_DONOTREPEAT_HEAD');
+			$tab_top_newpage	= $repeatHead ? 72 : 20;
+			$widthOptions		= $posx_montant - $posx_options - 0.8;
+			$widthMontant		= $objmarge->page_largeur - $objmarge->marge_droite - $posx_montant - 0.8;
+			$hidetop			= 0;
+			$TTot				= ['total_ht' => 0, 'total_tva' => 0, 'total_ttc' => 0, 'TTotal_tva' => [], 'multicurrency_total_ht' => 0, 'multicurrency_total_tva' => 0, 'multicurrency_total_ttc' => 0, 'TTotal_tva_multicurrency' => []];
+			$useMultiCurrency	= (isModEnabled('multicurrency') && !empty($object->multicurrency_tx) && $object->multicurrency_tx != 1);
+			// Refetch les lignes : beforePDFCreation peut filtrer $object->lines (print_as_list/print_condensed absorbent les enfants dans le titre, hideInnerLines, INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL supprime les sous-totaux). Sans refetch, getAllTitleFromDocument calculerait sur des lignes filtrées et renverrait des totaux faux.
+			$freshObject		= clone $object;
+			$freshObject->lines	= [];
+			if (isset($freshObject->context) && is_array($freshObject->context) && isset($freshObject->context['infrastructureCache'])) {
+				unset($freshObject->context['infrastructureCache']);	// Évite la réutilisation du cache linesReversed / totalLineByKey indexé sur les anciennes lignes.
+			}
+			$freshObject->fetch_lines();
+			$TLine				= self::getAllTitleFromDocument($freshObject, true);
 			if (!empty($TLine)) {
-				$hidetop		= 0;
-				$iniY			= $tab_top + 10;
 				$curY			= $tab_top + 10;
 				$nexY			= $tab_top + 10;
 				$nblignes		= count($TLine);
-				foreach ($TLine as $i => &$line) {
-					$curY = $nexY;
-					if (self::getNiveau($line) == 1) {
+				foreach ($TLine as $i => $line) {
+					$niveau	= self::getNiveau($line);
+					$curY	= $nexY;
+					if ($niveau == 1) {
 						$pdf->SetFont('', 'B', $default_font_size - 1);   // Into loop to work with multipage
 						$curY								+= 2;
 						$TTot['total_ht']					+= $line->total_ht;
@@ -1012,21 +1044,27 @@
 						$TTot['multicurrency_total_ht']		+= $line->multicurrency_total_ht;
 						$TTot['multicurrency_total_tva']	+= $line->multicurrency_total_tva;
 						$TTot['multicurrency_total_ttc']	+= $line->multicurrency_total_ttc;
-						foreach ($line->TTotal_tva as $tx => $amount) {
-							$TTot['TTotal_tva'][$tx] += $amount;
+						foreach (($line->TTotal_tva ?? []) as $tx => $amount) {
+							if (!isset($TTot['TTotal_tva'][$tx])) {
+								$TTot['TTotal_tva'][$tx]	= 0;
+							}
+							$TTot['TTotal_tva'][$tx]	+= $amount;
 						}
-						foreach ($line->TTotal_tva_multicurrency as $tx => $amount) {
-							$TTot['TTotal_tva_multicurrency'][$tx] += $amount;
+						foreach (($line->TTotal_tva_multicurrency ?? []) as $tx => $amount) {
+							if (!isset($TTot['TTotal_tva_multicurrency'][$tx])) {
+								$TTot['TTotal_tva_multicurrency'][$tx]	= 0;
+							}
+							$TTot['TTotal_tva_multicurrency'][$tx]	+= $amount;
 						}
 					} else {
 						$pdf->SetFont('', '', $default_font_size - 1);   // Into loop to work with multipage
 					}
 					$pdf->SetTextColor(0, 0, 0);
 					$pdf->setTopMargin($tab_top_newpage + 10);
-					$pdf->setPageOrientation('', 1, $heightforfooter+$heightforinfotot);	// The only function to edit the bottom margin of current page to set it.
+					$pdf->setPageOrientation('', 1, $heightforfooter + $heightforinfotot);	// The only function to edit the bottom margin of current page to set it.
 					$pageposbefore				= $pdf->getPage();
 					$showpricebeforepagebreak	= 1;
-					$decalage					= (self::getNiveau($line) - 1) * 2;
+					$decalage					= ($niveau - 1) * 2;
 					$label						= $line->label;
 					$pdf->startTransaction();
 					$pdf->writeHTMLCell($posx_options-$posx_designation-$decalage, 3, $posx_designation+$decalage, $curY, $outputlangs->convToOutputCharset($label), 0, 1, false, true, 'J', true);
@@ -1040,16 +1078,16 @@
 						$pageposafter	= $pdf->getPage();
 						$posyafter		= $pdf->GetY();
 						//var_dump($posyafter); var_dump(($this->page_hauteur - ($heightforfooter+$heightforfreetext+$heightforinfotot))); exit;
-						if ($posyafter > ($objmarge->page_hauteur - ($heightforfooter+$heightforinfotot))) {	// There is no space left for total+free text
-							if ($i == ($nblignes-1)) {	// No more lines, and no space left to show total, so we create a new page
+						if ($posyafter > ($objmarge->page_hauteur - ($heightforfooter + $heightforinfotot))) {	// There is no space left for total+free text
+							if ($i == ($nblignes - 1)) {	// No more lines, and no space left to show total, so we create a new page
 								$pdf->AddPage('', '', true);
-								if (! empty($tplidx)) {
+								if (!empty($tplidx)) {
 									$pdf->useTemplate($tplidx);
 								}
-								if (!getDolGlobalString('MAIN_PDF_DONOTREPEAT_HEAD')) {
+								if ($repeatHead) {
 									self::pageHead($objmarge, $pdf, $object, 0, $outputlangs);
 								}
-								$pdf->setPage($pageposafter+1);
+								$pdf->setPage($pageposafter + 1);
 							}
 						} else {
 							// We found a page break
@@ -1058,7 +1096,6 @@
 					} else {
 						$pdf->commitTransaction();
 					}
-					$posYAfterDescription	= $pdf->GetY();
 					$nexY					= $pdf->GetY();
 					$pageposafter			= $pdf->getPage();
 					$pdf->setPage($pageposbefore);
@@ -1066,49 +1103,47 @@
 					$pdf->setPageOrientation('', 1, 0);	// The only function to edit the bottom margin of current page to set it.
 					// We suppose that a too long description or photo were moved completely on next page
 					if ($pageposafter > $pageposbefore && empty($showpricebeforepagebreak)) {
-						$pdf->setPage($pageposafter); $curY = $tab_top_newpage + 10;
+						$pdf->setPage($pageposafter);
+						$curY	= $tab_top_newpage + 10;
 					}
 					self::printLevel($objmarge, $pdf, $line, $curY, $posx_designation);
 					// Print: Options
-					if (!empty($line->total_options)) {
+					$displayedOptions	= $useMultiCurrency ? ($line->multicurrency_total_options ?? 0) : $line->total_options;
+					if (!empty($displayedOptions)) {
 						$pdf->SetXY($posx_options, $curY);
-						$pdf->MultiCell($posx_montant-$posx_options-0.8, 3, price($line->total_options, 0, $outputlangs), 0, 'R', 0);
+						$pdf->MultiCell($widthOptions, 3, price($displayedOptions, 0, $outputlangs), 0, 'R', 0);
 					}
 					// Print: Montant
+					$displayedTotalHT	= $useMultiCurrency ? $line->multicurrency_total_ht : $line->total_ht;
 					$pdf->SetXY($posx_montant, $curY);
-					$pdf->MultiCell($objmarge->page_largeur-$objmarge->marge_droite-$posx_montant-0.8, 3, price($line->total_ht, 0, $outputlangs), 0, 'R', 0);
-					$nexY+=2;    // Passe espace entre les lignes
+					$pdf->MultiCell($widthMontant, 3, price($displayedTotalHT, 0, $outputlangs), 0, 'R', 0);
+					$nexY	+= 2;    // Passe espace entre les lignes
 					// Detect if some page were added automatically and output _tableau for past pages
 					while ($pagenb < $pageposafter) {
 						$pdf->setPage($pagenb);
-						if ($pagenb == 1) {
-							self::tableau($objmarge, $pdf, $posx_designation, $posx_options, $posx_montant, $tab_top, $objmarge->page_hauteur - $tab_top - $heightforfooter, 0, $outputlangs, 0, 1, $object->multicurrency_code);
-						} else {
-							self::tableau($objmarge, $pdf, $posx_designation, $posx_options, $posx_montant, $tab_top_newpage, $objmarge->page_hauteur - $tab_top_newpage - $heightforfooter, 0, $outputlangs, $hidetop, 1, $object->multicurrency_code);
-						}
+						$thisTabTop		= ($pagenb == 1) ? $tab_top : $tab_top_newpage;
+						$thisHidetop	= ($pagenb == 1) ? 0 : $hidetop;
+						self::tableau($objmarge, $pdf, $posx_designation, $posx_options, $posx_montant, $thisTabTop, $objmarge->page_hauteur - $thisTabTop - $heightforfooter, 0, $outputlangs, $thisHidetop, 1, $object->multicurrency_code);
 						$pagenb++;
 						$pdf->setPage($pagenb);
 						$pdf->setPageOrientation('', 1, 0);	// The only function to edit the bottom margin of current page to set it.
-						if (!getDolGlobalString('MAIN_PDF_DONOTREPEAT_HEAD')) {
+						if ($repeatHead) {
 							self::pageHead($objmarge, $pdf, $object, 0, $outputlangs);
 						}
 					}
 				}
 			}
 			// Show square
-			if ($pagenb == 1) {
-				self::tableau($objmarge, $pdf, $posx_designation, $posx_options, $posx_montant, $tab_top, $objmarge->page_hauteur - $tab_top - $heightforinfotot - $heightforfooter, 0, $outputlangs, 0, 0, $object->multicurrency_code);
-				$bottomlasttab=$objmarge->page_hauteur - $heightforinfotot - $heightforfooter + 1;
-			} else {
-				self::tableau($objmarge, $pdf, $posx_designation, $posx_options, $posx_montant, $tab_top_newpage, $objmarge->page_hauteur - $tab_top_newpage - $heightforinfotot - $heightforfooter, 0, $outputlangs, $hidetop, 0, $object->multicurrency_code);
-				$bottomlasttab=$objmarge->page_hauteur - $heightforinfotot - $heightforfooter + 1;
-			}
+			$thisTabTop		= ($pagenb == 1) ? $tab_top : $tab_top_newpage;
+			$thisHidetop	= ($pagenb == 1) ? 0 : $hidetop;
+			self::tableau($objmarge, $pdf, $posx_designation, $posx_options, $posx_montant, $thisTabTop, $objmarge->page_hauteur - $thisTabTop - $heightforinfotot - $heightforfooter, 0, $outputlangs, $thisHidetop, 0, $object->multicurrency_code);
+			$bottomlasttab	= $objmarge->page_hauteur - $heightforinfotot - $heightforfooter + 1;
 			// Affiche zone totaux
-			$posy	= self::tableauTot($objmarge, $pdf, $object, $bottomlasttab, $outputlangs, $TTot);
+			self::tableauTot($objmarge, $pdf, $object, $bottomlasttab, $outputlangs, $TTot);
 			$pdf->Close();
 			$pdf->Output($file, 'F');
 			if (empty($fromInfraS)) {
-				$pagecount = self::concat($outputlangs, array($origin_file, $file), $origin_file);
+				self::concat($outputlangs, [$origin_file, $file], $origin_file);
 			}
 			if (!empty($fromInfraS)){
 				return $file;
@@ -1174,13 +1209,13 @@
 			$pdf->SetTextColor(0, 0, 0);
 			$pdf->SetFont('', 'B', $default_font_size + 2);
 			$pdf->SetXY($objmarge->marge_gauche, $posy);
-			$key = 'infrastructurePropalTitle';
+			$key = 'InfrastructurePropalTitle';
 			if ($object->element == 'commande') {
-				$key = 'infrastructureCommandeTitle';
+				$key = 'InfrastructureCommandeTitle';
 			} elseif ($object->element == 'facture') {
-				$key = 'infrastructureInvoiceTitle';
+				$key = 'InfrastructureInvoiceTitle';
 			} elseif ($object->element == 'facturerec') {
-				$key = 'infrastructureInvoiceTitle';
+				$key = 'InfrastructureInvoiceTitle';
 			}
 			$pdf->MultiCell(150, 4, $outputlangs->transnoentities($key, $object->ref, $object->thirdparty->name), '', 'L');
 			$pdf->SetFont('', '', $default_font_size);
@@ -1189,7 +1224,7 @@
 			$posy += 8;
 			$pdf->SetFont('', 'B', $default_font_size + 2);
 			$pdf->SetXY($objmarge->marge_gauche, $posy);
-			$pdf->MultiCell(70, 4, $outputlangs->transnoentities('infrastructureRecapLot'), '', 'L');
+			$pdf->MultiCell(70, 4, $outputlangs->transnoentities('InfrastructureRecapLot'), '', 'L');
 		}
 		/**
 		*   Show table for lines
@@ -1221,7 +1256,7 @@
 				$pdf->SetXY($objmarge->page_largeur - $objmarge->marge_droite - ($pdf->GetStringWidth($titre) + 3), $tab_top-4.5);
 				$pdf->MultiCell(($pdf->GetStringWidth($titre) + 3), 2, $titre);
 				if (getDolGlobalString('MAIN_PDF_TITLE_BACKGROUND_COLOR')) {
-					$pdf->Rect($objmarge->marge_gauche, $tab_top, $objmarge->page_largeur-$objmarge->marge_droite-$objmarge->marge_gauche, 8, 'F', array(), explode(',', getDolGlobalString('MAIN_PDF_TITLE_BACKGROUND_COLOR')));
+					$pdf->Rect($objmarge->marge_gauche, $tab_top, $objmarge->page_largeur-$objmarge->marge_droite-$objmarge->marge_gauche, 8, 'F', [], explode(',', getDolGlobalString('MAIN_PDF_TITLE_BACKGROUND_COLOR')));
 				}
 				$pdf->line($objmarge->marge_gauche, $tab_top, $objmarge->page_largeur-$objmarge->marge_droite, $tab_top);	// line prend une position y en 2eme param et 4eme param
 				$pdf->SetXY($posx_designation, $tab_top+2);
@@ -1247,7 +1282,7 @@
 		*/
 		private static function tableauTot(&$objmarge, &$pdf, $object, $posy, $outputlangs, $TTot)
 		{
-
+			$useMultiCurrency	= (isModEnabled('multicurrency') && !empty($object->multicurrency_tx) && $object->multicurrency_tx != 1);
 			$pdf->line($objmarge->marge_gauche, $posy, $objmarge->page_largeur-$objmarge->marge_droite, $posy);	// line prend une position y en 2eme param et 4eme param
 			$default_font_size	= pdf_getPDFFontSize($outputlangs);
 			$tab2_top			= $posy+2;
@@ -1266,14 +1301,14 @@
 			$pdf->SetFillColor(255, 255, 255);
 			$pdf->SetXY($col1x, $tab2_top + 0);
 			$pdf->MultiCell($col2x-$col1x, $tab2_hl, $outputlangs->transnoentities("TotalHT"), 0, 'L', 1);
-			// $total_ht = (isModEnabled('multicurrency') && $object->mylticurrency_tx != 1) ? $TTot['multicurrency_total_ht'] : $TTot['total_ht'];
-			$total_ht	= $TTot['total_ht'];
+			$total_ht	= $useMultiCurrency ? $TTot['multicurrency_total_ht'] : $TTot['total_ht'];
 			$pdf->SetXY($col2x, $tab2_top + 0);
 			$pdf->MultiCell($largcol2, $tab2_hl, price($total_ht, 0, $outputlangs), 0, 'R', 1);
 			// Show VAT by rates and total
 			$pdf->SetFillColor(248, 248, 248);
 			$atleastoneratenotnull	= 0;
-			foreach ($TTot['TTotal_tva'] as $tvakey => $tvaval) {
+			$TTotal_tva_to_display	= $useMultiCurrency ? $TTot['TTotal_tva_multicurrency'] : $TTot['TTotal_tva'];
+			foreach ($TTotal_tva_to_display as $tvakey => $tvaval) {
 				if ($tvakey != 0) {    // On affiche pas taux 0
 					$atleastoneratenotnull++;
 					$index++;
@@ -1296,8 +1331,7 @@
 			$pdf->SetTextColor(0, 0, 60);
 			$pdf->SetFillColor(224, 224, 224);
 			$pdf->MultiCell($col2x-$col1x, $tab2_hl, $outputlangs->transnoentities("TotalTTC"), $useborder, 'L', 1);
-			// $total_ttc = (isModEnabled('multicurrency') && $object->multiccurency_tx != 1) ? $TTot['multicurrency_total_ttc'] : $TTot['total_ttc'];
-			$total_ttc = $TTot['total_ttc'];
+			$total_ttc	= $useMultiCurrency ? $TTot['multicurrency_total_ttc'] : $TTot['total_ttc'];
 			$pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
 			$pdf->MultiCell($largcol2, $tab2_hl, price($total_ttc, 0, $outputlangs), $useborder, 'R', 1);
 			$pdf->SetTextColor(0, 0, 0);
@@ -1367,24 +1401,24 @@
 		}
 
 		/**
-		* Méthode pour savoir si une ligne fait partie d'un bloc Compris/Non Compris
+		* Méthode pour savoir si une ligne fait partie d'un bloc Optionnel
 		*
 		* @param	PropaleLigne|OrderLine|FactureLigne	$line	Ligne à tester
 		* @return	bool
 		*/
-		public static function hasNcTitle(&$line)
+		public static function hasOlTitle(&$line)
 		{
-			if (isset($line->has_nc_title)) {
-				return $line->has_nc_title;
+			if (isset($line->has_ol_title)) {
+				return $line->has_ol_title;
 			}
 			$TTitle = self::getAllTitleFromLine($line);
 			foreach ($TTitle as &$line_title) {
-				if (!empty($line_title->array_options['options_infrastructure_nc'])) {
-					$line->has_nc_title = true;
+				if (!empty($line_title->array_options['options_infrastructure_ol'])) {
+					$line->has_ol_title = true;
 					return true;
 				}
 			}
-			$line->has_nc_title = false;
+			$line->has_ol_title = false;
 			return false;
 		}
 
@@ -1431,7 +1465,7 @@
 		*/
 		public static function getCommonVATRate($object, $lineRef)
 		{
-			if (!TInfrastructure::isTitle($lineRef) && !TInfrastructure::isInfrastructure($lineRef)) {
+			if (!TInfrastructure::isTitle($lineRef) && !TInfrastructure::isTotal($lineRef)) {
 				return false;
 			}
 			$niveau 	= TInfrastructure::getNiveau($lineRef);
@@ -1446,7 +1480,7 @@
 						continue;
 					}
 					// Si on rencontre un sous-total du même niveau que le titre initial, on marque la fin du bloc.
-					if (TInfrastructure::isInfrastructure($line) && TInfrastructure::getNiveau($line) == $niveau) {
+					if (TInfrastructure::isTotal($line) && TInfrastructure::getNiveau($line) == $niveau) {
 						$end_rang = $line->rang;
 						break;
 					}
@@ -1456,7 +1490,7 @@
 						return false;
 					}
 				}
-			} elseif (TInfrastructure::isInfrastructure($lineRef)) {
+			} elseif (TInfrastructure::isTotal($lineRef)) {
 				$end_rang = $lineRef->rang;
 				for ($i = count($object->lines) - 1; $i >= 0; $i--) {
 					$line = $object->lines[$i];

@@ -1,7 +1,7 @@
 <?php
 
 	/************************************************
-	* Copyright (C) 2016-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
+	* Copyright (C) 2025-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
 	*
 	* This program is free software: you can redistribute it and/or modify
 	* it under the terms of the GNU General Public License as published by
@@ -40,11 +40,8 @@
 
 	$langs->load('infrastructure@infrastructure');
 
-	// Access control
-	restrictedArea($user, 'infrastructure');
-
 	// Whitelist of allowed element class names
-	$TAllowedElements	= array('propal'				=> 'Propal',
+	$TAllowedElements	= ['propal'				=> 'Propal',
 								'commande'				=> 'Commande',
 								'facture'				=> 'Facture',
 								'supplier_proposal'		=> 'SupplierProposal',
@@ -57,7 +54,29 @@
 								'SupplierProposal'		=> 'SupplierProposal',
 								'CommandeFournisseur'	=> 'CommandeFournisseur',
 								'FactureFournisseur'	=> 'FactureFournisseur',
-							);
+							];
+
+	// Access control : check rights on the underlying document module
+	// (the 'infrastructure' module itself has no permissions, so we secure
+	// based on the element submitted in the POST)
+	$TElementToRight	= ['propal'				=> 'propal',
+								'commande'				=> 'commande',
+								'facture'				=> 'facture',
+								'supplier_proposal'		=> 'supplier_proposal',
+								'order_supplier'		=> 'fournisseur',
+								'invoice_supplier'		=> 'fournisseur',
+								'Propal'				=> 'propal',
+								'Commande'				=> 'commande',
+								'Facture'				=> 'facture',
+								'SupplierProposal'		=> 'supplier_proposal',
+								'CommandeFournisseur'	=> 'fournisseur',
+								'FactureFournisseur'	=> 'fournisseur',
+							];
+	$elementPost		= GETPOST('element', 'aZ09');
+	if (empty($TElementToRight[$elementPost])) {
+		accessforbidden();
+	}
+	restrictedArea($user, $TElementToRight[$elementPost]);
 
 	$get	= GETPOST('get', 'aZ09');
 	$set	= GETPOST('set', 'aZ09');
@@ -69,7 +88,7 @@
 		$newToken	= !empty($_SESSION['newtoken']) ? $_SESSION['newtoken'] : '';
 		if (empty($sentToken) || ($sentToken !== $validToken && $sentToken !== $newToken)) {
 			http_response_code(403);
-			echo json_encode(array('error' => 'Invalid CSRF token'));
+			echo json_encode(['error' => 'Invalid CSRF token']);
 			exit;
 		}
 	}
@@ -83,14 +102,14 @@
 			$id_line	= GETPOSTINT('lineid');
 			if (empty($TAllowedElements[$element]) || $element_id <= 0) {
 				http_response_code(400);
-				echo json_encode(array('error' => 'Invalid element'));
+				echo json_encode(['error' => 'Invalid element']);
 				break;
 			}
 			$className	= $TAllowedElements[$element];
 			$object		= new $className($db);
 			$object->fetch($element_id);
 			if(!empty($object->lines)) {
-				$TRes	= array();
+				$TRes	= [];
 				foreach ($object->lines as $line) {
 					if ($line->id == $id_line) {
 						$title_line		= $line;
@@ -113,14 +132,47 @@
 			}
 			echo json_encode($TRes);
 			break;
+		case 'getTotalLine':
+			global $db;
+			$element	= GETPOST('element', 'aZ09');
+			$element_id	= GETPOSTINT('elementid');
+			$id_line	= GETPOSTINT('lineid');
+			if (empty($TAllowedElements[$element]) || $element_id <= 0 || $id_line <= 0) {
+				http_response_code(400);
+				echo json_encode(['error' => 'Invalid params']);
+				break;
+			}
+			$className	= $TAllowedElements[$element];
+			$object		= new $className($db);
+			$object->fetch($element_id);
+			if (empty($object->lines)) {
+				http_response_code(404);
+				echo json_encode(['error' => 'Object not found or no lines']);
+				break;
+			}
+			$lineFound	= null;
+			foreach ($object->lines as &$l) {
+				if ($l->id == $id_line) {
+					$lineFound	= &$l;
+					break;
+				}
+			}
+			if ($lineFound === null) {
+				http_response_code(404);
+				echo json_encode(['error' => 'Line not found']);
+				break;
+			}
+			$TDatas	= infrastructure_get_totalLineFromObject($object, $lineFound, false, 1);
+			echo json_encode(['total' => price($TDatas[0])]);
+			break;
 		default:
 			break;
 	}
 	switch ($set) {
-		case 'updateLineNC': // Gestion du Compris/Non Compris via les titres et/ou lignes
-			echo json_encode( infrastructure_updateLineNC(GETPOST('element', 'aZ09'), GETPOSTINT('elementid'), GETPOSTINT('lineid'), GETPOSTINT('infrastructure_nc')) );
+		case 'updateLineOL': // Gestion du caractère optionel via les titres et/ou lignes
+			echo json_encode( infrastructure_updateLineOL(GETPOST('element', 'aZ09'), GETPOSTINT('elementid'), GETPOSTINT('lineid'), GETPOSTINT('infrastructure_ol')) );
 		break;
-		//Mise � jour de la donn�e "hideblock" sur une ligne titre afin de savoir si le bloc doit �tre cach� ou pas
+		//Mise à jour de la donnée "hideblock" sur une ligne titre afin de savoir si le bloc doit être caché ou pas
 		case 'update_hideblock_data':
 			$jsonResponse = new SubInfrastructureJsonResponse();
 			_updateHideBlockData($jsonResponse);
@@ -132,7 +184,7 @@
 			$value		= GETPOSTINT('value');
 			if (empty($TAllowedElements[$element]) || $element_id <= 0) {
 				http_response_code(400);
-				echo json_encode(array('error' => 'Invalid element'));
+				echo json_encode(['error' => 'Invalid element']);
 				break;
 			}
 			$className	= $TAllowedElements[$element];
@@ -173,7 +225,7 @@
 			$jsonResponse->result	= 0;
 			return false;
 		}
-		$titleStatusList	= isset($data['titleStatusList']) ? $data['titleStatusList'] : array();
+		$titleStatusList	= isset($data['titleStatusList']) ? $data['titleStatusList'] : [];
 		if (!empty($titleStatusList)) {
 			$className		= $TAllowedElements[$element];
 			$object			= new $className($db);

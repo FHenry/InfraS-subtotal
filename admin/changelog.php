@@ -1,6 +1,6 @@
 <?php
 	/************************************************
-	* Copyright (C) 2016-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
+	* Copyright (C) 2025-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
 	*
 	* This program is free software: you can redistribute it and/or modify
 	* it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 	dol_include_once('/infrastructure/core/lib/infrastructureAdmin.lib.php');
 
 	// Translations *********************************
-	$langs->loadLangs(array('admin', 'errors', 'infrastructure@infrastructure'));
+	$langs->loadLangs(['admin', 'errors', 'infrastructure@infrastructure']);
 
 	// Access control *******************************
 	$accessright	= !empty($user->admin) || !empty($user->hasRight('infrastructure', 'paramInfrastructure')) ? 1 : 0;
@@ -48,7 +48,7 @@
 	$currentversion	= infrastructure_getLocalVersionMinDoli('infrastructure');
 
 	// View *****************************************
-	$page_name		= $langs->trans('InfrastructureSetup').' - '.$langs->trans('Changelog');
+	$page_name		= $langs->trans('Infrastructure').' - '.$langs->trans('InfrastructureParamChangelog');
 	llxHeader('', $page_name);
 	$linkback		= !empty($user->admin) ? '<a href = "'.DOL_URL_ROOT.'/admin/modules.php?restore_lastsearch_values=1">'.$langs->trans('BackToModuleList').'</a>' : '';
 	print load_fiche_titre($page_name, $linkback, 'title_setup');

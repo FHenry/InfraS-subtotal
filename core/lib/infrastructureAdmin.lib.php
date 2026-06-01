@@ -1,6 +1,6 @@
 <?php
 	/************************************************
-	* Copyright (C) 2016-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
+	* Copyright (C) 2025-2026	Sylvain Legrand - <contact@infras.fr>	InfraS - <https://www.infras.fr>
 	*
 	* This program is free software: you can redistribute it and/or modify
 	* it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@
 		global $langs, $conf, $user;
 
 		$h		= 0;
-		$head	= array();
+		$head	= [];
 		if (!empty($user->admin) || !empty($user->hasRight('infrastructure', 'paramInfrastructure'))) {
 			$head[$h][0]	= dol_buildpath('/infrastructure/admin/infrastructuresetup.php', 1);
 			$head[$h][1]	= $langs->trans('Parameters');
@@ -98,7 +98,7 @@
 			dolibarr_set_const($db, 'INFRAS_PHP_EXT_XML',	1, 'chaine', 0, 'Infrastructure module', $conf->entity);
 		} else {
 			dolibarr_set_const($db, 'INFRAS_PHP_EXT_XML',	-1, 'chaine', 0, 'Infrastructure module', $conf->entity);
-			setEventMessages('<span class = "infrastructurecaution">'.$langs->trans('InfrastructureCautionMess').'</span>'.$langs->trans('InfraSXMLextError'), array(), 'warnings');
+			setEventMessages('<span class = "infrastructurecaution">'.$langs->trans('InfrastructureCautionMess').'</span>'.$langs->trans('InfraSXMLextError'), [], 'warnings');
 		}
 	}
 
@@ -120,7 +120,7 @@
 	{
 		global $langs;
 
-		$currentversion	= array();
+		$currentversion	= [];
 		$sxe			= infrastructure_getChangelogFile($appliname);
 		if (is_object($sxe))	{
 			$currentversion[0]	= $sxe->Version[count($sxe->Version) - 1]->attributes()->Number;
@@ -158,7 +158,7 @@
 		$file	= empty($from) ? dol_buildpath(strtolower($appliname), 0).'/docs/changelog.xml' : DOL_DATA_ROOT.'/'.$appliname.'/changelogdwn.xml';
 		if (is_file($file)) {
 			libxml_use_internal_errors(true);
-			$context	= stream_context_create(array('http' => array('method' => 'GET', 'header' => 'Accept: application/xml')));
+			$context	= stream_context_create(['http' => ['method' => 'GET', 'header' => 'Accept: application/xml']]);
 			$changelog	= @file_get_contents($file, false, $context);
 			$sxe		= @simplexml_load_string(rtrim($changelog));
 			dol_syslog('infrastructureAdmin.Lib::infrastructure_getChangelogFile appliname = '.$appliname.' from = '.$from.' context = '.$context.' changelog = '.($changelog ? 'Ok' : 'KO').' sxe = '.($sxe ? 'Ok' : 'KO'));
@@ -180,7 +180,7 @@
 		if (getDolGlobalString('INFRAS_PHP_EXT_XML', '') == -1) {
 			return -1;
 		}
-		$newVersion	= getURLContent('https://infras.fr/jdownloads/Modules_Dolibarr/'.$appliname.'/changelog.xml', 'GET', '', 1, array(), array('http', 'https'), 0);
+		$newVersion	= getURLContent('https://infras.fr/jdownloads/Modules_Dolibarr/'.$appliname.'/changelog.xml', 'GET', '', 1, [], ['http', 'https'], 0);
 		if (!isset($newVersion['content'])) {	// not connected
 			return -1;
 		} else {
@@ -230,16 +230,16 @@ SET FOREIGN_KEY_CHECKS = 0;
 SET SQL_MODE = \'NO_AUTO_VALUE_ON_ZERO\';
 ';
 			fwrite($handle, $sqlhead);
-			$cols_const		= array ('name', 'entity', 'value', 'type');
-			$duplicate		= array ('2', 'value', 'name');
+			$cols_const		= ['name', 'entity', 'value', 'type'];
+			$duplicate		= ['2', 'value', 'name'];
 			$sql_const		= 'SELECT '.implode(', ', $cols_const);
 			$sql_const		.= ' FROM '.$db->prefix().'const';
 			$sql_const		.= ' WHERE name LIKE "INFRASTRUCTURE\_%"';
 			$sql_const		.= ' AND entity = '.((int) $conf->entity);
 			$sql_const		.= ' ORDER BY name';
 			fwrite($handle, infrastructure_bkup_table ('const', $sql_const, $cols_const, $duplicate, 0, ''));
-			$cols_dict		= array ('label', 'content', 'active', 'entity');
-			$duplicate_dict	= array ('2', 'content', 'label');
+			$cols_dict		= ['label', 'content', 'active', 'entity'];
+			$duplicate_dict	= ['2', 'content', 'label'];
 			$sql_dict		= 'SELECT '.implode(', ', $cols_dict).' FROM '.$db->prefix().'c_infrastructure_free_text WHERE entity = "'.$conf->entity .'" ORDER BY label';
 			fwrite($handle, infrastructure_bkup_table ('c_infrastructure_free_text', $sql_dict, $cols_dict, $duplicate_dict, 1, ''));
 
@@ -275,7 +275,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 	*	@param	string	$add		sql data to add on the beginning of the query
 	*	@return	string				sql query to restore the datas
 	**/
-	function infrastructure_bkup_table ($table, $sql, $listeCols, $duplicate = array (), $truncate = 0, $add = '')
+	function infrastructure_bkup_table ($table, $sql, $listeCols, $duplicate = [], $truncate = 0, $add = '')
 	{
 		global $db;
 
@@ -380,7 +380,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 		global $langs, $conf;
 
 		print '	<table class = "centpercent noborderspacing">';
-		$metas	= array('*', '90px', '156px', '120px');
+		$metas	= ['*', '90px', '156px', '120px'];
 		infrastructure_print_colgroup($metas);
 		print '		<tr>
 						<td colspan = "2" class = "center infrastructuretitleparam">
@@ -435,7 +435,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 	*	@param		array		$metas	list of col value
 	*	@return		void
 	**/
-	function infrastructure_print_colgroup($metas = array())
+	function infrastructure_print_colgroup($metas = [])
 	{
 		print '	<tr>';
 		foreach ($metas as $values)	{
@@ -450,7 +450,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 	*	@param		array		$metas	list of col value
 	*	@return		void
 	**/
-	function infrastructure_print_liste_titre($metas = array())
+	function infrastructure_print_liste_titre($metas = [])
 	{
 		global $langs;
 
@@ -535,7 +535,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 	*	@param		int				$num		Add a numbering column first with this number
 	*	@return		int
 	**/
-	function infrastructure_print_input($confkey, $tag = 'on_off', $desc = '', $help = '', $metas = array(), $cs1 = '2', $cs2 = '1', $end = '', $num = 0)
+	function infrastructure_print_input($confkey, $tag = 'on_off', $desc = '', $help = '', $metas = [], $cs1 = '2', $cs2 = '1', $end = '', $num = 0)
 	{
 		global $langs, $conf, $db;
 
@@ -574,10 +574,13 @@ SET FOREIGN_KEY_CHECKS = 1;
 				$inputValue		= $currentValue < $metas['min'] ? $metas['min'] : $currentValue;
 			}
 			// default input
-			$defaultMetas		= array('type' => 'text', 'class' => 'flat quatrevingtpercent infrastructurenopadding infrastructurefontsizeinherit', 'name' => $confkey, 'id' => $confkey, 'value' => $inputValue);
-			$metas				= array_merge ($defaultMetas, $metas);
-			$metascompil		= '';
+			$defaultMetas	= ['type' => 'text', 'class' => 'flat quatrevingtpercent infrastructurenopadding infrastructurefontsizeinherit', 'name' => $confkey, 'id' => $confkey, 'value' => $inputValue];
+			$metas			= array_merge ($defaultMetas, $metas);
+			$metascompil	= '';
 			foreach ($metas as $key => $value) {
+				if (is_array($value)) {
+					continue;
+				}
 				$metascompil	.= ' '.$key.($key == 'enabled' || $key == 'disabled' ? '' : ' = "'.$value.'"');
 			}
 			print '	<'.$tag.' '.$metascompil.'>'.(!preg_match('/<td(.*)/', $end, $reg) ? $end : '');
@@ -608,7 +611,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 	*	@param		int			$num		Add a numbering column first with this number
 	*	@return		int						line number for next option
 	**/
-	function infrastructure_print_line_inputs($type = '', $desc = '', $metas = array(), $cs1 = 2, $w = 0, $end = '', $num = 0)
+	function infrastructure_print_line_inputs($type = '', $desc = '', $metas = [], $cs1 = 2, $w = 0, $end = '', $num = 0)
 	{
 		print '	<tr class = "oddeven">';
 		if (!empty($num)) {
@@ -659,7 +662,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 	{
 		global $langs, $user;
 
-		$langs->loadLangs(array('admin', 'errors', 'infrastructure@infrastructure'));
+		$langs->loadLangs(['admin', 'errors', 'infrastructure@infrastructure']);
 
 		$supportURL				= 'https://support.infras.fr/create_ticket.php';
 		$headerPath				= dol_buildpath('/'.$appliname.'/img/InfraSheader.png', 1);
@@ -723,7 +726,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 		$ret					.= load_fiche_titre($langs->trans("InfrastructureParamHistoryUpdates"), '', $listUpD, 1);
 		$sxe					= infrastructure_getChangelogFile($appliname);
 		$sxelast				= infrastructure_getChangelogFile($appliname, 'dwn');
-		$tblversionslast		= is_object($sxelast) ? $sxelast->Version : array();
+		$tblversionslast		= is_object($sxelast) ? $sxelast->Version : [];
 		if ($resVersion == -1) {
 			if (is_array($tblversions) || is_object($tblversions)) {
 				foreach ($tblversions as $error) {
@@ -750,7 +753,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 									</tr>';
 		if (is_object($sxe) && count($tblversionslast) > count($tblversions)) {	// il y a du nouveau
 			for ($i = count($tblversionslast)-1; $i >= 0; $i--) {
-				$sxePath				= is_object($sxe) ? $sxe->xpath('//Version[@Number="'.$tblversionslast[$i]->attributes()->Number.'"]') : array();
+				$sxePath				= is_object($sxe) ? $sxe->xpath('//Version[@Number="'.$tblversionslast[$i]->attributes()->Number.'"]') : [];
 				dol_syslog('infrastructure.Lib::infrastructure_getChangeLog sxePath = '.$sxePath);
 				if (empty($sxePath))	$color='bgcolor = orange';
 				$lineversion			= $tblversionslast[$i]->change;
