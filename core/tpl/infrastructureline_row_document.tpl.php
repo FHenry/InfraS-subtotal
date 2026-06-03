@@ -260,7 +260,7 @@
 		$line->element		= 'tr_extrafield_title '.$line->element;	// Pour pouvoir manipuler ces tr
 		$isExtraSelected	= false;
 		$colspan			+= 5;
-		print $line->showOptionals($extrafieldsline, $mode, ['style' => ' style="background:#eeffee;" ', 'colspan' => $colspan]);
+		print $line->showOptionals($extrafieldsline, $mode, ['style' => ' style="background:'.getDolGlobalString('INFRASTRUCTURE_TOTAL_BACKGROUND_COLOR').';color:'.getDolGlobalString('INFRASTRUCTURE_TOTAL_COLOR').';" ', 'colspan' => $colspan]);
 		foreach ($line->array_options as $option) {
 			if (!empty($option) && $option != "-1") {
 				$isExtraSelected = true;

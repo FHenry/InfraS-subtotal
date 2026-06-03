@@ -102,6 +102,26 @@
 	}
 
 	/**
+	* List extrafields with "list"(Visible field) attribute > 0 for a given element type (propaldet, commandedet, ...)
+	* 
+	* @param	string		$elementtype	Element type (propaldet, commandedet, facturedet, ...)
+	* @return	array						List of extrafields [fieldname => label]
+	*/
+	function getVisibleExtrafields($elementtype) {
+		global $db;
+
+		$extrafields	= new ExtraFields($db);
+		$all			= $extrafields->fetch_name_optionals_label($elementtype);
+		$list			= [];
+		foreach ($all as $key => $label) {
+			if ((int) ($extrafields->attributes[$elementtype]['list'][$key] ?? 0) > 0) {
+				$list[$key]	= $label;
+			}
+		}
+		return $list;
+	}
+
+	/**
 	* Ajax block order JS
 	*
 	* @param CommonObject$object Object
@@ -229,10 +249,10 @@
 
 		ob_start();
 		$jsConf = ['langs' => ['AddTitleBlocFromOrdersToInvoice'		=> $langs->trans('InfrastructureAddTitleBlocFromOrderstoinvoice'),
-										'AddShippingListToTile'					=> $langs->trans('InfrastructureAddShippingListToTile'),
-										'InfrastructureOptions'					=> $langs->trans('InfrastructureOptions'),
-										'UseHiddenConfToAutoCheck'				=> $langs->trans('InfrastructureUseHiddenConfToAutoCheck'),
-									],
+								'AddShippingListToTile'					=> $langs->trans('InfrastructureAddShippingListToTile'),
+								'InfrastructureOptions'					=> $langs->trans('InfrastructureOptions'),
+								'UseHiddenConfToAutoCheck'				=> $langs->trans('InfrastructureUseHiddenConfToAutoCheck'),
+							],
 						'isModShippingEnable' 									=> isModEnabled('expedition'),
 						'INFRASTRUCTURE_DEFAULT_CHECK_SHIPPING_LIST_FOR_TITLE_DESC'	=> getDolGlobalInt('INFRASTRUCTURE_DEFAULT_CHECK_SHIPPING_LIST_FOR_TITLE_DESC')
 					];

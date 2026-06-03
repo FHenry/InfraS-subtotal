@@ -248,11 +248,11 @@
 		infrastructure_print_subTitle(4, 'InfrastructureSetupForExtrafields');
 		$metas	= ['class' => 'flat infrastructurewidth270 infrastructurefontsizeinherit'];
 		$num	= infrastructure_print_input('INFRASTRUCTURE_ALLOW_EXTRAFIELDS_ON_TITLE', 'on_off', $langs->trans('InfrastructureAllowExtrafieldsOnTitle'), '', [], 2, 1, '', $num);
-		$metas	= $form->multiselectarray('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_PROPALDET', $extrafields->fetch_name_optionals_label('propaldet'), $propalSelected, 0, 0, 'flat infrastructurewidth270 infrastructurefontsizeinherit', 0, 0, '', '', '');
+		$metas	= $form->multiselectarray('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_PROPALDET', getVisibleExtrafields('propaldet'), $propalSelected, 0, 0, 'flat infrastructurewidth270 infrastructurefontsizeinherit', 0, 0, '', '', '');
 		$num	= infrastructure_print_input('', 'select', $langs->trans('InfrastructureListOfExtrafieldsPropaldet'), '', $metas, 1, 2, '', $num);
-		$metas	= $form->multiselectarray('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_COMMANDEDET', $extrafields->fetch_name_optionals_label('commandedet'), $orderSelected, 0, 0, 'flat infrastructurewidth270 infrastructurefontsizeinherit', 0, 0, '', '', '');
+		$metas	= $form->multiselectarray('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_COMMANDEDET', getVisibleExtrafields('commandedet'), $orderSelected, 0, 0, 'flat infrastructurewidth270 infrastructurefontsizeinherit', 0, 0, '', '', '');
 		$num	= infrastructure_print_input('', 'select', $langs->trans('InfrastructureListOfExtrafieldsCommandedet'), '', $metas, 1, 2, '', $num);
-		$metas	= $form->multiselectarray('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_FACTUREDET', $extrafields->fetch_name_optionals_label('facturedet'), $invoiceSelected, 0, 0, 'flat infrastructurewidth270 infrastructurefontsizeinherit', 0, 0, '', '', '');
+		$metas	= $form->multiselectarray('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_FACTUREDET', getVisibleExtrafields('facturedet'), $invoiceSelected, 0, 0, 'flat infrastructurewidth270 infrastructurefontsizeinherit', 0, 0, '', '', '');
 		$num	= infrastructure_print_input('', 'select', $langs->trans('InfrastructureListOfExtrafieldsFacturedet'), '', $metas, 1, 2, '', $num);
 		// num = 10
 		infrastructure_print_subTitle(4, 'InfrastructureSetupForShipping');
