@@ -252,15 +252,15 @@
 	</tr>
 	<?php
 	// Affichage des extrafields à la Dolibarr (sinon non affiché sur les titres)
-	if (TInfrastructure::isTitle($line) && getDolGlobalInt('INFRASTRUCTURE_ALLOW_EXTRAFIELDS_ON_TITLE')) {
+	if (TInfrastructure::isTitle($line) && getDolGlobalInt('INFRASTRUCTURE_ALLOW_EXTRAFIELDS_ON_TITLE') && (getDolGlobalString('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_PROPALDET') || getDolGlobalString('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_COMMANDEDET') || getDolGlobalString('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_FACTUREDET'))) {
 		$extrafieldsline	= new ExtraFields($db);
 		$extralabelsline	= $extrafieldsline->fetch_name_optionals_label($object->table_element_line);
 		$mode				= $action === 'editline' && $line->rowid == GETPOST('lineid', 'int') ? 'edit' : 'view';
 		$ex_element			= $line->element;
 		$line->element		= 'tr_extrafield_title '.$line->element;	// Pour pouvoir manipuler ces tr
 		$isExtraSelected	= false;
+		$bgBrightness		= colorLighten(getDolGlobalString('INFRASTRUCTURE_TITLE_BACKGROUND_COLOR'), 25);
 		$colspan			+= 5;
-		print $line->showOptionals($extrafieldsline, $mode, ['style' => ' style="background:'.getDolGlobalString('INFRASTRUCTURE_TOTAL_BACKGROUND_COLOR').';color:'.getDolGlobalString('INFRASTRUCTURE_TOTAL_COLOR').';" ', 'colspan' => $colspan]);
 		foreach ($line->array_options as $option) {
 			if (!empty($option) && $option != "-1") {
 				$isExtraSelected = true;
@@ -268,7 +268,8 @@
 			}
 		}
 		if ($mode === 'edit') {
-			?>
+			print $line->showOptionals($extrafieldsline, $mode, ['style' => ' style="background:'.$bgBrightness.';color:'.getDolGlobalString('INFRASTRUCTURE_TITLE_COLOR').';" ', 'colspan' => $colspan]);
+		?>
 			<script>
 				$(document).ready(function () {
 					var all_tr_extrafields = $("tr.tr_extrafield_title");
@@ -284,7 +285,7 @@
 						echo 'var extra = 1;';
 					}
 					?>
-					$("div .infrastructure_underline").append(
+					$("#infrastructure_desc").append(
 						'<a id="printBlocExtrafields" onclick="return false;" href="#">' + trad + '</a>'
 						+ '<input type="hidden" name="showBlockExtrafields" id="showBlockExtrafields" value="' + extra + '" />');
 							$(document).on('click', "#printBlocExtrafields", function() {

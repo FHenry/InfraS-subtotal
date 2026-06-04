@@ -190,31 +190,9 @@
 		if (getDolGlobalString('FCKEDITOR_ENABLE_DETAILS_FULL')) {
 			$toolbarname	= 'dolibarr_notes';
 		}
+		echo '<div id="infrastructure_desc">';
 		$doleditor	= new DolEditor('line-description', $line->description, '', 100, $toolbarname, '', false, true, $cked_enabled, $nbrows, '98%', (bool) $readonlyForSituation);
 		$doleditor->Create();
-		$TKey		= null;
-		if ($line->element == 'propaldet') {
-			$TKey	= explode(',', getDolGlobalString('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_PROPALDET'));
-		} elseif ($line->element == 'commandedet') {
-			$TKey	= explode(',', getDolGlobalString('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_COMMANDEDET'));
-		} elseif ($line->element == 'facturedet') {
-			$TKey	= explode(',', getDolGlobalString('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_FACTUREDET'));
-		}
-		// TODO ajouter la partie fournisseur
-		if (!empty($TKey)) {
-			$extrafields	= new ExtraFields($this->db);
-			$extrafields->fetch_name_optionals_label($object->table_element_line);
-			if (!empty($extrafields->attributes[$line->element]['param'])) {
-				foreach ($extrafields->attributes[$line->element]['param'] as $code => $val) {
-					if (in_array($code, $TKey) && $extrafields->attributes[$line->element]['list'][$code] > 0) {
-						print '	<div class="sub-'.$code.'">
-									<label class="">'.$extrafields->attributes[$line->element]['label'][$code].'</label>';
-						print $extrafields->showInputField($code, $line->array_options['options_'.$code], '', '', 'infrastructure_', '', 0, $object->table_element_line);
-						print '</div>';
-					}
-				}
-			}
-		}
 	}
 	?>
 <!-- END PHP TEMPLATE infrastructureline_edit.tpl.php -->
