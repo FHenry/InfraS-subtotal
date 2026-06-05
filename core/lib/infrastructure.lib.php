@@ -102,6 +102,26 @@
 	}
 
 	/**
+	* List extrafields with "list"(Visible field) attribute > 0 for a given element type (propaldet, commandedet, ...)
+	* 
+	* @param	string		$elementtype	Element type (propaldet, commandedet, facturedet, ...)
+	* @return	array						List of extrafields [fieldname => label]
+	*/
+	function getVisibleExtrafields($elementtype) {
+		global $db;
+
+		$extrafields	= new ExtraFields($db);
+		$all			= $extrafields->fetch_name_optionals_label($elementtype);
+		$list			= [];
+		foreach ($all as $key => $label) {
+			if ((int) ($extrafields->attributes[$elementtype]['list'][$key] ?? 0) > 0) {
+				$list[$key]	= $label;
+			}
+		}
+		return $list;
+	}
+
+	/**
 	* Ajax block order JS
 	*
 	* @param CommonObject$object Object
@@ -229,10 +249,10 @@
 
 		ob_start();
 		$jsConf = ['langs' => ['AddTitleBlocFromOrdersToInvoice'		=> $langs->trans('InfrastructureAddTitleBlocFromOrderstoinvoice'),
-										'AddShippingListToTile'					=> $langs->trans('InfrastructureAddShippingListToTile'),
-										'InfrastructureOptions'					=> $langs->trans('InfrastructureOptions'),
-										'UseHiddenConfToAutoCheck'				=> $langs->trans('InfrastructureUseHiddenConfToAutoCheck'),
-									],
+								'AddShippingListToTile'					=> $langs->trans('InfrastructureAddShippingListToTile'),
+								'InfrastructureOptions'					=> $langs->trans('InfrastructureOptions'),
+								'UseHiddenConfToAutoCheck'				=> $langs->trans('InfrastructureUseHiddenConfToAutoCheck'),
+							],
 						'isModShippingEnable' 									=> isModEnabled('expedition'),
 						'INFRASTRUCTURE_DEFAULT_CHECK_SHIPPING_LIST_FOR_TITLE_DESC'	=> getDolGlobalInt('INFRASTRUCTURE_DEFAULT_CHECK_SHIPPING_LIST_FOR_TITLE_DESC')
 					];
@@ -753,15 +773,11 @@
 		}
 		// TODO ajouter la partie fournisseur
 		if (!empty($TKey)) {
-			$extrafields	= new ExtraFields($object->db);
-			$extrafields->fetch_name_optionals_label($line->element);
-			$TPost			= $extrafields->getOptionalsFromPost($line->element, '', 'infrastructure_');
-			$TLine			= TInfrastructure::getLinesFromTitleId($object, $line->id);
+			$TLine	= TInfrastructure::getLinesFromTitleId($object, $line->id);
 			foreach ($TLine as $object_line) {
 				foreach ($TKey as $key) {
-					// TODO remove "true"
-					if (isset($TPost['infrastructure_options_'.$key])) {
-						$object_line->array_options['options_'.$key] = $TPost['infrastructure_options_'.$key];
+					if (array_key_exists('options_'.$key, $line->array_options)) {
+						$object_line->array_options['options_'.$key] = $line->array_options['options_'.$key];
 					}
 				}
 				$object_line->insertExtraFields();
@@ -781,14 +797,20 @@
 	{
 		global $langs;
 
-		$infrastructure_tva_tx		= $infrastructure_tva_tx_init = GETPOST('infrastructure_tva_tx', 'int');
-		$infrastructure_progress		= $infrastructure_progress_init = GETPOST('infrastructure_progress', 'int');
-		$array_options			= $line->array_options;
-		$showBlockExtrafields	= GETPOST('showBlockExtrafields', 'aZ09');
+		$infrastructure_tva_tx		= $infrastructure_tva_tx_init	= GETPOST('infrastructure_tva_tx', 'int');
+		$infrastructure_progress	= $infrastructure_progress_init	= GETPOST('infrastructure_progress', 'int');
+		$array_options				= $line->array_options;
+		$showBlockExtrafields		= GETPOST('showBlockExtrafields', 'aZ09');
 		if ($infrastructure_tva_tx != '' || $infrastructure_progress != '' || (!empty($showBlockExtrafields) && !empty($array_options))) {
 			$error_progress	= $nb_progress_update = $nb_progress_not_updated = 0;
-			$TLine			= TInfrastructure::getLinesFromTitleId($object, $line->id);
+			$parentTitleId	= $line->id;
+			$TLine			= TInfrastructure::getLinesFromTitleId($object, $line->id, true);
+			// Clés propres au module infrastructure — ne pas les propager aux titres enfants
+			$infrastructureOwnKeys	= ['options_show_total_ht', 'options_show_reduc', 'options_infrastructure_show_qty', 'options_hideblock', 'options_show_table_header_before', 'options_print_as_list', 'options_print_condensed', 'options_infrastructure_ol'];
 			foreach ($TLine as &$line) {
+				if ($line->id == $parentTitleId || TInfrastructure::isTotal($line)) {
+					continue;	// Ignorer le titre parent lui-même et les sous-totaux
+				}
 				if (!TInfrastructure::isModInfrastructureLine($line)) {
 					$infrastructure_tva_tx = $infrastructure_tva_tx_init; // ré-init car la variable peut évoluer
 					if (!empty($showBlockExtrafields)) {
@@ -815,6 +837,14 @@
 					} else {
 						$error_updated_line++;
 					}
+				} elseif (TInfrastructure::isTitle($line) && !empty($showBlockExtrafields) && !empty($array_options)) {
+					// Titre enfant : propager uniquement les extrafields non gérés par infrastructure
+					foreach ($array_options as $optKey => $optVal) {
+						if (!in_array($optKey, $infrastructureOwnKeys)) {
+							$line->array_options[$optKey] = $optVal;
+						}
+					}
+					$line->insertExtraFields();
 				}
 			}
 			if ($nb_progress_not_updated > 0) {

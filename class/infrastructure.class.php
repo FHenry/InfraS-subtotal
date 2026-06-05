@@ -146,18 +146,17 @@
 		*/
 		static function addInfrastructureLine(&$object, $label, $qty, $rang=-1, $desc = '')
 		{
-			$res	= 0;
-			$desc	= '';
-			$TNotElements = ['invoice_supplier', 'order_supplier'];
+			$res			= 0;
+			$desc			= '';
+			$TNotElements	= ['invoice_supplier', 'order_supplier'];
 			if ($qty == 50 && !in_array($object->element, $TNotElements)) {
-				$desc	= $label;
-				$label	= '';
+				$desc		= $label;
+				$label		= '';
 			}
 			if ($object->element=='facture') {
 				$res	=  $object->addline($desc, 0, $qty, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 'HT', 0, 9, $rang, TInfrastructure::getModuleNumber(), '', 0, 0, null, 0, $label);
 			} elseif ($object->element=='invoice_supplier') {
-				$object->special_code	= TInfrastructure::getModuleNumber();
-				$res					= $object->addline($label, 0, 0, 0, 0, $qty, 0, 0, 0, 0, 0, 0, 'HT', 9, $rang, false, [], null, 0, 0, '', TInfrastructure::getModuleNumber());
+				$res	= $object->addline($label, 0, 0, 0, 0, $qty, 0, 0, 0, 0, 0, 0, 'HT', 9, $rang, false, [], null, 0, 0, '', TInfrastructure::getModuleNumber());
 			} elseif ($object->element=='propal') {
 				$res	= $object->addline($desc, 0, $qty, 0, 0, 0, 0, 0, 'HT', 0, 0, 9, $rang, TInfrastructure::getModuleNumber(), 0, 0, 0, $label);
 			} elseif ($object->element=='supplier_proposal') {
@@ -165,10 +164,9 @@
 			} elseif ($object->element=='commande') {
 				$res	=  $object->addline($desc, 0, $qty, 0, 0, 0, 0, 0, 0, 0, 'HT', 0, '', '', 9, $rang, TInfrastructure::getModuleNumber(), 0, null, 0, $label);
 			} elseif ($object->element=='order_supplier') {
-				$object->special_code	= TInfrastructure::getModuleNumber(); // à garder pour la rétrocompatibilité
-				$res					= $object->addline($label, 0, $qty, 0, 0, 0, 0, 0, '', 0, 'HT', 0, 9, 0, false, null, null, 0, null, 0, '', 0, -1, TInfrastructure::getModuleNumber());
+				$res	= $object->addline($label, 0, $qty, 0, 0, 0, 0, 0, '', 0, 'HT', 0, 9, 0, false, null, null, 0, null, 0, '', 0, $rang, TInfrastructure::getModuleNumber());
 			} elseif ($object->element=='facturerec') {
-				$res =  $object->addline($desc, 0, $qty, 0, 0, 0, 0, 0, 'HT', 0, '', 0, 9, $rang, TInfrastructure::getModuleNumber(), $label);
+				$res	=  $object->addline($desc, 0, $qty, 0, 0, 0, 0, 0, 'HT', 0, '', 0, 9, $rang, TInfrastructure::getModuleNumber(), $label);
 			}
 			self::generateDoc($object);
 			return $res;

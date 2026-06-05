@@ -490,8 +490,9 @@
 		<change type='fix'>Correction d'une page parasite (page blanche + bandeau bleu vide sans label sur la page suivante). Cause : quand le libellé déborde, TCPDF déclenche un auto-page-break interne au writeHTMLCell qui crée une page parasite => la réservation d'espace s'applique désormais à tous les titres infrastructure.</change>
 		<change type='fix'>Suppression d'un code mort : L'option est déclarée mais jamais utilisée.</change>
 		<change type='fix'>Page récapitulatif InfraSPackPlus (option INFRASTRUCTURE_*_ADD_RECAP) non générée quand INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL est actif. Cause : infrastructure_applyTitleWithTotal() supprimait les sous-totaux de $object->lines avant que la boucle de préparation de write_file() d'InfraSPackPlus ne les parcoure ; $subtotalRecap restait vide. Correction : les sous-totaux retirés sont désormais sauvegardés dans $object->context['infrastructureCache']['removedTotals'] (avec le rang du titre parent et le niveau) avant suppression, permettant à InfraSPackPlus de reconstruire $subtotalRecap depuis ce contexte.</change>
+		<change type='fix'>ExtraFields sur titre (INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_*) non enregistrés quand les lignes de toggle (showOptionals) sont visibles => suppression du bloc showInputField() de infrastructureline_edit.tpl.php (un seul mécanisme d'affichage : showOptionals) ; la logique TKey ne lit plus POST — elle propage simplement $line->array_options vers les lignes enfants du bloc (valeur déjà correcte : setOptionalsFromPost quand showBlockExtrafields=1, valeur BD sinon).</change>
 	</Version>
-	<InfraS Downloaded="20260601"/>
+	<InfraS Downloaded="20260604"/>
 	<Dolibarr minVersion="21.0.0" maxVersion="24.x.x"/>
 	<PHP minVersion="7.4" maxVersion="8.4"/>
 </changelog>

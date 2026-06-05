@@ -360,9 +360,7 @@
 				if (($object instanceof Propal && getDolGlobalString('INFRASTRUCTURE_PROPAL_ADD_RECAP')) ||
 					($object instanceof Commande && getDolGlobalString('INFRASTRUCTURE_COMMANDE_ADD_RECAP')) ||
 					($object instanceof Facture && getDolGlobalString('INFRASTRUCTURE_INVOICE_ADD_RECAP')) ||
-					($object instanceof FactureRec && getDolGlobalString('INFRASTRUCTURE_INVOICE_ADD_RECAP')) ||
-					($object instanceof CommandeFournisseur && getDolGlobalString('INFRASTRUCTURE_COMMANDE_ADD_RECAP')) ||
-					($object instanceof FactureFournisseur && getDolGlobalString('INFRASTRUCTURE_INVOICE_ADD_RECAP')))
+					($object instanceof FactureRec && getDolGlobalString('INFRASTRUCTURE_INVOICE_ADD_RECAP')))
 				{
 					$this->resprints	.= '	<tr class = "oddeven infrastructurefoldable">
 													<td colspan = "'.$colspan.'" class = "right">
