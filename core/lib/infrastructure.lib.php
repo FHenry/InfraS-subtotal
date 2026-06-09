@@ -103,7 +103,7 @@
 
 	/**
 	* List extrafields with "list"(Visible field) attribute > 0 for a given element type (propaldet, commandedet, ...)
-	* 
+	*
 	* @param	string		$elementtype	Element type (propaldet, commandedet, facturedet, ...)
 	* @return	array						List of extrafields [fieldname => label]
 	*/

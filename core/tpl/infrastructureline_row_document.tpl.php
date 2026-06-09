@@ -266,7 +266,7 @@
 		$tableElement 		= $object->table_element_line;
 		if (isset($tableToConst[$tableElement]) && getDolGlobalString($tableToConst[$tableElement])) {
 			$selectedExtrafields	= explode(',', getDolGlobalString($tableToConst[$tableElement]));
-		}				
+		}
 		if (is_array($selectedExtrafields) && !empty($extrafieldsline->attributes[$object->table_element_line]['label']) && is_array($extrafieldsline->attributes[$object->table_element_line]['label'])) {
 			foreach (array_keys($extrafieldsline->attributes[$object->table_element_line]['label']) as $efkey) {
 				if (!in_array($efkey, $selectedExtrafields, true)) {
