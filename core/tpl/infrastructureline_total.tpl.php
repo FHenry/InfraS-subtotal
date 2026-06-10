@@ -59,7 +59,7 @@
 <?php
 	// Détermine si la cellule marge sera rendue (juste avant Total HT, dans la colonne Marge native)
 	// Aligné sur les permissions Dolibarr standard (cf. core/tpl/objectline_view.tpl.php) : module margin actif, utilisateur interne, droit margins.liretous, pas de masquage par le module affmarges.
-	$displayMargin			= getDolGlobalString('INFRASTRUCTURE_DISPLAY_MARGIN_ON_TOTAL') && isModEnabled('margin') && empty($user->socid) && !(isset($margins_hidden_by_module) && $margins_hidden_by_module) && !empty($user) && $user->hasRight('margins', 'liretous');
+	$displayMargin			= getDolGlobalString('INFRASTRUCTURE_DISPLAY_MARGIN_ON_TOTAL') && isModEnabled('margin') && !in_array($object->element, array('supplier_order', 'supplier_invoice', 'supplier_proposal')) && empty($user->socid) && !(isset($margins_hidden_by_module) && $margins_hidden_by_module) && !empty($user) && $user->hasRight('margins', 'liretous');
 	// Styles communs du libellé
 	$style					= getDolGlobalString('INFRASTRUCTURE_TOTAL_STYLE', '');
 	$titleStyleItalic		= strpos($style, 'I') === false ? '' : ' font-style: italic;';
