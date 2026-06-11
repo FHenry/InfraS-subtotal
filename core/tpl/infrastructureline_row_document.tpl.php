@@ -251,22 +251,20 @@
 	?>
 	</tr>
 	<?php
-	// Affichage des extrafields à la Dolibarr (sinon non affiché sur les titres)
-	if (TInfrastructure::isTitle($line) && getDolGlobalInt('INFRASTRUCTURE_ALLOW_EXTRAFIELDS_ON_TITLE') && (getDolGlobalString('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_PROPALDET') || getDolGlobalString('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_COMMANDEDET') || getDolGlobalString('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_FACTUREDET'))) {
-		$extrafieldsline	= new ExtraFields($db);
-		$extralabelsline	= $extrafieldsline->fetch_name_optionals_label($object->table_element_line);
-		$mode				= $action === 'editline' && $line->rowid == GETPOST('lineid', 'int') ? 'edit' : 'view';
-		$ex_element			= $line->element;
-		$line->element		= 'tr_extrafield_title '.$line->element;	// Pour pouvoir manipuler ces tr
-		$isExtraSelected	= false;
-		$bgBrightness		= colorLighten(getDolGlobalString('INFRASTRUCTURE_TITLE_BACKGROUND_COLOR'), 25);
-		$colspan			+= 5;
-		// N'afficher que les extrafields sélectionnés dans la configuration du module (INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_*).
-		$tableToConst 		= ['propaldet'   => 'INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_PROPALDET', 'commandedet' => 'INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_COMMANDEDET', 'facturedet'  => 'INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_FACTUREDET'];
-		$tableElement 		= $object->table_element_line;
-		if (isset($tableToConst[$tableElement]) && getDolGlobalString($tableToConst[$tableElement])) {
-			$selectedExtrafields	= explode(',', getDolGlobalString($tableToConst[$tableElement]));
-		}
+	// N'afficher que les extrafields sélectionnés dans la configuration du module (INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_*),
+	$tableToConst				= ['propaldet' => 'INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_PROPALDET', 'commandedet' => 'INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_COMMANDEDET', 'facturedet' => 'INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_FACTUREDET'];
+	$tableElement				= $object->table_element_line;
+	$currentExtrafieldsConst	= isset($tableToConst[$tableElement]) ? getDolGlobalString($tableToConst[$tableElement]) : '';
+	if (TInfrastructure::isTitle($line) && getDolGlobalInt('INFRASTRUCTURE_ALLOW_EXTRAFIELDS_ON_TITLE') && $currentExtrafieldsConst) {
+		$extrafieldsline		= new ExtraFields($db);
+		$extralabelsline		= $extrafieldsline->fetch_name_optionals_label($object->table_element_line);
+		$selectedExtrafields	= explode(',', $currentExtrafieldsConst);
+		$mode					= $action === 'editline' && $line->rowid == GETPOST('lineid', 'int') ? 'edit' : 'view';
+		$ex_element				= $line->element;
+		$line->element			= 'tr_extrafield_title '.$line->element;	// Pour pouvoir manipuler ces tr
+		$isExtraSelected		= false;
+		$bgBrightness			= colorLighten(getDolGlobalString('INFRASTRUCTURE_TITLE_BACKGROUND_COLOR'), 25);
+		$colspan				+= 5;
 		if (is_array($selectedExtrafields) && !empty($extrafieldsline->attributes[$object->table_element_line]['label']) && is_array($extrafieldsline->attributes[$object->table_element_line]['label'])) {
 			foreach (array_keys($extrafieldsline->attributes[$object->table_element_line]['label']) as $efkey) {
 				if (!in_array($efkey, $selectedExtrafields, true)) {
