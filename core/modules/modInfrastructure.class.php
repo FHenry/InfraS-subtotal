@@ -51,21 +51,20 @@
 			infrastructure_test_php_ext();
 			$this->db 				= $db;
 			$this->numero			= 550090;																									// Unique Id for module
-			$this->name				= preg_replace('/^mod/i', '', strtolower(get_class($this)));	// Module label (no space allowed)
+			$this->name				= preg_replace('/^mod/i', '', strtolower(get_class($this)));												// Module label (no space allowed)
 			$this->editor_name		= '<b>InfraS - Sylvain Legrand</b>';
 			$this->editor_email		= 'support@infras.fr';
-			$editor_web				= 'https://www.infras.fr/';
-			$this->editor_url		= $editor_web;
-			$this->url_last_version	= $editor_web.'jdownloads/Modules_Dolibarr/'.$this->name.'/'.$this->name.'.txt';
+			$this->editor_url		= 'https://www.infras.fr/';
+			$this->url_last_version	= 'https://raw.githubusercontent.com/InfraS-SARL/modules-versions/main/'.$this->name.'/'.$this->name.'.txt';
 			$this->rights_class		= $this->name;																								// Key text used to identify module (for permissions, menus, etc...)
 			$family					= 'Modules '.$langs->trans('basenameInfrastructure');
 			$this->family			= $family;																									// used to group modules in module setup page
 			$this->familyinfo		= [$family => ['position' => '001', 'label' => $langs->trans($family)]];
-			$this->description		= $langs->trans('Module550090Desc');																	// Module description
+			$this->description		= $langs->trans('Module550090Desc');																		// Module description
 			$this->version			= $this->getLocalVersion();																					// Version : 'development', 'experimental', 'dolibarr' or 'dolibarr_deprecated' or version
-			$this->const_name		= 'MAIN_MODULE_'.strtoupper($this->name);															// llx_const table to save module status enabled/disabled
+			$this->const_name		= 'MAIN_MODULE_'.strtoupper($this->name);																	// llx_const table to save module status enabled/disabled
 			$this->special			= 2;																										// (0=common,1=interface,2=others,3=very specific)
-			$this->picto			= $this->name.'@'.$this->name;																			// Name of image file used for this module. If in theme => 'pictovalue' ; if in module => 'pictovalue@module' under name object_pictovalue.png
+			$this->picto			= $this->name.'@'.$this->name;																				// Name of image file used for this module. If in theme => 'pictovalue' ; if in module => 'pictovalue@module' under name object_pictovalue.png
 			$this->module_parts		= ['triggers'	=> 1,
 											'hooks'		=> ['invoicecard','invoicesuppliercard','propalcard','supplier_proposalcard','ordercard','ordersuppliercard',
 																'odtgeneration','orderstoinvoice','orderstoinvoicesupplier','admin','invoicereccard',
@@ -77,11 +76,11 @@
 											'css'		=> ['css' => '/'.$this->name.'/css/'.$this->name.'.css.php']
 			];
 			$this->dirs				= ['/'.$this->name.'/sql'];																				// Data directories to create when module is enabled.
-			$this->config_page_url	= [$this->name.'setup.php@'.$this->name];															// stored into titre/admin directory, used to setup module.
+			$this->config_page_url	= [$this->name.'setup.php@'.$this->name];																// stored into titre/admin directory, used to setup module.
 			// Dependencies
 			$this->depends			= [];																									// List of modules id that must be enabled if this module is enabled
 			$this->requiredby		= [];																									// List of modules id to disable if this one is disabled
-			$this->conflictwith		= ['modMilestone'];																					// List of modules id that cannot be enabled if this module is enabled
+			$this->conflictwith		= ['modMilestone'];																						// List of modules id that cannot be enabled if this module is enabled
 			$this->langfiles		= [$this->name.'@'.$this->name];
 			$this->const			= [0	=> ['MAIN_USE_HTML5_COLOR_SELECTOR', 'chaine', '1', 'InfraStructure module', 1]];
 			$this->tabs				= [];
