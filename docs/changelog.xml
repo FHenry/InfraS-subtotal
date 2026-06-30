@@ -502,7 +502,10 @@
 	<Version Number="21.0.6" MonthVersion="2026-06">
 		<change type='chg'>Mise à jour du fichier de langue : ajout d'une clé manquante</change>
 	</Version>
-	<InfraS Downloaded="20260629"/>
+	<Version Number="21.0.7" MonthVersion="2026-06">
+		<change type='fix'>Les caractères spéciaux saisis dans un titre, sous-titre ou sous-total s'affichaient sous forme encodée. Cause : le libellé était capturé en tant que contenu HTML (GETPOST 'restricthtml'), puis ré-échappé à l'affichage, d'où un double encodage. Correctif : capture du libellé en texte simple (GETPOST 'alphanohtml') lors de l'ajout d'un titre, sous-titre, sous-total ou texte libre.</change>
+	</Version>
+	<InfraS Downloaded="20260630"/>
 	<Dolibarr minVersion="21.0.0" maxVersion="24.x.x"/>
 	<PHP minVersion="7.4" maxVersion="8.4"/>
 </changelog>
