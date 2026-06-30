@@ -563,7 +563,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 			}
 		}
 		if ($tag == 'on_off') {
-			print '		<a href = "'.dol_escape_htmltag($_SERVER['PHP_SELF']).'?action=set_'.$confkey.'&value='.(!empty($conf->global->$confkey) ? '0' : '1').'">';
+			print '		<a href = "'.dol_escape_htmltag($_SERVER['PHP_SELF']).'?action=set_'.$confkey.'&token='.newToken().'&value='.(getDolGlobalString($confkey, '') ? '0' : '1').'">';
 			print ajax_constantonoff($confkey);
 			print '		</a>';
 		} elseif ($tag == 'input') {

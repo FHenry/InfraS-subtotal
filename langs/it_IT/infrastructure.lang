@@ -40,6 +40,7 @@ Infrastructure_HideAll                                            = Nascondere t
 Infrastructure_Hide                                               = Nascondere le righe
 InfrastructureHideSubtitleOnFold                                  = Un pulsante: nasconde tutto il contenuto del blocco (righe articolo, titoli e subtotali figli)
 InfrastructureHidePriceDefaultChecked                             = Per default, spuntare la casella "Nascondere il prezzo delle righe degli insiemi" durante la generazione dei PDF
+InfrastructureHideDocumentTotal                                   = Nascondere i totali del documento
 Infrastructure_ShowAll                                            = Mostrare tutte le righe
 Infrastructure_Hide                                               = Nascondere le righe
 Infrastructure_Show                                               = Mostrare le righe

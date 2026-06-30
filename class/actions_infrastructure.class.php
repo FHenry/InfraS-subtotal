@@ -239,10 +239,10 @@
 					if (in_array($action, ['add_title_line', 'add_total_line', 'add_subtitle_line', 'add_infrastructure_line', 'add_free_text'])) {
 						$level	= GETPOST('level', 'int');
 						if ($action == 'add_title_line') {
-							$title	= !empty(GETPOST('title', 'restricthtml')) ? GETPOST('title', 'restricthtml') : $langs->trans('InfrastructureTitle');
+							$title	= !empty(GETPOST('title', 'alphanohtml')) ? GETPOST('title', 'alphanohtml') : $langs->trans('InfrastructureTitle');
 							$qty	= $level < 1 ? 1 : $level ;
 						} elseif ($action=='add_free_text') {
-							$title	= GETPOST('title', 'restricthtml');
+							$title	= GETPOST('title', 'alphanohtml');
 							if (empty($title)) {
 								$free_text		= GETPOST('free_text', 'int');
 								if (!empty($free_text)) {
@@ -255,13 +255,13 @@
 							$title	= !empty($title) ? $title : $langs->trans('InfrastructureAddLineDescription');
 							$qty	= 50;
 						} elseif ($action == 'add_subtitle_line') {
-							$title	= !empty(GETPOST('title', 'restricthtml')) ? GETPOST('title', 'restricthtml') : $langs->trans('InfrastructureSubtitle');
+							$title	= !empty(GETPOST('title', 'alphanohtml')) ? GETPOST('title', 'alphanohtml') : $langs->trans('InfrastructureSubtitle');
 							$qty	= 2;
 						} elseif ($action == 'add_infrastructure_line') {
 							$title	= $langs->trans('SubInfrastructure');
 							$qty	= 98;
 						} else {
-							$title	= !empty(GETPOST('title', 'restricthtml')) ? GETPOST('title', 'restricthtml') : $langs->trans('Infrastructure');
+							$title	= !empty(GETPOST('title', 'alphanohtml')) ? GETPOST('title', 'alphanohtml') : $langs->trans('Infrastructure');
 							$qty	= $level ? 100 - $level : 99;
 						}
 						if (getDolGlobalString('INFRASTRUCTURE_AUTO_ADD_TOTAL_ON_ADDING_NEW_TITLE') && $qty < 10) {
