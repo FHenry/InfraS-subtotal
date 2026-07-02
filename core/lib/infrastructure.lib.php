@@ -107,7 +107,7 @@
 	* @param	string		$elementtype	Element type (propaldet, commandedet, facturedet, ...)
 	* @return	array						List of extrafields [fieldname => label]
 	*/
-	function getVisibleExtrafields($elementtype) {
+	function infrastructure_getVisibleExtrafields($elementtype) {
 		global $db;
 
 		$extrafields	= new ExtraFields($db);
