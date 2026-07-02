@@ -508,7 +508,10 @@
 	<Version Number="21.1.0" MonthVersion="2026-06">
 		<change type='add'>Ajout d'une option pour garder le bloc de génération de document ouvert par défaut.</change>
 	</Version>
-	<InfraS Downloaded="20260630"/>
+	<Version Number="21.1.1" MonthVersion="2026-07">
+		<change type='fix'>Déplacement d'un bloc titre complet par glisser-déposer (icône fa-grip-horizontal sur les lignes de titre) inopérant. Dans infrastructure_ajaxBlockOrderJs(), l'initialisation jQuery UI sortable ciblait $("tablelines") (sélecteur de balise HTML inexistant) au lieu de $("#tablelines") : sortable s'appliquait à zéro élément et aucun glisser-déposer n'était armé, bien que l'icône de préhension s'affiche. Ajout du « # » manquant, conforme aux templates natifs Dolibarr (ajaxrow.tpl.php).</change>
+	</Version>
+	<InfraS Downloaded="20260702"/>
 	<Dolibarr minVersion="21.0.0" maxVersion="24.x.x"/>
 	<PHP minVersion="7.4" maxVersion="8.4"/>
 </changelog>

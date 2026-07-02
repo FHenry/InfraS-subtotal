@@ -156,7 +156,7 @@
 						moveBlockCol.css("text-align","center");
 						moveBlockCol.css("cursor","move");
 						titleRow.attr('title', '<?php echo html_entity_decode($langs->trans('InfrastructureMoveTitleBlock')); ?>');
-						$( "<?php echo $tagidfortablednd; ?>" ).sortable({
+						$( "#<?php echo $tagidfortablednd; ?>" ).sortable({
 							cursor: "move",
 							handle: ".movetitleblock",
 							items: 'tr:not(.nodrag,.nodrop,.noblockdrop)',
