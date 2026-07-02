@@ -78,6 +78,7 @@ InfrastructurePdfTotalStyle                                       = Subtotals st
 InfrastructurePdfTotalStyleInfo                                   = Style applied to subtotals in PDF. If left empty, no style (bold / underline / italic) is applied — the PDF font is rendered in regular.
 InfrastructureBlocFoldMode                                        = Behavior when hiding a title block
 InfrastructureOptions                                             = <b>Options for the InfraStructure module</b>
+InfrastructureMakeBuildDocNoFoldable                              = Keep the options blocks before document generation open (non-foldable)
 InfrastructureNumberOfHiddenLines                                 = Number of hidden lines
 Infrastructure_ForceShowAll                                       = Show all lines of the block as well as lines from lower-level title blocks
 InfrastructureKeepSubtitleDisplayOnFold                           = Two buttons: the first hides article lines directly under the title, the second hides all article lines (including those in nested titles)

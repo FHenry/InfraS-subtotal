@@ -78,6 +78,7 @@ InfrastructurePdfTotalStyle                                       = Style des so
 InfrastructurePdfTotalStyleInfo                                   = Style appliqué aux sous-totaux dans le PDF. Si laissé vide, aucun style (gras / souligné / italique) n'est appliqué — la police PDF est rendue en regular.
 InfrastructureBlocFoldMode                                        = Comportement à adopter lorsque l'on cache un bloc de titre
 InfrastructureOptions                                             = <b>Options pour le module InfraStructure</b>
+InfrastructureMakeBuildDocNoFoldable                              = Garder les blocs des options avant génération de document ouverts (non repliables)
 InfrastructureNumberOfHiddenLines                                 = Nombre de lignes cachées
 Infrastructure_ForceShowAll                                       = Afficher toutes les lignes du bloc ainsi que les lignes des blocs de titre de niveau inférieur
 InfrastructureKeepSubtitleDisplayOnFold                           = Deux boutons : le premier masque les lignes article directement sous le titre, le second masque toutes les lignes articles (y compris celles des titres imbriqués)

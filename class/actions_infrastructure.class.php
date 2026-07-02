@@ -321,10 +321,15 @@
 				$titleStyle				= 'background-color: rgba(148, 148, 148, .065) !important;';
 				$this->resprints		.= '	<script type = "text/javascript">
 													$(document).ready(function(){
-														$(".infrastructurefoldable").hide();
-														$(".infrastructurefold").click(function (){
-															$(".infrastructurefoldable").toggle();
-														});
+														var noFoldable	= '.getDolGlobalString('INFRASTRUCTURE_MAKE_BUILD_DOC_NO_FOLDABLE').';
+														if (noFoldable) {
+															$(".infrastructurefoldable").show();
+														} else {
+															$(".infrastructurefoldable").hide();
+															$(".infrastructurefold").click(function (){
+																$(".infrastructurefoldable").toggle();
+															});
+														}
 														// Exclusion mutuelle : hideInnerLines vs (hideprices, hideqtys)
 														$("#hideInnerLines").on("change", function () {
 															if ($(this).is(":checked")) {

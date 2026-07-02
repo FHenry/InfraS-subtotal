@@ -318,7 +318,12 @@
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TOTAL_BACKGROUND_COLOR', 'color', $langs->trans('InfrastructureTotalBackgroundcolor'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TOTAL_COLOR', 'color', $langs->trans('InfrastructureTotalColor'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_HIDE_OPTIONS_BUILD_DOC', 'on_off', $langs->trans('InfrastructureHideOptionsBuildDoc'), '', [], 2, 1, '', $num);
-		// num = 25
+		if (!getDolGlobalInt('INFRASTRUCTURE_HIDE_OPTIONS_BUILD_DOC')) {
+			$num	= infrastructure_print_input('INFRASTRUCTURE_MAKE_BUILD_DOC_NO_FOLDABLE', 'on_off', $langs->trans('InfrastructureMakeBuildDocNoFoldable'), '', [], 2, 1, '', $num);
+		} else {
+			$num++;
+		}
+		// num = 26
 	}
 	print '			</table>
 				</div>';
