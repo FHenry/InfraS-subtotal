@@ -511,7 +511,11 @@
 	<Version Number="21.1.1" MonthVersion="2026-07">
 		<change type='fix'>Déplacement d'un bloc titre complet par glisser-déposer (icône fa-grip-horizontal sur les lignes de titre) inopérant. Dans infrastructure_ajaxBlockOrderJs(), l'initialisation jQuery UI sortable ciblait $("tablelines") (sélecteur de balise HTML inexistant) au lieu de $("#tablelines") : sortable s'appliquait à zéro élément et aucun glisser-déposer n'était armé, bien que l'icône de préhension s'affiche. Ajout du « # » manquant, conforme aux templates natifs Dolibarr (ajaxrow.tpl.php).</change>
 	</Version>
-	<InfraS Downloaded="20260702"/>
+	<Version Number="21.1.2" MonthVersion="2026-07">
+		<change type='fix'>Clés de traduction erronées (trans() appelé avec un nom de clé inexistant, faute de frappe) : InfraSXMLextError → InfrastructureXMLextError (infrastructure_test_php_ext, core/lib/infrastructureAdmin.lib.php), ErrorClassXNotExists → InfrastructureErrorClassXNotExists (class/actions_infrastructure.class.php, doActions), SubInfrastructure → InfrastructureSubInfrastructure et Infrastructure → modcomnameInfrastructure (class/actions_infrastructure.class.php, ajout de bloc sous-total / sous-sous-total), basename → basenameInfrastructure (constructeur du trigger, famille affichée dans la liste des triggers). Ces clés étant absentes des fichiers .lang, Dolibarr affichait la clé brute au lieu du texte traduit.</change>
+		<change type='fix'>Ajout de 14 clés de traduction manquantes dans les 4 fichiers langs/*/infrastructure.lang (fr_FR, en_US, es_ES, it_IT), utilisées par du code existant mais jamais définies : Development, Experimental (statut de version affiché par le trigger) ; InfrastructurenoMinPHPVersion, InfrastructurenoMaxPHPVersion (repli si changelog.xml illisible, miroir de InfrastructurenoMin/MaxDolVersion) ; DolibarrVersion, ModuleVersion, PHPVersion, DatabaseVersion, WebServerVersion (tableau « Informations » de la page About — ces clés sont désormais autonomes dans le module au lieu de dépendre de install.lang du core, qui n'est jamais chargé par le module) ; InfrastructurePagebreak (info-bulle de l'icône de saut de page) ; Infrastructure_update_ol_success (message de succès après réinitialisation des lignes optionnelles sur clonage) ; ElementMissing, ElementIdMissing, ErrorFetchingElement (réponses JSON d'erreur du endpoint AJAX script/interface.php).</change>
+	</Version>
+	<InfraS Downloaded="20260707"/>
 	<Dolibarr minVersion="21.0.0" maxVersion="24.x.x"/>
 	<PHP minVersion="7.4" maxVersion="8.4"/>
 </changelog>

@@ -140,7 +140,7 @@
 	}
 
 	// View *****************************************
-	$page_name			= $langs->trans('Infrastructure').' - '.$langs->trans('InfrastructureSetup');
+	$page_name			= $langs->trans('modcomnameInfrastructure').' - '.$langs->trans('InfrastructureSetup');
 	llxHeader('', $page_name);	// browser tab
 	echo $confirm_mesg;
 	$linkback			= !empty($user->admin) ? '<a href = "'.DOL_URL_ROOT.'/admin/modules.php?restore_lastsearch_values=1">'.$langs->trans('BackToModuleList').'</a>' : '';
@@ -150,7 +150,7 @@
 	// Configuration header *************************
 	$head				= infrastructure_admin_prepare_head();
 	$picto				= 'infrastructure@infrastructure';
-	print dol_get_fiche_head($head, 'infrastructuresetup', $langs->trans('Infrastructure'), 0, $picto);
+	print dol_get_fiche_head($head, 'infrastructuresetup', $langs->trans('modcomnameInfrastructure'), 0, $picto);
 
 	// setup page goes here *************************
 	if (!empty($conf->use_javascript_ajax)) {

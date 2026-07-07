@@ -258,10 +258,10 @@
 							$title	= !empty(GETPOST('title', 'alphanohtml')) ? GETPOST('title', 'alphanohtml') : $langs->trans('InfrastructureSubtitle');
 							$qty	= 2;
 						} elseif ($action == 'add_infrastructure_line') {
-							$title	= $langs->trans('SubInfrastructure');
+							$title	= $langs->trans('InfrastructureSubInfrastructure');
 							$qty	= 98;
 						} else {
-							$title	= !empty(GETPOST('title', 'alphanohtml')) ? GETPOST('title', 'alphanohtml') : $langs->trans('Infrastructure');
+							$title	= !empty(GETPOST('title', 'alphanohtml')) ? GETPOST('title', 'alphanohtml') : $langs->trans('modcomnameInfrastructure');
 							$qty	= $level ? 100 - $level : 99;
 						}
 						if (getDolGlobalString('INFRASTRUCTURE_AUTO_ADD_TOTAL_ON_ADDING_NEW_TITLE') && $qty < 10) {
@@ -767,7 +767,7 @@
 			}
 			$set_pagebreak_margin	= false;
 			if (method_exists('Closure', 'bind')) {
-				$pageBreakOriginalValue = $pdf->AcceptPageBreak();
+				$pagebreakOriginalValue = $pdf->AcceptPageBreak();
 				$sweetsThief = function ($pdf) {
 						return $pdf->bMargin ;
 				};
@@ -873,7 +873,7 @@
 				}
 				$pdf->SetXY($pdf->postotalht, $posy);
 				if ($set_pagebreak_margin) {
-					$pdf->SetAutoPageBreak($pageBreakOriginalValue, $bMargin);
+					$pdf->SetAutoPageBreak($pagebreakOriginalValue, $bMargin);
 				}
 				if ($pdfModelUseColSystem) {
 					// Modèles à colonnes configurables (InfraSPlus) : printStdColumnContent dessine le total directement (les hooks pdf_getline* ne sont pas appelés pour ces modèles).
@@ -885,7 +885,7 @@
 				// Modèles natifs Dolibarr (azur, crabe, etc.) : le total HT/TTC est rendu via les hooks pdf_getlinetotalexcltax / pdf_getlinetotalwithtax (universels depuis 18.3.1) — pas de dessin direct ici pour éviter le doublon avec ces hooks.
 			} else {
 				if ($set_pagebreak_margin) {
-					$pdf->SetAutoPageBreak($pageBreakOriginalValue, $bMargin);
+					$pdf->SetAutoPageBreak($pagebreakOriginalValue, $bMargin);
 				}
 			}
 			// Pas de restauration des paddings ici : on les laisse actifs pour que les hooks pdf_getlinevatrate / pdf_getlinetotalexcltax / pdf_getlinetotalwithtax (appelés ensuite par le modèle PDF pour rendre les colonnes voisines de la ligne sous-total) bénéficient du même padding 1mm haut/bas. Ils seront restaurés au début de la prochaine ligne via pdf_writelinedesc.
@@ -947,7 +947,7 @@
 			infrastructure_setPdfTextColor($pdf, 'INFRASTRUCTURE_PDF_TITLE_COLOR');
 			$pdf->SetTextColor(0, 0, 0);
 			// Réservation d'espace : pour tout titre infrastructure (avec ou sans totaux stockés via INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL), si le couple « libellé du titre + description optionnelle + (ligne de totaux si applicable) » ne tient pas sur la page courante, on force un AddPage propre AVANT le rendu. Sans cette précaution, le writeHTMLCell du libellé déclenche un auto-page-break TCPDF en plein milieu du titre — le label se retrouve à cheval ou perdu entre les deux pages, une page parasite vide est créée, et le MultiCell du bandeau de fond (appelé après le writeHTMLCell, avec SetXY à $posy + offset) est dessiné sur la page d'arrivée à la position Y de l'ancienne page : on observe alors un bandeau vide sans texte en haut de la page suivante. Pour le mode INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL actif, on ajoute en plus la hauteur de la ligne de totaux redessinée par infrastructure_drawTitleColumnsAtPosY.
-			// Compat. modèles natifs Dolibarr (pdf_crabe, pdf_azur, etc.) : ces modèles entourent l'appel à pdf_writelinedesc d'un startTransaction / rollbackTransaction(true) et, en cas de pagebreak détecté au 1er essai, ils réduisent temporairement la marge basse via setPageOrientation('', true, $heightforfooter) (~12 mm au lieu des 80-120 mm initiaux pour la zone footer + totaux + freetext + QR) avant un 2e appel. Conséquence : notre AddPage du 1er essai est annulé par le rollback, et au 2e essai notre check $posy + $reservedH > getPageHeight() - getBreakMargin() ne se déclencherait plus (marge basse trop courte) — le titre serait rendu en débordement en bas de page courante puis les lignes suivantes se dessineraient par-dessus le footer. On applique donc un plancher conservatif de 25 mm à la marge basse pour le calcul du pageBreakTrigger, ce qui garantit que notre AddPage explicite se redéclenche correctement au 2e essai hors transaction. De plus, on désactive l'auto-page-break TCPDF pendant le rendu du couple writeHTMLCell + MultiCell pour le rendre atomique (sinon l'auto-page-break interne pourrait toujours fragmenter le titre dans des cas non couverts par notre estimation de hauteur).
+			// Compat. modèles natifs Dolibarr (pdf_crabe, pdf_azur, etc.) : ces modèles entourent l'appel à pdf_writelinedesc d'un startTransaction / rollbackTransaction(true) et, en cas de saut de page détecté au 1er essai, ils réduisent temporairement la marge basse via setPageOrientation('', true, $heightforfooter) (~12 mm au lieu des 80-120 mm initiaux pour la zone footer + totaux + freetext + QR) avant un 2e appel. Conséquence : notre AddPage du 1er essai est annulé par le rollback, et au 2e essai notre check $posy + $reservedH > getPageHeight() - getBreakMargin() ne se déclencherait plus (marge basse trop courte) — le titre serait rendu en débordement en bas de page courante puis les lignes suivantes se dessineraient par-dessus le footer. On applique donc un plancher conservatif de 25 mm à la marge basse pour le calcul du pagebreakTrigger, ce qui garantit que notre AddPage explicite se redéclenche correctement au 2e essai hors transaction. De plus, on désactive l'auto-page-break TCPDF pendant le rendu du couple writeHTMLCell + MultiCell pour le rendre atomique (sinon l'auto-page-break interne pourrait toujours fragmenter le titre dans des cas non couverts par notre estimation de hauteur).
 			$reservedSizeTitle		= (float) (getDolGlobalString('INFRASTRUCTURE_PDF_TITLE_SIZE') ? getDolGlobalString('INFRASTRUCTURE_PDF_TITLE_SIZE') : 9);
 			$reservedLabelH			= max((float) $h, $reservedSizeTitle * 0.6);
 			$reservedDescH			= !empty($description) && empty($hidedesc) ? max((float) $h, ($reservedSizeTitle - 1) * 0.5) + 1 : 0;
@@ -956,8 +956,8 @@
 			$savedAutoPageBreak		= $pdf->getAutoPageBreak();
 			$savedBreakMargin		= (float) $pdf->getBreakMargin();
 			$effectiveBreakMargin	= max($savedBreakMargin, 25.0);
-			$pageBreakTrigger		= $pdf->getPageHeight() - $effectiveBreakMargin;
-			if ($posy + $reservedH > $pageBreakTrigger) {
+			$pagebreakTrigger		= $pdf->getPageHeight() - $effectiveBreakMargin;
+			if ($posy + $reservedH > $pagebreakTrigger) {
 				$pdf->AddPage('', '', true);
 				$newPageMargins		= $pdf->getMargins();
 				$posy				= isset($newPageMargins['top']) && $newPageMargins['top'] > 0 ? (float) $newPageMargins['top'] : 10.0;
@@ -1014,7 +1014,7 @@
 			}
 			// restore cell padding
 			$pdf->setCellPaddings($curentCellPaddinds['L'], $curentCellPaddinds['T'], $curentCellPaddinds['R'], $curentCellPaddinds['B']);
-			// Option INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL : les hooks vat/total ont été neutralisés systématiquement pour les titres porteurs de totaux stockés (sans cela, Dolibarr dessinerait les valeurs au $curY d'origine — sans tenir compte du padding top 1mm appliqué au libellé du titre — soit ~1mm trop haut ; et après un pagebreak, au mauvais Y sur la mauvaise page). On redessine ici manuellement les colonnes TVA / Total HT à la position Y réelle du titre avec le même décalage vertical que le libellé.
+			// Option INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL : les hooks vat/total ont été neutralisés systématiquement pour les titres porteurs de totaux stockés (sans cela, Dolibarr dessinerait les valeurs au $curY d'origine — sans tenir compte du padding top 1mm appliqué au libellé du titre — soit ~1mm trop haut ; et après un saut de page, au mauvais Y sur la mauvaise page). On redessine ici manuellement les colonnes TVA / Total HT à la position Y réelle du titre avec le même décalage vertical que le libellé.
 			if (isset($line->infrastructure_title_total_ht)) {
 				$pdfModel	= infrastructure_getCallerNativePdfModel($object);
 				if (is_object($pdfModel)) {
@@ -1838,7 +1838,7 @@
 						$label .= ' '.infrastructure_getTitle($object, $line);
 					}
 					// FIX DA024845 : Le module sous total amène des erreurs dans les sauts de page lorsque l'on arrive tout juste en bas de page.
-					// Quand un modèle InfraSPlus est en charge ($_SESSION['InfraSPackPlus_model']), on délègue la décision de pagebreak au modèle PDF appelant. Le modèle dispose d'un pre-check spécifique aux lignes Infrastructure (pdf_InfraSPlus_*.modules.php — `if (!empty($isSubTotal) || !empty($isInfraTotal))`) exécuté AVANT pdf_InfraSPlus_writelinedesc, qui synchronise $curY et le numéro de page avec l'AddPage. Si on faisait ici un AddPage interne SANS que le modèle s'en aperçoive, les valeurs des colonnes voisines (Qté / TVA / Total HT) seraient dessinées sur l'ANCIENNE page à $curY non actualisé, alors que le bandeau + libellé du sous-total seraient dessinés sur la NOUVELLE page — désynchronisation visible par un sous-total dont les valeurs et le bandeau sont sur deux pages différentes.
+					// Quand un modèle InfraSPlus est en charge ($_SESSION['InfraSPackPlus_model']), on délègue la décision de saut de page au modèle PDF appelant. Le modèle dispose d'un pre-check spécifique aux lignes Infrastructure (pdf_InfraSPlus_*.modules.php — `if (!empty($isSubTotal) || !empty($isInfraTotal))`) exécuté AVANT pdf_InfraSPlus_writelinedesc, qui synchronise $curY et le numéro de page avec l'AddPage. Si on faisait ici un AddPage interne SANS que le modèle s'en aperçoive, les valeurs des colonnes voisines (Qté / TVA / Total HT) seraient dessinées sur l'ANCIENNE page à $curY non actualisé, alors que le bandeau + libellé du sous-total seraient dessinés sur la NOUVELLE page — désynchronisation visible par un sous-total dont les valeurs et le bandeau sont sur deux pages différentes.
 					$heightForFooter = getDolGlobalInt('MAIN_PDF_MARGIN_BOTTOM', 10) + (getDolGlobalInt('MAIN_GENERATE_DOCUMENTS_SHOW_FOOT_DETAILS') ? 12 : 22); // Height reserved to output the footer (value include bottom margin)
 					if (empty($_SESSION['InfraSPackPlus_model']) && $pdf->getPageHeight() - $posy - $heightForFooter < 8) {
 						$pdf->addPage('', '', true);
@@ -2475,7 +2475,7 @@
 				} else $element = $TCurrentContexts[0];
 				if (!class_exists($element)) {
 					// Pour éviter la fatale sur une page d'un module externe qui utiliserait un nom de context de Dolibarr mais qui
-					$this->error = $langs->trans('ErrorClassXNotExists', $element);
+					$this->error = $langs->trans('InfrastructureErrorClassXNotExists', $element);
 					return -1;
 				}
 				$object			= new $element($db);

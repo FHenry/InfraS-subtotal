@@ -246,7 +246,7 @@
 					if ($rang_to_add != -1) {
 						self::updateRang($object, $rang_to_add);
 					}
-					self::addInfrastructureLine($object, $langs->trans('Infrastructure'), 100-$title_niveau, $rang_to_add);
+					self::addInfrastructureLine($object, $langs->trans('modcomnameInfrastructure'), 100-$title_niveau, $rang_to_add);
 					if (method_exists($object, 'fetch_lines')) {
 						$object->fetch_lines();
 					} else {

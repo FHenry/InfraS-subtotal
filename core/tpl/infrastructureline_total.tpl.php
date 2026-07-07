@@ -83,7 +83,7 @@
 	}
 	print ' : ';
 	if ($line->info_bits > 0) {
-		echo img_picto($langs->trans('Pagebreak'), 'pagebreak@infrastructure');
+		echo img_picto($langs->trans('InfrastructurePagebreak'), 'pagebreak@infrastructure');
 	}
 	$labelHtml		= ob_get_clean();
 	$alignedMode	= $line_show_qty && isset($colsBeforeQty) && $colsBeforeQty > 0 && ($colsBeforeQty + 1) <= $colspan;

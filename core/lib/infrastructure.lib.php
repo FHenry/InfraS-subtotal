@@ -690,7 +690,7 @@
 						e.preventDefault();
 						promptInfrastructure('addInfrastructure'
 							, '<?php echo $langs->trans('InfrastructureYourInfrastructureLabel') ?>'
-							, '<?php echo $langs->trans('Infrastructure'); ?>'
+							, '<?php echo $langs->trans('InfrastructureSubtotal'); ?>'
 							, '?<?php echo $idvar ?>=<?php echo $object->id; ?>'
 							, '<?php echo $_SERVER['PHP_SELF']; ?>'
 							, {<?php echo $idvar; ?>: <?php echo (int)$object->id; ?>,
@@ -1759,7 +1759,7 @@
 
 	/**
 	*	Redessine les valeurs des colonnes TVA, Total HT (et Total TTC si disponible) sur la ligne d'un titre porteur de totaux stockés.
-	*	Utilisé après un pagebreak où les hooks vat/total ont été neutralisés (sinon Dolibarr les dessinerait avec le $curY d'origine — avant pagebreak — soit dans la zone d'en-tête de la nouvelle page).
+	*	Utilisé après un saut de page où les hooks vat/total ont été neutralisés (sinon Dolibarr les dessinerait avec le $curY d'origine — avant le saut de page — soit dans la zone d'en-tête de la nouvelle page).
 	*	Compatible modèles natifs Dolibarr legacy (pdf_azur, pdf_cyan, pdf_crabe, pdf_sponge, pdf_einstein) via les propriétés posxXXX / postotalht, et modèles modernes à cols (pdf_octopus, pdf_eratosthene) via $pdfModel->cols.
 	*
 	*	@param	TCPDF			$pdf		Instance PDF

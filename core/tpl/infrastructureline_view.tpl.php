@@ -138,7 +138,7 @@
 		print '</span>';
 	}
 	if ($line->info_bits > 0) {
-		print img_picto($langs->trans('Pagebreak'), 'pagebreak@infrastructure');
+		print img_picto($langs->trans('InfrastructurePagebreak'), 'pagebreak@infrastructure');
 	}
 	print '</td>';
 	?>

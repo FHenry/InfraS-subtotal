@@ -98,7 +98,7 @@
 			dolibarr_set_const($db, 'INFRAS_PHP_EXT_XML',	1, 'chaine', 0, 'Infrastructure module', $conf->entity);
 		} else {
 			dolibarr_set_const($db, 'INFRAS_PHP_EXT_XML',	-1, 'chaine', 0, 'Infrastructure module', $conf->entity);
-			setEventMessages('<span class = "infrastructurecaution">'.$langs->trans('InfrastructureCautionMess').'</span>'.$langs->trans('InfraSXMLextError'), [], 'warnings');
+			setEventMessages('<span class = "infrastructurecaution">'.$langs->trans('InfrastructureCautionMess').'</span>'.$langs->trans('InfrastructureXMLextError'), [], 'warnings');
 		}
 	}
 

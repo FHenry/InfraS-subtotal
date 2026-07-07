@@ -53,7 +53,7 @@
 			$langs->load('infrastructure@infrastructure');
 			$this->db			= $db;
 			$this->name			= preg_replace('/^Interface/i', '', get_class($this));
-			$this->family		= 'Modules '.$langs->trans('basename');
+			$this->family		= 'Modules '.$langs->trans('basenameInfrastructure');
 			$this->description	= $langs->trans('Module550090DescTrigger');
 			$currentversion		= infrastructure_getLocalVersionMinDoli('infrastructure');
 			$this->version		= $currentversion[0];	// 'development', 'experimental', 'dolibarr' or version
@@ -644,7 +644,7 @@
 						$res	= $line->update($user, 1);
 					}
 					if ($res > 0) {
-						setEventMessage($langs->trans('infrastructure_update_ol_success'));
+						setEventMessage($langs->trans('Infrastructure_update_ol_success'));
 					}
 				}
 			}

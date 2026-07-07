@@ -16,6 +16,15 @@ InfrastructureXMLextError       = <br><center>L'extension PHP 'XML' n'est pas ch
 InfrastructureChangelogXMLError = Erreur changelog.xml
 InfrastructurenoMinDolVersion   = Pas de version minimum connue
 InfrastructurenoMaxDolVersion   = Pas de version maximum connue
+InfrastructurenoMinPHPVersion   = Pas de version minimum PHP connue
+InfrastructurenoMaxPHPVersion   = Pas de version maximum PHP connue
+Development                     = Développement
+Experimental                    = Expérimental
+DolibarrVersion                 = Version de Dolibarr
+ModuleVersion                   = Version du module
+PHPVersion                      = Version de PHP
+DatabaseVersion                 = Version de la base
+WebServerVersion                = Version du serveur web
 
 ### Actions and buttons ###
 InfrastructuresAndTitlesActionBtnLabel = Structurer mon document
@@ -140,6 +149,7 @@ InfrastructureYourTextLabel                         = Saisissez votre descriptio
 InfrastructureDeleteWithAllLines                    = Supprimer avec toutes les lignes contenues
 InfrastructureConfirmDeleteAllThisLines             = Confirmez-vous la suppression de %s lignes ?
 InfrastructureAddBreakPageBefore                    = Ajouter un saut de page avant.
+InfrastructurePagebreak                             = Saut de page
 InfrastructureShowTableHeaderBefore                 = N'afficher l'en-tête du tableau QUE juste avant ce titre
 InfrastructurePrintAsList                           = Imprimer les détails de ce titre sous forme de liste
 InfrastructurePrintCondensed                        = Imprimer les détails de ce titre en condensé
@@ -177,6 +187,7 @@ InfrastructureOlTitleHelp         = Gestion des lignes / blocs optionnel(le)s
 InfrastructureManageOL            = Permettre de marquer des lignes ou des blocs comme « Optionnel(le)s » : leurs montants restent affichés mais sont exclus des sous-totaux parents et du total général
 InfrastructureOlReducePa          = La gestion des lignes / blocs optionnel(le)s vide aussi le prix de revient
 InfrastructureOlReducePaInfo      = Attention, si vous rendez de nouveau la ligne / le bloc non optionnel(le), il faudra de nouveau saisir le(s) prix de revient
+Infrastructure_update_ol_success  = Lignes optionnelles réinitialisées
 
 ### Summary ###
 InfrastructureRecap                            = Récapitulatif
@@ -235,6 +246,9 @@ InfrastructureErrorLoadingLinesFromLinkedOrder         = Erreur lors du chargeme
 InfrastructureErrorLoadingLinkedOrder                  = Erreur lors du chargement de la commande associées à l'expedition
 InfrastructureErrorNoLinkedOrder                       = pas de commande associée
 InfrastructureErrorClassXNotExists                     = ERREUR : la classe php %s n'est pas chargée
+ElementMissing                                         = Élément manquant
+ElementIdMissing                                       = Identifiant de l'élément manquant
+ErrorFetchingElement                                   = Erreur lors de la récupération de l'élément
 InfrastructureMigrateSubtotalFailed                    = Le test de migration depuis le module sous-total a échoué, activation annulée
 InfrastructureMigrateSubtotalRealRunFailed             = La migration réelle depuis le module sous-total a échoué
 InfrastructureCleanupSubtotalFailed                    = Le nettoyage du module sous-total après migration a échoué

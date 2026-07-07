@@ -16,6 +16,15 @@ InfrastructureXMLextError       = <br><center>The PHP 'XML' extension is not loa
 InfrastructureChangelogXMLError = Error changelog.xml
 InfrastructurenoMinDolVersion   = No known minimum version
 InfrastructurenoMaxDolVersion   = No known maximum version
+InfrastructurenoMinPHPVersion   = No known minimum PHP version
+InfrastructurenoMaxPHPVersion   = No known maximum PHP version
+Development                     = Development
+Experimental                    = Experimental
+DolibarrVersion                 = Dolibarr version
+ModuleVersion                   = Module version
+PHPVersion                      = PHP Version
+DatabaseVersion                 = Database version
+WebServerVersion                = Web server version
 
 ### Actions and buttons ###
 InfrastructuresAndTitlesActionBtnLabel = Structure my document
@@ -140,6 +149,7 @@ InfrastructureYourTextLabel                         = Enter your description
 InfrastructureDeleteWithAllLines                    = Delete with all contained lines
 InfrastructureConfirmDeleteAllThisLines             = Confirm deletion of %s lines?
 InfrastructureAddBreakPageBefore                    = Add a page break before.
+InfrastructurePagebreak                             = Page break
 InfrastructureShowTableHeaderBefore                 = ONLY display the table header just before this title
 InfrastructurePrintAsList                           = Print details of this title as a list
 InfrastructurePrintCondensed                        = Print details of this title in summary
@@ -177,6 +187,7 @@ InfrastructureOlTitleHelp         = Management of optional lines/blocks
 InfrastructureManageOL            = Allow marking lines or blocks as "Optional": their amounts remain displayed but are excluded from parent subtotals and grand total
 InfrastructureOlReducePa          = Managing optional lines/blocks also empties the cost price
 InfrastructureOlReducePaInfo      = Warning: if you set the line back to included, you will need to re-enter the cost price
+Infrastructure_update_ol_success  = Optional lines reset
 
 ### Summary ###
 InfrastructureRecap                            = Summary
@@ -235,6 +246,9 @@ InfrastructureErrorLoadingLinesFromLinkedOrder         = Error while loading ord
 InfrastructureErrorLoadingLinkedOrder                  = Error while loading the order associated with the shipment
 InfrastructureErrorNoLinkedOrder                       = No associated order
 InfrastructureErrorClassXNotExists                     = ERROR: the PHP class %s is not loaded
+ElementMissing                                         = Missing element
+ElementIdMissing                                       = Missing element ID
+ErrorFetchingElement                                   = Error while fetching the element
 InfrastructureMigrateSubtotalFailed                    = Migration test from subtotal module failed, activation aborted
 InfrastructureMigrateSubtotalRealRunFailed             = Real migration from subtotal module failed
 InfrastructureCleanupSubtotalFailed                    = Cleanup of subtotal module after migration failed

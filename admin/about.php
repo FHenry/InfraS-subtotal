@@ -49,7 +49,7 @@
 							]
 							);
 	// View *********************************
-	$page_name  = $langs->trans('Infrastructure').' - '.$langs->trans('About');
+	$page_name  = $langs->trans('modcomnameInfrastructure').' - '.$langs->trans('About');
 	llxHeader('', $page_name);
 	$newToken   = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
 	$linkback	= !empty($user->admin) ? '<a href = "'.DOL_URL_ROOT.'/admin/modules.php?restore_lastsearch_values=1">'.$langs->trans('BackToModuleList').'</a>' : '';

@@ -16,6 +16,15 @@ InfrastructureXMLextError       = <br><center>La extensión PHP 'XML' no está c
 InfrastructureChangelogXMLError = Error changelog.xml
 InfrastructurenoMinDolVersion   = Versión mínima desconocida
 InfrastructurenoMaxDolVersion   = Versión máxima desconocida
+InfrastructurenoMinPHPVersion   = Versión mínima de PHP desconocida
+InfrastructurenoMaxPHPVersion   = Versión máxima de PHP desconocida
+Development                     = Desarrollo
+Experimental                    = Experimental
+DolibarrVersion                 = Versión de Dolibarr
+ModuleVersion                   = Versión del módulo
+PHPVersion                      = Versión PHP
+DatabaseVersion                 = Versión de la base de datos
+WebServerVersion                = Versión del servidor web
 
 ### Actions and buttons ###
 InfrastructuresAndTitlesActionBtnLabel = Estructurar mi documento
@@ -140,6 +149,7 @@ InfrastructureYourTextLabel                         = Ingrese su descripción
 InfrastructureDeleteWithAllLines                    = Eliminar con todas las líneas contenidas
 InfrastructureConfirmDeleteAllThisLines             = ¿Confirma la eliminación de %s líneas?
 InfrastructureAddBreakPageBefore                    = Agregar un salto de página antes.
+InfrastructurePagebreak                             = Salto de página
 InfrastructureShowTableHeaderBefore                 = Mostrar el encabezado de la tabla SOLO justo antes de este título
 InfrastructurePrintAsList                           = Imprimir los detalles de este título como una lista
 InfrastructurePrintCondensed                        = Imprimir los detalles de este título en formato resumido
@@ -177,6 +187,7 @@ InfrastructureOlTitleHelp         = Gestión de líneas / bloques opcionales
 InfrastructureManageOL            = Permitir marcar líneas o bloques como «Opcionales»: sus importes se siguen mostrando pero quedan excluidos de los subtotales padres y del total general
 InfrastructureOlReducePa          = La gestión de líneas / bloques opcionales también vacía el precio de coste
 InfrastructureOlReducePaInfo      = Atención: si vuelve a poner la línea como incluida, tendrá que volver a ingresar el precio de coste
+Infrastructure_update_ol_success  = Líneas opcionales reinicializadas
 
 ### Summary ###
 InfrastructureRecap                            = Resumen
@@ -235,6 +246,9 @@ InfrastructureErrorLoadingLinesFromLinkedOrder         = Error al cargar las lí
 InfrastructureErrorLoadingLinkedOrder                  = Error al cargar el pedido asociado al envío
 InfrastructureErrorNoLinkedOrder                       = Sin pedido asociado
 InfrastructureErrorClassXNotExists                     = ERROR: la clase PHP %s no está cargada
+ElementMissing                                         = Elemento faltante
+ElementIdMissing                                       = Identificador del elemento faltante
+ErrorFetchingElement                                   = Error al recuperar el elemento
 InfrastructureMigrateSubtotalFailed                    = La prueba de migración desde el módulo subtotal falló, activación cancelada
 InfrastructureMigrateSubtotalRealRunFailed             = La migración real desde el módulo subtotal falló
 InfrastructureCleanupSubtotalFailed                    = La limpieza del módulo subtotal después de la migración falló
