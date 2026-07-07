@@ -240,8 +240,9 @@ La classe `ActionsInfrastructure` (`class/actions_infrastructure.class.php`) exp
 | `infrasprojectEnrichObjectLine` | cartes de documents | Sous-hook exposé par InfraSProject : retourne via `$this->resprints` le `<td class="infrastructure_ol">` avec checkbox pour les lignes standards (chaîne vide pour les lignes spéciales infrastructure, déjà gérées par le tpl `infrastructureline_row_document.tpl.php`) |
 | `printOriginObjectLine` / `printOriginObjectSubLine` | création depuis objet d'origine | Affichage des lignes spéciales dans les tables d'origine |
 | `ODTSubstitutionLine` | `odtgeneration` | Substitution de variables dans les documents ODT |
+| `pdf_writelinedesc` | `pdfgeneration` | Hook natif Dolibarr : construit le libellé de chaque ligne spéciale avant rendu (sur les sous-totaux : concaténation du libellé complet du titre parent si `INFRASTRUCTURE_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL`, sinon ajout de sa seule numérotation si `INFRASTRUCTURE_USE_NUMEROTATION`), gère les sauts de page puis délègue à `pdfAddTitle` / `pdfAddTotal` |
 | `pdfAddTitle` / `pdfAddTotal` | `pdfgeneration` | Rendu PDF spécifique des titres et sous-totaux |
-| `beforePDFCreation` | `pdfgeneration` | Préparation des lignes (factures de situation, recap) |
+| `beforePDFCreation` | `pdfgeneration` | Préparation des lignes (factures de situation, recap), applique la numérotation (`infrastructure_addNumerotation()`) |
 | `afterPDFCreation` | `pdfgeneration` | Post-traitement (page récap si configuré) |
 | `beforePercentCalculation` | `pdfgeneration` | Support des factures de situation |
 | `changeRoundingMode` | `pdfgeneration` | Ajustement arrondis TVA sur blocs condensés |
@@ -352,7 +353,8 @@ Constantes actives usuelles (voir `sql/data.sql` et la page `admin/infrastructur
 - **Permissions globales** : `INFRASTRUCTURE_ALLOW_ADD_BLOCK` / `_EDIT_BLOCK` / `_REMOVE_BLOCK` / `_DUPLICATE_BLOCK` / `_DUPLICATE_LINE` / `_ADD_LINE_UNDER_TITLE`
 - **Comportement d'insertion** : `INFRASTRUCTURE_ADD_LINE_UNDER_TITLE_AT_END_BLOCK`, `INFRASTRUCTURE_AUTO_ADD_TOTAL_ON_ADDING_NEW_TITLE`
 - **ExtraFields sur titres** : `INFRASTRUCTURE_ALLOW_EXTRAFIELDS_ON_TITLE`
-- **Concaténation labels** : `INFRASTRUCTURE_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL`
+- **Numérotation automatique des titres** : `INFRASTRUCTURE_USE_NUMEROTATION` — préfixe hiérarchique (`1`, `1.2`, ...) ajouté au libellé des titres par `infrastructure_addNumerotation()` / `infrastructure_formatNumerotation()` (`core/lib/infrastructure.lib.php`), appliqué dans `beforePDFCreation()` avant génération PDF
+- **Concaténation labels** : `INFRASTRUCTURE_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL` — ajoute le libellé complet du titre parent en fin de libellé du sous-total (écran et PDF). Si inactif et que `INFRASTRUCTURE_USE_NUMEROTATION` est actif, seule la numérotation du titre parent (ex. `1.2`) est ajoutée en fin de libellé du sous-total **sur le PDF** (`infrastructure_getNumerotation()`, appelée depuis `pdf_writelinedesc()`)
 - **Styles écran** : `INFRASTRUCTURE_TITLE_STYLE` (défaut `BU`), `INFRASTRUCTURE_TOTAL_STYLE` (défaut `B`) — fallback pour PDF si versions PDF vides
 - **Styles PDF** (18.3.0+) : `INFRASTRUCTURE_PDF_TITLE_STYLE`, `INFRASTRUCTURE_PDF_TOTAL_STYLE` (écrasent la version écran)
 - **Totaux sur titres** (18.4.0+) : `INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL` (reporte Total HT et taux TVA du bloc directement sur la ligne de titre, supprime l'impression des sous-totaux)

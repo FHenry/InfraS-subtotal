@@ -1836,6 +1836,11 @@
 				} elseif ($line->qty > 90) {
 					if (getDolGlobalInt('INFRASTRUCTURE_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL')) {
 						$label .= ' '.infrastructure_getTitle($object, $line);
+					} elseif (getDolGlobalInt('INFRASTRUCTURE_USE_NUMEROTATION')) {
+						$numerotation = infrastructure_getNumerotation($object, $line);
+						if ($numerotation !== '') {
+							$label .= ' '.$numerotation;
+						}
 					}
 					// FIX DA024845 : Le module sous total amène des erreurs dans les sauts de page lorsque l'on arrive tout juste en bas de page.
 					// Quand un modèle InfraSPlus est en charge ($_SESSION['InfraSPackPlus_model']), on délègue la décision de saut de page au modèle PDF appelant. Le modèle dispose d'un pre-check spécifique aux lignes Infrastructure (pdf_InfraSPlus_*.modules.php — `if (!empty($isSubTotal) || !empty($isInfraTotal))`) exécuté AVANT pdf_InfraSPlus_writelinedesc, qui synchronise $curY et le numéro de page avec l'AddPage. Si on faisait ici un AddPage interne SANS que le modèle s'en aperçoive, les valeurs des colonnes voisines (Qté / TVA / Total HT) seraient dessinées sur l'ANCIENNE page à $curY non actualisé, alors que le bandeau + libellé du sous-total seraient dessinés sur la NOUVELLE page — désynchronisation visible par un sous-total dont les valeurs et le bandeau sont sur deux pages différentes.

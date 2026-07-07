@@ -505,6 +505,23 @@
 	}
 
 	/**
+	* Get the numerotation prefix (ex. "1.2") of the parent title of a sub-total line.
+	* Requires infrastructure_addNumerotation() to have already prefixed the parent title label.
+	*
+	* @param CommonObject $object Object
+	* @param CommonObjectLine $currentLine Current line (sous-total)
+	* @return string
+	*/
+	function infrastructure_getNumerotation(&$object, &$currentLine)
+	{
+		$titleLabel	= infrastructure_getTitle($object, $currentLine);
+		if ($titleLabel !== '' && preg_match('/^([0-9]+(?:\.[0-9]+)*)\s/', $titleLabel, $matches)) {
+			return $matches[1];
+		}
+		return '';
+	}
+
+	/**
 	* Print new format
 	*
 	* @param	CommonObject	$object		Object
