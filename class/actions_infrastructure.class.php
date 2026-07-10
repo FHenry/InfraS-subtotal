@@ -242,7 +242,7 @@
 							$title	= !empty(GETPOST('title', 'alphanohtml')) ? GETPOST('title', 'alphanohtml') : $langs->trans('InfrastructureTitle');
 							$qty	= $level < 1 ? 1 : $level ;
 						} elseif ($action=='add_free_text') {
-							$title	= GETPOST('title', 'alphanohtml');
+							$title	= GETPOST('title', 'restricthtml');
 							if (empty($title)) {
 								$free_text		= GETPOST('free_text', 'int');
 								if (!empty($free_text)) {
