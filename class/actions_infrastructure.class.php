@@ -261,7 +261,7 @@
 							$title	= $langs->trans('InfrastructureSubInfrastructure');
 							$qty	= 98;
 						} else {
-							$title	= !empty(GETPOST('title', 'alphanohtml')) ? GETPOST('title', 'alphanohtml') : $langs->trans('modcomnameInfrastructure');
+							$title	= !empty(GETPOST('title', 'alphanohtml')) ? GETPOST('title', 'alphanohtml') : $langs->trans('InfrastructureSubtotal');
 							$qty	= $level ? 100 - $level : 99;
 						}
 						if (getDolGlobalString('INFRASTRUCTURE_AUTO_ADD_TOTAL_ON_ADDING_NEW_TITLE') && $qty < 10) {
