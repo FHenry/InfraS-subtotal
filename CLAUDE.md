@@ -316,6 +316,8 @@ Classe `InterfaceInfrastructuretrigger` dans `core/triggers/interface_90_modInfr
 
 Option introduite en 3.26.0 : la référence d'expédition peut être incluse dans le libellé des titres lors de la génération d'expéditions depuis une commande.
 
+**Point de vigilance (depuis v21.1.5)** : `runTrigger()` est invoqué par Dolibarr pour **tous** les événements métier, pas seulement les événements `LINE*`/`SHIPPING_CREATE`/etc. listés ci-dessus — le log de débogage en tête de méthode lisait `$object->id` sans vérifier son existence, provoquant un avertissement PHP « Undefined property » sur des objets qui n'exposent pas cette propriété (ex. `TPropaleHist`, historique de devis). Un test `isset($object->id)` (repli chaîne vide) protège désormais ce log.
+
 ## Données / SQL (Data model)
 
 Une table dictionnaire :

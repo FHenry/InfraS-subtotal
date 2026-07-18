@@ -522,7 +522,10 @@
 	<Version Number="21.1.4" MonthVersion="2026-07">
 		<change type='fix'>Sous-total ajouté sans titre saisi affichait « InfraStructure » (nom du module) au lieu de « Sous-total ». Cause : dans la branche générique d'ajout de sous-total de formObjectOptions() (class/actions_infrastructure.class.php), le correctif de la 21.1.2 (qui remplaçait la clé de traduction inexistante 'Infrastructure') pointait vers 'modcomnameInfrastructure' (nom du module) au lieu de la clé dédiée 'InfrastructureSubtotal' (= « Sous-total »). Correctif : $langs->trans('modcomnameInfrastructure') → $langs->trans('InfrastructureSubtotal').</change>
 	</Version>
-	<InfraS Downloaded="20260717"/>
+	<Version Number="21.1.5" MonthVersion="2026-07">
+		<change type='fix'>Trigger société : avertissement PHP "Undefined property" (TPropaleHist::$id) à chaque événement Dolibarr sans rapport avec les lignes de document. Le trigger est appelé pour tous les événements métier et lisait $object->id dans le log de débogage sans vérifier son existence au préalable.</change>
+	</Version>
+	<InfraS Downloaded="20260718"/>
 	<Dolibarr minVersion="21.0.0" maxVersion="24.x.x"/>
 	<PHP minVersion="7.4" maxVersion="8.4"/>
 </changelog>

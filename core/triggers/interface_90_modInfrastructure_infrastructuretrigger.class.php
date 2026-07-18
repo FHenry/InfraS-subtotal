@@ -184,7 +184,7 @@
 			if ($action == 'LINEBILL_SUPPLIER_UPDATE') {
 				$action	= 'LINEBILL_SUPPLIER_MODIFY';
 			}
-			dol_syslog('Trigger "'.$this->name.'" for action '.$action.' launched by '.__FILE__.' id = '.$object->id);
+			dol_syslog('Trigger "'.$this->name.'" for action '.$action.' launched by '.__FILE__.' id = '.(isset($object->id) ? $object->id : ''));
 			// Line invoice insert/create: deposit handling + shipping origin special_code
 			if (in_array($action, ['LINEBILL_INSERT', 'LINEBILL_CREATE'])) {
 				$this->LineInvoiceInsert($object, $user);
