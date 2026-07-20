@@ -19,7 +19,7 @@ Informations module (issues du code et du changelog local) :
 - Licence : GPL v3+
 - Compatibilité Dolibarr : `21.0.0` à `24.x.x`
 - Compatibilité PHP : `7.4` à `8.4`
-- Dernière version locale : `21.1.4` (2026-07)
+- Dernière version locale : `21.2.0` (2026-07)
 - Schéma de numérotation : depuis `18.1.0`, le module aligne sa version majeure sur la version minimale de Dolibarr supportée (même convention que `infraspackplus`). Format : `<dolibarrMin>.<mineur>.<patch>`. Les versions antérieures (jusqu'à `3.30.1`) suivaient une numérotation indépendante.
 - Dépendance obligatoire : aucune
 - Conflit : module **Milestone/Jalon** (iNodbox) — les deux modules ne peuvent pas être activés simultanément
@@ -356,7 +356,8 @@ Constantes actives usuelles (voir `sql/data.sql` et la page `admin/infrastructur
 - **Comportement d'insertion** : `INFRASTRUCTURE_ADD_LINE_UNDER_TITLE_AT_END_BLOCK`, `INFRASTRUCTURE_AUTO_ADD_TOTAL_ON_ADDING_NEW_TITLE`
 - **ExtraFields sur titres** : `INFRASTRUCTURE_ALLOW_EXTRAFIELDS_ON_TITLE`
 - **Numérotation automatique des titres** : `INFRASTRUCTURE_USE_NUMEROTATION` — préfixe hiérarchique (`1`, `1.2`, ...) ajouté au libellé des titres par `infrastructure_addNumerotation()` / `infrastructure_formatNumerotation()` (`core/lib/infrastructure.lib.php`), appliqué dans `beforePDFCreation()` avant génération PDF
-- **Concaténation labels** : `INFRASTRUCTURE_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL` — ajoute le libellé complet du titre parent en fin de libellé du sous-total (écran et PDF). Si inactif et que `INFRASTRUCTURE_USE_NUMEROTATION` est actif, seule la numérotation du titre parent (ex. `1.2`) est ajoutée en fin de libellé du sous-total **sur le PDF** (`infrastructure_getNumerotation()`, appelée depuis `pdf_writelinedesc()`)
+- **Concaténation labels (PDF)** : `INFRASTRUCTURE_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL` — ajoute le libellé complet du titre parent en fin de libellé du sous-total sur le PDF (`pdf_writelinedesc()`) ainsi que dans les cas hérités où `$line->label` est vide (contexte shipment, ODT). Sans effet sur l'affichage écran du cas courant (sous-total avec label rempli, ex. `21.1.4`+) : voir `INFRASTRUCTURE_SCREEN_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL` ci-dessous. Si inactif et que `INFRASTRUCTURE_USE_NUMEROTATION` est actif, seule la numérotation du titre parent (ex. `1.2`) est ajoutée en fin de libellé du sous-total **sur le PDF** (`infrastructure_getNumerotation()`, appelée depuis `pdf_writelinedesc()`)
+- **Concaténation labels (écran)** (21.2.0+) : `INFRASTRUCTURE_SCREEN_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL` — ajoute le libellé complet du titre parent en fin de libellé du sous-total sur l'écran de la fiche document (`core/tpl/infrastructureline_total.tpl.php`, contexte `document`), y compris quand `$line->label` est déjà rempli (cas normal depuis l'ajout d'un libellé par défaut « Sous-total »). Constante indépendante de la variante PDF ci-dessus
 - **Styles écran** : `INFRASTRUCTURE_TITLE_STYLE` (défaut `BU`), `INFRASTRUCTURE_TOTAL_STYLE` (défaut `B`) — fallback pour PDF si versions PDF vides
 - **Styles PDF** (18.3.0+) : `INFRASTRUCTURE_PDF_TITLE_STYLE`, `INFRASTRUCTURE_PDF_TOTAL_STYLE` (écrasent la version écran)
 - **Totaux sur titres** (18.4.0+) : `INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL` (reporte Total HT et taux TVA du bloc directement sur la ligne de titre, supprime l'impression des sous-totaux)

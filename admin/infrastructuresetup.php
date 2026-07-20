@@ -294,13 +294,14 @@
 		} else {
 			$num++;
 		}
+		$num	= infrastructure_print_input('INFRASTRUCTURE_SCREEN_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL', 'on_off', $langs->trans('InfrastructureScreenConcatTitleLabelInTotalLabel'), '', [], 2, 1, '', $num);
 		$metas	= ['class' => 'flat infrastructurewidth270 infrastructurefontsizeinherit'];
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TEXT_LINE_STYLE', 'input', $langs->trans('InfrastructureTextLineStyle'), '', $metas, 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TITLE_STYLE', 'input', $langs->trans('InfrastructureTitleStyle'), '', $metas, 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TOTAL_STYLE', 'input', $langs->trans('InfrastructureTotalStyle'), '', $metas, 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TITLE_AND_TOTAL_BRIGHTNESS_PERCENTAGE', 'input', $langs->trans('InfrastructureTitleAndInfrastructureBrightnessPercentage'), 'InfrastructureTitleAndInfrastructureBrightnessPercentageInfo', $metas, 2, 1, '%', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_DISABLE_SUMMARY', 'on_off', $langs->trans('InfrastructureDisableSummary'), '', $metas, 2, 1, '', $num);
-		// num = 17
+		// num = 18
 		$metas	= $form->selectarray('INFRASTRUCTURE_BLOC_FOLD_MODE', ['default' => $langs->trans('InfrastructureHideSubtitleOnFold'), 'keepTitle' => $langs->trans('InfrastructureKeepSubtitleDisplayOnFold'), 'hideAll' => $langs->trans('InfrastructureHideAllOnFold')], getDolGlobalString('INFRASTRUCTURE_BLOC_FOLD_MODE'), 0, 0, 0, '', 1, 0, 0, '', 'infrastructurewidth270 infrastructurefontsizeinherit');
 		$num	= infrastructure_print_input('', 'select', $langs->trans('InfrastructureBlocFoldMode'), '', $metas, 2, 1, '', $num);
 		$TFieldScreen	= ['propal'				=> $langs->trans('Proposal'),
@@ -315,7 +316,7 @@
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TITLE_BACKGROUND_COLOR', 'color', $langs->trans('InfrastructureTitleBackgroundcolor'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TITLE_COLOR', 'color', $langs->trans('InfrastructureTitleColor'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TITLE_COLOR_BLOC', 'color', $langs->trans('InfrastructureTitleColorBloc'), '', [], 2, 1, '', $num);
-		// num = 22
+		// num = 23
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TOTAL_BACKGROUND_COLOR', 'color', $langs->trans('InfrastructureTotalBackgroundcolor'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TOTAL_COLOR', 'color', $langs->trans('InfrastructureTotalColor'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_HIDE_OPTIONS_BUILD_DOC', 'on_off', $langs->trans('InfrastructureHideOptionsBuildDoc'), '', [], 2, 1, '', $num);
@@ -324,7 +325,7 @@
 		} else {
 			$num++;
 		}
-		// num = 26
+		// num = 27
 	}
 	print '			</table>
 				</div>';

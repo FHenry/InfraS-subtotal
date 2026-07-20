@@ -525,7 +525,10 @@
 	<Version Number="21.1.5" MonthVersion="2026-07">
 		<change type='fix'>Trigger société : avertissement PHP "Undefined property" (TPropaleHist::$id) à chaque événement Dolibarr sans rapport avec les lignes de document. Le trigger est appelé pour tous les événements métier et lisait $object->id dans le log de débogage sans vérifier son existence au préalable.</change>
 	</Version>
-	<InfraS Downloaded="20260718"/>
+	<Version Number="21.2.0" MonthVersion="2026-07">
+		<change type='add'>Nouvelle option d'affichage écran INFRASTRUCTURE_SCREEN_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL (section « Paramètres d'affichage », juste avant INFRASTRUCTURE_TEXT_LINE_STYLE) : ajoute le libellé du titre parent en fin de libellé du sous-total sur l'écran de la fiche document, y compris quand le sous-total a déjà un libellé rempli (cas normal). Distincte de INFRASTRUCTURE_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL qui ne couvre que le PDF et les cas hérités de libellé vide à l'écran.</change>
+	</Version>
+	<InfraS Downloaded="20260720"/>
 	<Dolibarr minVersion="21.0.0" maxVersion="24.x.x"/>
 	<PHP minVersion="7.4" maxVersion="8.4"/>
 </changelog>

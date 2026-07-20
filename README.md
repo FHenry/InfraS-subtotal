@@ -103,20 +103,21 @@ Les options sont regroupées en trois sections dans la page d'administration du 
 		* ***9*** Cacher les options de titre
 		* ***10*** Cacher l'option du saut de page avant
 		* ***11*** Forcer l'affichage des boutons d'action en mode éclaté (hors menu déroulant) (Dolibarr ≥ 20)
-		* ***12*** Style des textes libres (B = gras, U = souligné, I = italique)
-		* ***13*** Style des titres (B = gras, U = souligné, I = italique)
-		* ***14*** Style des sous-totaux (B = gras, U = souligné, I = italique)
-		* ***15*** Pourcentage de réduction de la luminosité entre chaque niveau de titres / sous-titres / sous-totaux
-		* ***16*** Désactiver le menu « sommaire rapide » (bouton flottant visible lorsque le document a des titres)
-		* ***17*** Comportement à adopter lorsque l'on cache un bloc de titre (`default` / `keepTitle` / `hideAll`)
-		* ***18*** Activer l'affichage de la somme des quantités sur les lignes de sous-totaux par type de document (devis, commande, facture, propal/commande/facture fournisseur)
-		* ***19*** Couleur de fond utilisée pour les titres
-		* ***20*** Couleur de texte utilisée pour les titres (texte et icônes d'action)
-		* ***21*** Couleur de texte utilisée pour les icônes d'action sur les blocs
-		* ***22*** Couleur de fond utilisée pour les sous-totaux
-		* ***23*** Couleur de texte utilisée pour les sous-totaux (texte et icônes d'action)
-		* ***24*** Cacher les options de génération du document
-		* ***25*** Garder le bloc de génération de document toujours ouvert (non pliable)
+		* ***12*** Sur les lignes de sous-total à l'écran, ajouter le libellé du titre auquel cette dernière est rattachée
+		* ***13*** Style des textes libres (B = gras, U = souligné, I = italique)
+		* ***14*** Style des titres (B = gras, U = souligné, I = italique)
+		* ***15*** Style des sous-totaux (B = gras, U = souligné, I = italique)
+		* ***16*** Pourcentage de réduction de la luminosité entre chaque niveau de titres / sous-titres / sous-totaux
+		* ***17*** Désactiver le menu « sommaire rapide » (bouton flottant visible lorsque le document a des titres)
+		* ***18*** Comportement à adopter lorsque l'on cache un bloc de titre (`default` / `keepTitle` / `hideAll`)
+		* ***19*** Activer l'affichage de la somme des quantités sur les lignes de sous-totaux par type de document (devis, commande, facture, propal/commande/facture fournisseur)
+		* ***20*** Couleur de fond utilisée pour les titres
+		* ***21*** Couleur de texte utilisée pour les titres (texte et icônes d'action)
+		* ***22*** Couleur de texte utilisée pour les icônes d'action sur les blocs
+		* ***23*** Couleur de fond utilisée pour les sous-totaux
+		* ***24*** Couleur de texte utilisée pour les sous-totaux (texte et icônes d'action)
+		* ***25*** Cacher les options de génération du document
+		* ***26*** Garder le bloc de génération de document toujours ouvert (non pliable)
 	* PARAMÈTRES D'IMPRESSION PDF
 		* ***1*** Activer la numérotation automatique sur le PDF
 		* ***2*** Imprimer les totaux directement sur les lignes de titre

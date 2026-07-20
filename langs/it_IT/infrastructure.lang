@@ -61,6 +61,7 @@ InfrastructureAllowDuplicateBlock                                 = Consentire l
 InfrastructureAllowDuplicateLine                                  = Consentire la duplicazione di una riga
 InfrastructureAllowExtrafieldsOnTitle                             = Consentire la visualizzazione degli extrafields sui titoli (i dati registrati saranno quindi popolati sulle righe del blocco)
 InfrastructureAllowAddLineUnderTitle                              = Permettere l'aggiunta di una riga libera e/o prodotto direttamente sotto un titolo
+InfrastructureScreenConcatTitleLabelInTotalLabel                  = Sulle righe di subtotale a schermo, aggiungere l'etichetta del titolo a cui appartiene.
 InfrastructureTextLineStyle                                       = Stile dei testi liberi (B = grassetto, U = sottolineato, I = corsivo)
 InfrastructureTitleStyle                                          = Stile dei titoli (B = grassetto, U = sottolineato, I = corsivo)
 InfrastructurePdfTitleSize                                        = Dimensione dei titoli nei PDF

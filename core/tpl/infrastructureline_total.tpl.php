@@ -76,9 +76,16 @@
 	} else {
 		if (getDolGlobalString('PRODUIT_DESC_IN_FORM') && !empty($line->description)) {
 			$lineLabel	= $line->description != $line->label ? $line->label.'</span><br><div class="infrastructure_desc">'.dol_htmlentitiesbr($line->description) : $line->label;
+			if (getDolGlobalInt('INFRASTRUCTURE_SCREEN_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL')) {
+				$lineLabel	.= ' '.infrastructure_getTitle($object, $line);
+			}
 			print '	<span class="infrastructure_label" style="'.$titleStyleItalic.$titleStyleBold.$titleStyleUnderline.'">'.$lineLabel.'</div>';
 		} else {
-			print '	<span class="infrastructure_label classfortooltip" style=" '.$titleStyleItalic.$titleStyleBold.$titleStyleUnderline.'" title="'.$line->description.'">'.$line->label.'</span>';
+			$lineLabel	= $line->label;
+			if (getDolGlobalInt('INFRASTRUCTURE_SCREEN_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL')) {
+				$lineLabel	.= ' '.infrastructure_getTitle($object, $line);
+			}
+			print '	<span class="infrastructure_label classfortooltip" style=" '.$titleStyleItalic.$titleStyleBold.$titleStyleUnderline.'" title="'.$line->description.'">'.$lineLabel.'</span>';
 		}
 	}
 	print ' : ';

@@ -61,6 +61,7 @@ InfrastructureAllowDuplicateBlock                                 = Allow block 
 InfrastructureAllowDuplicateLine                                  = Allow line duplication
 InfrastructureAllowExtrafieldsOnTitle                             = Allow extrafields display on titles (recorded data will then populate the block lines)
 InfrastructureAllowAddLineUnderTitle                              = Allow adding a free line and/or product directly under a title
+InfrastructureScreenConcatTitleLabelInTotalLabel                  = On subtotal lines on screen, add the label of the title it belongs to.
 InfrastructureTextLineStyle                                       = Free text style (B = bold, U = underline, I = italic)
 InfrastructureTitleStyle                                          = Title style (B = bold, U = underline, I = italic)
 InfrastructurePdfTitleSize                                        = Title size in PDF
