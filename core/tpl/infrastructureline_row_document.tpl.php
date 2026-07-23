@@ -189,7 +189,7 @@
 					}
 				}
 				if ($object->statut == 0 && $createRight && getDolGlobalString('INFRASTRUCTURE_ALLOW_EDIT_BLOCK')) {
-					$color	= getDolGlobalString(TInfrastructure::isTitle($line) ? 'INFRASTRUCTURE_TITLE_COLOR' : 'INFRASTRUCTURE_TOTAL_COLOR', '000000');
+					$color	= getDolGlobalString(TInfrastructure::isTitle($line) ? 'INFRASTRUCTURE_TITLE_COLOR' : (TInfrastructure::isFreeText($line) ? 'INFRASTRUCTURE_TEXT_LINE_COLOR' : 'INFRASTRUCTURE_TOTAL_COLOR'), '000000');
 					print '		<a class="infrastructure-line-action-btn"  href="'.dol_escape_htmltag($_SERVER['PHP_SELF']).'?'.$idvar.'='.((int) $object->id).'&action=editline&token='.$newToken.'&lineid='.((int) $line->id).'#row-'.((int) $line->id).'">
 									'.img_edit('default', 0, ' style="color:'.$color.' !important;"').'
 								</a>';
@@ -203,7 +203,7 @@
 			if ($object->statut == 0 && $createRight && !empty(getDolGlobalString('INFRASTRUCTURE_ALLOW_REMOVE_BLOCK'))) {
 				$line->fk_prev_id	= empty($line->fk_prev_id) ? null : $line->fk_prev_id;
 				if (!isset($line->fk_prev_id) || $line->fk_prev_id === null) {
-					$color		= getDolGlobalString(TInfrastructure::isTitle($line) ? 'INFRASTRUCTURE_TITLE_COLOR' : 'INFRASTRUCTURE_TOTAL_COLOR', '000000');
+					$color		= getDolGlobalString(TInfrastructure::isTitle($line) ? 'INFRASTRUCTURE_TITLE_COLOR' : (TInfrastructure::isFreeText($line) ? 'INFRASTRUCTURE_TEXT_LINE_COLOR' : 'INFRASTRUCTURE_TOTAL_COLOR'), '000000');
 					$img_delete	= img_delete('default', ' style="color:'.$color.' !important;"', '');
 					print '	<a class="infrastructure-line-action-btn"  href="'.dol_escape_htmltag($_SERVER['PHP_SELF']).'?'.$idvar.'='.((int) $object->id).'&action=ask_deleteline&lineid='.((int) $line->id).'&token='.$newToken.'">'.$img_delete.'</a>';
 				}

@@ -116,8 +116,9 @@ Les options sont regroupées en trois sections dans la page d'administration du 
 		* ***22*** Couleur de texte utilisée pour les icônes d'action sur les blocs
 		* ***23*** Couleur de fond utilisée pour les sous-totaux
 		* ***24*** Couleur de texte utilisée pour les sous-totaux (texte et icônes d'action)
-		* ***25*** Cacher les options de génération du document
-		* ***26*** Garder le bloc de génération de document toujours ouvert (non pliable)
+		* ***25*** Couleur de texte utilisée pour les lignes de texte libre (texte et icônes d'action)
+		* ***26*** Cacher les options de génération du document
+		* ***27*** Garder le bloc de génération de document toujours ouvert (non pliable)
 	* PARAMÈTRES D'IMPRESSION PDF
 		* ***1*** Activer la numérotation automatique sur le PDF
 		* ***2*** Imprimer les totaux directement sur les lignes de titre
