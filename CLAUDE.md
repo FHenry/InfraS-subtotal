@@ -19,7 +19,7 @@ Informations module (issues du code et du changelog local) :
 - Licence : GPL v3+
 - Compatibilité Dolibarr : `21.0.0` à `24.x.x`
 - Compatibilité PHP : `7.4` à `8.4`
-- Dernière version locale : `21.2.0` (2026-07)
+- Dernière version locale : `21.5.0` (2026-07)
 - Schéma de numérotation : depuis `18.1.0`, le module aligne sa version majeure sur la version minimale de Dolibarr supportée (même convention que `infraspackplus`). Format : `<dolibarrMin>.<mineur>.<patch>`. Les versions antérieures (jusqu'à `3.30.1`) suivaient une numérotation indépendante.
 - Dépendance obligatoire : aucune
 - Conflit : module **Milestone/Jalon** (iNodbox) — les deux modules ne peuvent pas être activés simultanément
@@ -368,6 +368,7 @@ Constantes actives usuelles (voir `sql/data.sql` et la page `admin/infrastructur
 - **TVA** : `INFRASTRUCTURE_LIMIT_TVA_ON_CONDENSED_BLOCS` (3.28.4+)
 - **Récapitulatif PDF** : `INFRASTRUCTURE_PROPAL_ADD_RECAP` / `_COMMANDE_ADD_RECAP` / `_INVOICE_ADD_RECAP`, `INFRASTRUCTURE_KEEP_RECAP_FILE`
 - **Marge sur sous-totaux** : `INFRASTRUCTURE_DISPLAY_MARGIN_ON_TOTAL`
+- **Lignes optionnelles (OL)** : `INFRASTRUCTURE_MANAGE_OL` (active la case « Opt »), `INFRASTRUCTURE_OL_REDUCE_PA` (vide aussi le prix de revient), `INFRASTRUCTURE_OL_SHOW_DETAILS` (21.4.0+, désactivée par défaut) — conditionne l'affichage du cumul « options non incluses » dans le libellé du sous-total (`infrastructureline_total.tpl.php`) et l'affichage de la quantité individuelle des lignes optionnelles dans les templates `lineviews` d'InfraSProject/InfraSPackPlus (sans cette option, la quantité reste masquée comme une ligne « Option » native Dolibarr classique), `INFRASTRUCTURE_PDF_OL_SHOW_DETAILS` (21.5.0+, désactivée par défaut) — équivalent PDF : même annotation dans le libellé du sous-total PDF (`pdf_writelinedesc()`) et même déblocage de la quantité affichée pour les lignes optionnelles en PDF (`pdf_getlineqty()`), indépendante de la variante écran
 - **UI** : `INFRASTRUCTURE_HIDE_OPTIONS_BUILD_DOC`, `INFRASTRUCTURE_DISABLE_SUMMARY`, `INFRASTRUCTURE_FORCE_EXPLODE_ACTION_BTN`, `INFRASTRUCTURE_DEFAULT_CHECK_SHIPPING_LIST_FOR_TITLE_DESC`
 - **Expéditions** : `NO_TITLE_SHOW_ON_EXPED_GENERATION`
 - **Offsets PDF** : `INFRASTRUCTURE_PDF_TITLE_BACKGROUND_CELL_HEIGHT_OFFSET` / `_POS_Y_OFFSET`, `INFRASTRUCTURE_PDF_TOTAL_BACKGROUND_CELL_HEIGHT_OFFSET` / `_POS_Y_OFFSET`

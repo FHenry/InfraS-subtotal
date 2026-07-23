@@ -88,6 +88,9 @@
 			print '	<span class="infrastructure_label classfortooltip" style=" '.$titleStyleItalic.$titleStyleBold.$titleStyleUnderline.'" title="'.$line->description.'">'.$lineLabel.'</span>';
 		}
 	}
+	if (!empty($total_options) && getDolGlobalString('INFRASTRUCTURE_OL_SHOW_DETAILS')) {
+		print ' <span class="infrastructure_label_options">('.$langs->trans('InfrastructureOptionalTotalInLabel', price($total_options)).')</span>';
+	}
 	print ' : ';
 	if ($line->info_bits > 0) {
 		echo img_picto($langs->trans('InfrastructurePagebreak'), 'pagebreak@infrastructure');
@@ -129,6 +132,9 @@
 		$totalCostPrice		= 0;
 		if (!empty($productLines)) {
 			foreach ($productLines as $l) {
+				if (!empty($l->array_options['options_infrastructure_ol'])) {
+					continue; // Ligne optionnelle déjà exclue de $total_line : exclure aussi son coût de revient pour garder une marge cohérente
+				}
 				$product	= new Product($db);
 				$res		= $product->fetch($l->fk_product);
 				if ($res) {

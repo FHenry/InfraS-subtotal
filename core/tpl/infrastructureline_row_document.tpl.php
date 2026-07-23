@@ -120,10 +120,12 @@
 		// Pour les sous-totaux : pré-calculs du total + quantité cumulée (utilisés par infrastructureline_total.tpl.php)
 		$line_show_qty	= false;
 		if (TInfrastructure::isTotal($line)) {
-			$TInfrastructureDatas		= infrastructure_get_totalLineFromObject($object, $line, false, 1);
-			$total_line					= $TInfrastructureDatas[0];
-			$multicurrency_total_line	= $TInfrastructureDatas[6];
-			$total_qty					= $TInfrastructureDatas[4];
+			$TInfrastructureDatas			= infrastructure_get_totalLineFromObject($object, $line, false, 1);
+			$total_line						= $TInfrastructureDatas[0];
+			$multicurrency_total_line		= $TInfrastructureDatas[6];
+			$total_qty						= $TInfrastructureDatas[4];
+			$total_options					= $TInfrastructureDatas[8];
+			$multicurrency_total_options	= $TInfrastructureDatas[9];
 			if (($show_qty_by_default = TInfrastructure::showQtyForObject($object))) {	// Assignation et if sur le retour pour éviter d'appeler showQtyForObject() pour chaque ligne
 				$line_show_qty	= TInfrastructure::showQtyForObjectLine($line, $show_qty_by_default);
 			}
