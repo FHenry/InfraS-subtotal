@@ -19,7 +19,7 @@ Informations module (issues du code et du changelog local) :
 - Licence : GPL v3+
 - Compatibilité Dolibarr : `21.0.0` à `24.x.x`
 - Compatibilité PHP : `7.4` à `8.4`
-- Dernière version locale : `21.5.0` (2026-07)
+- Dernière version locale : `21.6.0` (2026-07)
 - Schéma de numérotation : depuis `18.1.0`, le module aligne sa version majeure sur la version minimale de Dolibarr supportée (même convention que `infraspackplus`). Format : `<dolibarrMin>.<mineur>.<patch>`. Les versions antérieures (jusqu'à `3.30.1`) suivaient une numérotation indépendante.
 - Dépendance obligatoire : aucune
 - Conflit : module **Milestone/Jalon** (iNodbox) — les deux modules ne peuvent pas être activés simultanément
@@ -57,7 +57,8 @@ htdocs/custom/infrastructure/
 │   ├── lib/
 │   │   ├── infrastructure.lib.php
 │   │   ├── infrastructureAdmin.lib.php
-│   │   └── infrastructureMigrateSubtotal.lib.php
+│   │   ├── infrastructureMigrateSubtotal.lib.php
+│   │   └── infrastructureMigrateSoustotal.lib.php
 │   ├── modules/
 │   │   └── modInfrastructure.class.php
 │   ├── tpl/
@@ -90,7 +91,8 @@ htdocs/custom/infrastructure/
 │   └── it_IT/infrastructure.lang
 ├── script/
 │   ├── interface.php
-│   └── migrate-from-subtotal.php
+│   ├── migrate-from-subtotal.php
+│   └── migrate-from-soustotal.php
 └── sql/
     ├── data.sql
     ├── llx_c_infrastructure_free_text.sql
@@ -168,6 +170,44 @@ Le module `infrastructure` est un fork/remplacement du module `subtotal` (ATM Co
 - CLI : `php migrate-from-subtotal.php confirm [cleanup]`
 
 Clés de traduction : `InfrastructureMigrateSubtotalFailed`, `InfrastructureMigrateSubtotalRealRunFailed`, `InfrastructureCleanupSubtotalFailed`.
+
+### Migration depuis le module soustotal (Iouston — modSousTotal)
+
+En plus du Sous-Total d'ATM, le module remplace aussi le **Sous-Total de Iouston** (`modSousTotal`, numéro 446160), dont le **modèle de données est structurellement différent** (aucun renommage de constantes ne s'applique). À l'activation, si `isModEnabled('soustotal')` est vrai, une migration dédiée est déclenchée depuis `init()`.
+
+**Différence de modèle** (source Iouston vs cible infrastructure) :
+
+- Lignes spéciales identifiées **uniquement** par l'extrafield `options_soustotal_type` (1 = titre, 2 = sous-total, 3 = texte libre) et le niveau par `options_soustotal_level` — `special_code`/`qty`/`product_type` ne sont **pas fiables** (la migration ATM→soustotal les avait remis à 0). Cible : `special_code = 550090` + `product_type = 9` + `qty` (titre = niveau ; sous-total = 100 − niveau ; texte libre = 50).
+- Saut de page `options_soustotal_page_break` → `info_bits = 8`. Repli `options_soustotal_hidden` → extrafield `hideblock`.
+- Dictionnaire `c_predefined_texts` (colonnes `rowid, code, label, description, rang, color, entity, active`) → `c_infrastructure_free_text` (`description` → `content`).
+- Constantes `SOUSTOTAL_*` (couleurs **par niveau** `SOUSTOTAL_NIVEAU_%d_{PDF|FICHE}_*`) → `INFRASTRUCTURE_*` (couleurs **globales**), référence **NIVEAU_1**, le sous-total reprenant la couleur du titre.
+
+**Fichiers impliqués** :
+
+- `core/lib/infrastructureMigrateSoustotal.lib.php` :
+	- `infrastructure_migrateFromSoustotal($db, $conf, $dryRun, $logger)` — migration atomique (transaction), retour `['success' => bool, 'errors' => string[]]`
+	- `infrastructure_cleanupSoustotal($db, $conf, $logger)` — désactivation + nettoyage, retour `1` / `0`
+- `script/migrate-from-soustotal.php` — wrapper CLI/web (admin requis, simulation par défaut)
+
+**Séquence dans `init()`** : dry-run → exécution réelle → cleanup. Bloc **placé après la création des ExtraFields** (le report `soustotal_hidden` → `hideblock` écrit dans la colonne `hideblock`, qui doit exister au préalable). Toute étape qui échoue annule l'activation. Bloc indépendant de celui du subtotal ATM (les deux modules ont des noms techniques distincts : `subtotal` vs `soustotal`).
+
+**Opérations de migration** :
+
+| Étape | Opération |
+|-------|-----------|
+| 1/3 — Lignes de documents | Sur les 6 tables `*det` : `UPDATE ... JOIN *_extrafields` — réencode `special_code`/`product_type`/`qty` selon `soustotal_type`+`soustotal_level` (garde d'idempotence `special_code <> 550090`), `info_bits = 8` si `soustotal_page_break`, `hideblock = 1` si `soustotal_hidden` (gardé par `SHOW COLUMNS`), backfill de la description depuis `c_predefined_texts` si vide |
+| 2/3 — Dictionnaire | `c_predefined_texts` → `c_infrastructure_free_text` (`description` → `content`, dédoublonnage `label` + `entity`) |
+| 3/3 — Constantes | **Multi-entité** : découvre les entités possédant des `SOUSTOTAL_*`, puis pour chacune mappe récapitulatifs par document, couleurs et styles (B/U/I) du NIVEAU_1 → `INFRASTRUCTURE_*` (upsert SQL direct, pas de dépendance à `dolibarr_set_const`) |
+
+**Opérations de cleanup** : appel de `modSousTotal->remove('')`, suppression des résidus `MAIN_MODULE_SOUSTOTAL*` et `SOUSTOTAL_*` dans `llx_const`, `DROP TABLE IF EXISTS llx_c_predefined_texts`, suppression des ExtraFields `soustotal_*` orphelins (définitions + colonnes). Les opérations DDL (`DROP TABLE`/`ALTER TABLE`) auto-commitent en MySQL/MariaDB — le cleanup n'est donc pas rejouable par rollback et ne doit s'exécuter qu'après une migration réelle réussie.
+
+**Utilisation manuelle** :
+
+- Web simulation (par défaut) : `.../custom/infrastructure/script/migrate-from-soustotal.php`
+- Web exécution : `?confirm=yes` (+ `&cleanup=yes` pour nettoyer)
+- CLI : `php migrate-from-soustotal.php confirm [cleanup]`
+
+Clés de traduction : `InfrastructureMigrateSoustotalFailed`, `InfrastructureMigrateSoustotalRealRunFailed`, `InfrastructureCleanupSoustotalFailed`.
 
 ## Fonctionnement principal (Core behavior)
 
@@ -380,6 +420,7 @@ Point de vigilance : la liste complète des constantes par défaut (~30) est dan
 Le module est explicitement interopérable avec :
 
 - **Sous-Total** (ATM Consulting) — version originale ; **remplacement automatique** à l'activation
+- **Sous-Total** (Iouston — `modSousTotal`) — variante à modèle de données distinct ; **remplacement automatique** à l'activation (voir *Migration depuis le module soustotal*)
 - **Milestone / Jalon** (iNodbox) — **CONFLIT BLOQUANT**
 - **Ouvrage / Forfait** (Inovea), **Équipement** (Patas-Monkey), **Custom Link** (Patas-Monkey), **Note de Frais Plus** (Mikael Carlavan), **Ultimate** (ATM Consulting)
 - **InfraSPackPlus** (InfraS) — support complet des structures dans les modèles PDF (InfraSPlus_Propal, InfraSPlus_Facture, etc.)
