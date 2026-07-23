@@ -200,6 +200,39 @@
 				// Désactive le sommaire rapide
 				dolibarr_set_const($db, 'INFRASTRUCTURE_DISABLE_SUMMARY', 1, 'chaine', 0, '', $conf->entity);
 			}
+			// Migration depuis le module soustotal (Iouston, modSousTotal) si présent et activé.
+			// Placée ici (après création des extrafields) car le report soustotal_hidden → hideblock
+			// écrit dans la colonne extrafield hideblock, qui doit exister au préalable.
+			if (isModEnabled('soustotal')) {
+				dol_include_once('/'.$this->name.'/core/lib/infrastructureMigrateSoustotal.lib.php');
+				$logMessages		= [];
+				$logger				= function ($msg) use (&$logMessages) {
+					$logMessages[]	= $msg;
+					dol_syslog('modInfrastructure::init migrate-soustotal : '.$msg);
+				};
+				// Étape 1 : test (dry-run)
+				$dryRun				= infrastructure_migrateFromSoustotal($db, $conf, true, $logger);
+				if (! $dryRun['success']) {
+					$this->error	= $langs->trans('InfrastructureMigrateSoustotalFailed').' : '.implode(' | ', $dryRun['errors']);
+					dol_syslog('modInfrastructure::init migration soustotal dry-run FAILED : '.implode(' | ', $dryRun['errors']).' — messages : '.implode("\n", $logMessages), LOG_ERR);
+					return 0;
+				}
+				// Étape 2 : exécution réelle
+				$realRun			= infrastructure_migrateFromSoustotal($db, $conf, false, $logger);
+				if (! $realRun['success']) {
+					$this->error	= $langs->trans('InfrastructureMigrateSoustotalRealRunFailed').' : '.implode(' | ', $realRun['errors']);
+					dol_syslog('modInfrastructure::init migration soustotal real-run FAILED : '.implode(' | ', $realRun['errors']).' — messages : '.implode("\n", $logMessages), LOG_ERR);
+					return 0;
+				}
+				// Étape 3 : désactivation soustotal + cleanup
+				$resCleanup			= infrastructure_cleanupSoustotal($db, $conf, $logger);
+				if (! $resCleanup) {
+					$this->error	= $langs->trans('InfrastructureCleanupSoustotalFailed');
+					dol_syslog('modInfrastructure::init cleanup soustotal FAILED — messages : '.implode("\n", $logMessages), LOG_ERR);
+					return 0;
+				}
+				dol_syslog('modInfrastructure::init migration soustotal → infrastructure OK — messages : '.implode("\n", $logMessages));
+			}
 			return $this->_init($sql, $options);
 		}
 

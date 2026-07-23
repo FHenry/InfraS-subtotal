@@ -259,6 +259,9 @@ InfrastructureMigrateSubtotalFailed                    = Il test di migrazione d
 InfrastructureMigrateSubtotalRealRunFailed             = La migrazione reale dal modulo subtotal è fallita
 InfrastructureCleanupSubtotalFailed                    = La pulizia del modulo subtotal dopo la migrazione è fallita
 InfrastructureMigrateSpecialCodeFailed                 = La migrazione dello special_code (da 104777 a 550090) è fallita, attivazione annullata
+InfrastructureMigrateSoustotalFailed                   = Il test di migrazione dal modulo Sous-Total (Iouston) è fallito, attivazione annullata
+InfrastructureMigrateSoustotalRealRunFailed            = La migrazione reale dal modulo Sous-Total (Iouston) è fallita
+InfrastructureCleanupSoustotalFailed                   = La pulizia del modulo Sous-Total (Iouston) dopo la migrazione è fallita
 InfrastructureForceExplodeActionBtn                    = Forzare la visualizzazione dei pulsanti d'azione affiancati (al di fuori del menu a tendina)
 InfrastructureForceExplodeActionBtnInfo                = Mostra tutti i pulsanti d'azione « Aggiungi titolo / totale / testo libero / duplica » affiancati invece che raggruppati in un menu a tendina. Senza effetto in Dolibarr < 20 dove i pulsanti sono sempre espansi.
 InfrastructurePdfTitleStyleIfHiddenLines               = Stile dei titoli quando il dettaglio del blocco è nascosto (B = grassetto, U = sottolineato, I = corsivo)

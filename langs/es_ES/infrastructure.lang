@@ -259,6 +259,9 @@ InfrastructureMigrateSubtotalFailed                    = La prueba de migración
 InfrastructureMigrateSubtotalRealRunFailed             = La migración real desde el módulo subtotal falló
 InfrastructureCleanupSubtotalFailed                    = La limpieza del módulo subtotal después de la migración falló
 InfrastructureMigrateSpecialCodeFailed                 = La migración del special_code (104777 a 550090) falló, activación cancelada
+InfrastructureMigrateSoustotalFailed                   = La prueba de migración desde el módulo Sous-Total (Iouston) falló, activación cancelada
+InfrastructureMigrateSoustotalRealRunFailed            = La migración real desde el módulo Sous-Total (Iouston) falló
+InfrastructureCleanupSoustotalFailed                   = La limpieza del módulo Sous-Total (Iouston) después de la migración falló
 InfrastructureForceExplodeActionBtn                    = Forzar la visualización de los botones de acción uno al lado del otro (fuera del menú desplegable)
 InfrastructureForceExplodeActionBtnInfo                = Muestra todos los botones de acción « Añadir título / total / texto libre / duplicar » uno al lado del otro en lugar de agrupados en un menú desplegable. Sin efecto en Dolibarr < 20 donde los botones siempre están desplegados.
 InfrastructurePdfTitleStyleIfHiddenLines               = Estilo de los títulos cuando el detalle del bloque está oculto (B = negrita, U = subrayado, I = cursiva)

@@ -259,6 +259,9 @@ InfrastructureMigrateSubtotalFailed                    = Migration test from sub
 InfrastructureMigrateSubtotalRealRunFailed             = Real migration from subtotal module failed
 InfrastructureCleanupSubtotalFailed                    = Cleanup of subtotal module after migration failed
 InfrastructureMigrateSpecialCodeFailed                 = Special code migration (104777 to 550090) failed, activation aborted
+InfrastructureMigrateSoustotalFailed                   = Migration test from Sous-Total (Iouston) module failed, activation aborted
+InfrastructureMigrateSoustotalRealRunFailed            = Real migration from Sous-Total (Iouston) module failed
+InfrastructureCleanupSoustotalFailed                   = Cleanup of Sous-Total (Iouston) module after migration failed
 InfrastructureForceExplodeActionBtn                    = Force action buttons to display side-by-side (outside dropdown menu)
 InfrastructureForceExplodeActionBtnInfo                = Displays all action buttons « Add title / total / free text / duplicate » side-by-side rather than grouped in a dropdown menu. No effect in Dolibarr < 20 where buttons are always exploded.
 InfrastructurePdfTitleStyleIfHiddenLines               = Title style when block detail is hidden (B = bold, U = underline, I = italic)

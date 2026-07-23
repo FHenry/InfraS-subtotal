@@ -259,6 +259,9 @@ InfrastructureMigrateSubtotalFailed                    = Le test de migration de
 InfrastructureMigrateSubtotalRealRunFailed             = La migration réelle depuis le module sous-total a échoué
 InfrastructureCleanupSubtotalFailed                    = Le nettoyage du module sous-total après migration a échoué
 InfrastructureMigrateSpecialCodeFailed                 = La migration du special_code (104777 vers 550090) a échoué, activation annulée
+InfrastructureMigrateSoustotalFailed                   = Le test de migration depuis le module Sous-Total (Iouston) a échoué, activation annulée
+InfrastructureMigrateSoustotalRealRunFailed            = La migration réelle depuis le module Sous-Total (Iouston) a échoué
+InfrastructureCleanupSoustotalFailed                   = Le nettoyage du module Sous-Total (Iouston) après migration a échoué
 InfrastructureForceExplodeActionBtn                    = Forcer l'affichage des boutons d'action en mode éclaté (hors menu déroulant)
 InfrastructureForceExplodeActionBtnInfo                = Affiche tous les boutons d'action « Ajouter titre / sous-total / texte libre / dupliquer » côte à côte plutôt que regroupés dans un menu déroulant. Sans effet en Dolibarr < 20 où les boutons sont toujours éclatés.
 InfrastructurePdfTitleStyleIfHiddenLines               = Style des titres lorsque le détail du bloc est caché (B = gras, U = souligné, I = italique)
