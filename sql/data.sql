@@ -78,6 +78,7 @@ INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRAS
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_SCREEN_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL',					'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_SHOW_TVA_ON_TOTAL_LINES',									'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_TEXT_FOR_TITLE_ORDERS_TO_INVOICE',							'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
+INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_TEXT_LINE_COLOR',											'__ENTITY__', '000000',	'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_TEXT_LINE_STYLE',											'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_COL_2_KEEP_WITH_OL',										'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_TITLE_AND_TOTAL_BRIGHTNESS_PERCENTAGE',					'__ENTITY__', '10',		'chaine', '0', 'Infrastructure module');

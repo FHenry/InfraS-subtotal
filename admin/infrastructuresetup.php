@@ -82,7 +82,7 @@
 													'INFRASTRUCTURE_TITLE_AND_TOTAL_BRIGHTNESS_PERCENTAGE',
 													'INFRASTRUCTURE_TITLE_BACKGROUND_COLOR',			'INFRASTRUCTURE_TOTAL_BACKGROUND_COLOR',
 													'INFRASTRUCTURE_TITLE_COLOR',						'INFRASTRUCTURE_TOTAL_COLOR',
-													'INFRASTRUCTURE_TITLE_COLOR_BLOC'
+													'INFRASTRUCTURE_TITLE_COLOR_BLOC',					'INFRASTRUCTURE_TEXT_LINE_COLOR'
 													],
 									'pdf'	=> ['INFRASTRUCTURE_DEFAULT_DISPLAY_QTY_FOR_TOTAL_ON_ELEMENTS_PDF',
 													'INFRASTRUCTURE_PDF_TITLE_SIZE',					'INFRASTRUCTURE_PDF_TITLE_STYLE_IF_HIDDEN_LINES',
@@ -320,13 +320,14 @@
 		// num = 23
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TOTAL_BACKGROUND_COLOR', 'color', $langs->trans('InfrastructureTotalBackgroundcolor'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_TOTAL_COLOR', 'color', $langs->trans('InfrastructureTotalColor'), '', [], 2, 1, '', $num);
+		$num	= infrastructure_print_input('INFRASTRUCTURE_TEXT_LINE_COLOR', 'color', $langs->trans('InfrastructureTextLineColor'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_HIDE_OPTIONS_BUILD_DOC', 'on_off', $langs->trans('InfrastructureHideOptionsBuildDoc'), '', [], 2, 1, '', $num);
 		if (!getDolGlobalInt('INFRASTRUCTURE_HIDE_OPTIONS_BUILD_DOC')) {
 			$num	= infrastructure_print_input('INFRASTRUCTURE_MAKE_BUILD_DOC_NO_FOLDABLE', 'on_off', $langs->trans('InfrastructureMakeBuildDocNoFoldable'), '', [], 2, 1, '', $num);
 		} else {
 			$num++;
 		}
-		// num = 27
+		// num = 28
 	}
 	print '			</table>
 				</div>';

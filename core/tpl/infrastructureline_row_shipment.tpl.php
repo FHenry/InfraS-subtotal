@@ -28,7 +28,9 @@
 	*
 	* Inclus depuis ActionsInfrastructure::printObjectLine() — bloc 2.
 	* Rend l'intégralité du <tr>...</tr> : <td> libellé (délégué à infrastructureline_view.tpl.php en contexte
-	* 'shipment') + <td colspan> contenant les inputs hidden nécessaires au formulaire de création
+	* 'shipment', avec $infrastructureShowFoldButton=true pour bénéficier du bouton de pliage des titres —
+	* $object y est réellement la commande d'origine, hideblock est donc persistable normalement via
+	* script/interface.php) + <td colspan> contenant les inputs hidden nécessaires au formulaire de création
 	* d'expédition (idl, qtyasked, qdelivered, qtyl, entl).
 	*
 	* Variables disponibles via le scope local de la méthode appelante :
@@ -63,7 +65,8 @@
 <!-- BEGIN PHP TEMPLATE infrastructureline_row_shipment.tpl.php -->
 	<tr class="oddeven <?php echo $class; ?>" <?php echo $data; ?> rel="infrastructure" id="row-<?php echo $line->id ?>" style="<?php print infrastructure_getLineSpecialStyle($line); ?>">
 	<?php
-	$infrastructureViewContext	= 'shipment';
+	$infrastructureViewContext		= 'shipment';
+	$infrastructureShowFoldButton	= true;	// Bloc 2 : $object est la commande réelle, hideblock est supporté sur commandedet
 	include dol_buildpath('/infrastructure/core/tpl/infrastructureline_view.tpl.php', 0);
 	?>
 	<td colspan="<?php echo $colspan; ?>">

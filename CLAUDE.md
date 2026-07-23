@@ -19,7 +19,7 @@ Informations module (issues du code et du changelog local) :
 - Licence : GPL v3+
 - Compatibilité Dolibarr : `21.0.0` à `24.x.x`
 - Compatibilité PHP : `7.4` à `8.4`
-- Dernière version locale : `21.6.0` (2026-07)
+- Dernière version locale : `21.7.0` (2026-07)
 - Schéma de numérotation : depuis `18.1.0`, le module aligne sa version majeure sur la version minimale de Dolibarr supportée (même convention que `infraspackplus`). Format : `<dolibarrMin>.<mineur>.<patch>`. Les versions antérieures (jusqu'à `3.30.1`) suivaient une numérotation indépendante.
 - Dépendance obligatoire : aucune
 - Conflit : module **Milestone/Jalon** (iNodbox) — les deux modules ne peuvent pas être activés simultanément
@@ -402,7 +402,7 @@ Constantes actives usuelles (voir `sql/data.sql` et la page `admin/infrastructur
 - **Styles PDF** (18.3.0+) : `INFRASTRUCTURE_PDF_TITLE_STYLE`, `INFRASTRUCTURE_PDF_TOTAL_STYLE` (écrasent la version écran)
 - **Totaux sur titres** (18.4.0+) : `INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL` (reporte Total HT et taux TVA du bloc directement sur la ligne de titre, supprime l'impression des sous-totaux)
 - **Styles spéciaux** : `INFRASTRUCTURE_PDF_TITLE_STYLE_IF_HIDDEN_LINES` (défaut `I`)
-- **Couleurs** : `INFRASTRUCTURE_TITLE_BACKGROUND_COLOR` / `_TOTAL_BACKGROUND_COLOR` / `_TITLE_COLOR` / `_TOTAL_COLOR` / `_TITLE_COLOR_BLOC`
+- **Couleurs** : `INFRASTRUCTURE_TITLE_BACKGROUND_COLOR` / `_TOTAL_BACKGROUND_COLOR` / `_TITLE_COLOR` / `_TOTAL_COLOR` / `_TITLE_COLOR_BLOC` / `_TEXT_LINE_COLOR` (21.6.0+, défaut `000000`) — couleur dédiée aux lignes de texte libre (libellé dans `infrastructureline_view.tpl.php`, icônes Éditer/Supprimer dans `infrastructureline_row_document.tpl.php`), auparavant confondue avec `_TOTAL_COLOR` pour les icônes et absente pour le libellé
 - **Affichage quantités sous-totaux** : `INFRASTRUCTURE_DEFAULT_DISPLAY_QTY_FOR_TOTAL_ON_ELEMENTS` (CSV) + variante PDF `_PDF` (18.3.0+)
 - **Pliage** : `INFRASTRUCTURE_BLOC_FOLD_MODE` (`default` / `keepTitle` / `hideAll`), `INFRASTRUCTURE_HIDE_FOLDERS_BY_DEFAULT` (3.28.0+)
 - **TVA** : `INFRASTRUCTURE_LIMIT_TVA_ON_CONDENSED_BLOCS` (3.28.4+)
@@ -596,6 +596,16 @@ Classes CSS / attributs de données utilisés côté rendu :
 - `.infrastructure_label` — libellé principal (ciblé par le sommaire rapide)
 - `tr[data-isinfrastructure="title"]`, `tr[data-isinfrastructure="total"]`, `tr[data-isinfrastructure="free-text"]` — distinction au niveau DOM
 - `tr[data-level="..."]` — niveau hiérarchique exposé au JS
+
+### Alignement partiel du contexte « shipment » sur le contexte « document » (depuis 21.7.0)
+
+Le contexte `'shipment'` de `infrastructureline_view.tpl.php` couvre 2 blocs distincts de `printObjectLine()` : bloc 2 (création d'expédition depuis une commande, `ordershipmentcard` ou `expeditioncard`+`action=create` — `$object` y est réellement la commande d'origine) et bloc 3 (fiche shipping/delivery existante — `$object` est l'Expedition/Livraison, mais `$line` y est substituée par la ligne de commande d'origine, cf. `printObjectLine()` ~L2131-2143). Cette différence de nature de `$object` explique pourquoi l'alignement n'est que partiel :
+
+- **Style/couleur du libellé (les 2 blocs)** : `INFRASTRUCTURE_TEXT_LINE_STYLE`/`INFRASTRUCTURE_TEXT_LINE_COLOR` s'appliquent désormais uniformément quel que soit `$infrastructureViewContext`, au lieu d'utiliser `INFRASTRUCTURE_TITLE_STYLE` pour tous les types en contexte `'shipment'`. Aucune dépendance CSS/JS trouvée sur l'ancien comportement — changement sans risque.
+- **Boutons de pliage des titres (bloc 2 uniquement)** : nouveau paramètre `$infrastructureShowFoldButton` (bool, défaut `false`) sur `infrastructureline_view.tpl.php`, positionné à `true` par `infrastructureline_row_shipment.tpl.php` (bloc 2) uniquement. `ActionsInfrastructure::printCommonFooter()` reconnaît les contextes `ordershipmentcard` et `expeditioncard`+`action=create` pour injecter le JS/CSS de pliage, avec résolution de l'élément porteur des données = la commande d'origine (`Commande`, ou `ucfirst(GETPOST('origin'))` en repli), pas l'Expedition. Persistance de l'état plié (extrafield `hideblock`) déjà fonctionnelle sans changement : `commandedet` porte déjà cet extrafield et `'commande'` est déjà whitelisté dans `script/interface.php`.
+- **Bloc 3 délibérément exclu du pliage** : aucun extrafield `hideblock` sur `expeditiondet`/`deliverydet` ; et surtout, `$line->rang` (celui de la ligne de commande substituée) n'est **pas** dans le même espace de numérotation que `$object->lines` (celles de l'Expedition/Livraison, qui ont leur propre `rang` assigné indépendamment à l'insertion) — `TInfrastructure::getParentTitleOfLine($object, $line->rang)` y comparerait des `rang` incompatibles, avec un risque concret de mauvais titre parent détecté (ou `false`), donc de comportement silencieusement faux plutôt qu'une simple limitation cosmétique. Implémenter le pliage sur ce bloc nécessiterait un chaînage d'origine Livraison→Expedition→Commande non trivial, jugé disproportionné pour un gain mineur sur une fiche essentiellement consultative.
+- **Sélecteur JS généralisé** : le bouton « Cacher tout / Afficher tout » (JS injecté par `printCommonFooter()`) ciblait en dur `#tablelines`, absent du tableau de la page de création d'expédition (`expedition/card.php?action=create`). Le sélecteur recherche désormais la table ancêtre de la première ligne infrastructure présente sur la page (`$('tr[data-isinfrastructure]').first().closest('table')`), sans dépendance à un id spécifique à une page core Dolibarr.
+- **Dispatch vers `infrastructureline_total.tpl.php` (marge/quantité cumulée enrichie) volontairement écarté pour les 2 blocs** : les tableaux shipment/shipping/delivery sont des tableaux logistiques (quantité commandée/expédiée/à expédier, stock, poids, volume) sans aucune colonne financière (pas de PU HT ni Total HT) — il n'existe pas d'emplacement naturel pour une cellule marge/Total HT, et le calcul de colspan de `infrastructureline_total.tpl.php` est finement dépendant de la structure de colonnes du tableau document (marges, multidevise, TVA...), sans équivalent réutilisable ici.
 
 ### Interaction avec les factures de situation (Progress invoices)
 

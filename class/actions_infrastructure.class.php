@@ -2465,8 +2465,15 @@
 					|| in_array('ordercard', $contextArray)
 					|| in_array('ordersuppliercard', $contextArray)
 					|| in_array('invoicereccard', $contextArray)
+					|| in_array('ordershipmentcard', $contextArray)
+					|| (in_array('expeditioncard', $contextArray) && $action == 'create')
 				) {
 				$id					= !empty(GETPOSTINT('id')) ? GETPOSTINT('id') : GETPOSTINT('facid');	//On récupère les informations de l'objet actuel
+				if (in_array('expeditioncard', $contextArray) && $action == 'create' && empty($id)) {
+					// Page de création d'expédition (expedition/card.php) : l'id de la commande d'origine
+					// peut transiter par origin_id ou object_id selon le point d'entrée.
+					$id	= GETPOSTINT('origin_id') ? GETPOSTINT('origin_id') : GETPOSTINT('object_id');
+				}
 				$TCurrentContexts	= explode('card', $parameters['currentcontext']);	//On détermine l'élement concernée en fonction du contexte
 				/**
 				 *  TODO John le 11/08/2023 : Je trouve bizarre d'utiliser le contexte pour déterminer la class de l'objet alors
@@ -2490,6 +2497,15 @@
 				} elseif ($TCurrentContexts[0] == 'invoicerec') {
 					$element = 'FactureRec';
 					if (!class_exists($element)) { include_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facture-rec.class.php';}
+				} elseif ($TCurrentContexts[0] == 'ordershipment') {
+					// Onglet "Expédier" d'une commande (expedition/shipment.php) : le document porteur de hideblock est la commande.
+					$element = 'Commande';
+					if (!class_exists($element)) { include_once DOL_DOCUMENT_ROOT.'/commande/class/commande.class.php';}
+				} elseif ($TCurrentContexts[0] == 'expedition' && $action == 'create') {
+					// Page de création d'expédition (expedition/card.php?action=create) : $object y est en réalité
+					// le document d'origine (quasi toujours la commande), pas l'Expedition elle-même.
+					$element = GETPOST('origin', 'alpha') ? ucfirst(GETPOST('origin', 'alpha')) : 'Commande';
+					if ($element == 'Commande' && !class_exists($element)) { include_once DOL_DOCUMENT_ROOT.'/commande/class/commande.class.php';}
 				} else $element = $TCurrentContexts[0];
 				if (!class_exists($element)) {
 					// Pour éviter la fatale sur une page d'un module externe qui utiliserait un nom de context de Dolibarr mais qui
@@ -2558,6 +2574,9 @@
 			<script type="text/javascript">
 				// TODO : mettre ça dans une classe js
 				$(document).ready(function () {
+					// Table contenant les lignes infrastructure : recherche générique par ancêtre plutôt que #tablelines
+					// en dur, car ce sélecteur n'existe pas sur toutes les pages (ex. création d'expédition depuis commande).
+					var $infrastructureTable = $('tr[data-isinfrastructure]').first().closest('table');
 					// Utilisation d'une sorte de namespace en JS
 					infrastructureFolders = {};
 					(function (o) {
@@ -2774,7 +2793,7 @@
 							}
 						});
 						//Fonction qui permet d'ajouter l'option "Cacher les lignes" ou "Afficher les lignes"
-						$('#tablelines>tbody:first').prepend(
+						$infrastructureTable.find('>tbody:first').prepend(
 							'<tr>' +
 							'	<td colspan="100%" style="  text-align:right ">' +
 							'		<span id="hide_all"  class="toggle-all-folder-status" data-folder-status="closed" >' + o.config.img_folder_open + '&nbsp;' + o.config.langs.Infrastructure_HideAll + '</span>' +
@@ -2793,7 +2812,7 @@
 								element_id: o.config.element_id,
 								titleStatusList: []
 							};
-							$('#tablelines tr[data-isinfrastructure=title]').each(function (index) {
+							$infrastructureTable.find('tr[data-isinfrastructure=title]').each(function (index) {
 								sendData.titleStatusList.push({
 									'id': $(this).attr('data-id'),
 									'status': newStatus !== 'closed' ? 0 : 1,

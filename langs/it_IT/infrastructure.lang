@@ -78,6 +78,7 @@ InfrastructurePdfTotalBackgroundcolor                             = Colore di sf
 InfrastructureTitleColorBloc                                      = Colore del testo utilizzato per le icone di azione sui blocchi
 InfrastructureTitleColor                                          = Colore del testo utilizzato per i titoli (testo e icone di azione)
 InfrastructureTotalColor                                          = Colore del testo utilizzato per i totali (testo e icone di azione)
+InfrastructureTextLineColor                                       = Colore del testo utilizzato per le righe di testo libero (testo e icone di azione)
 InfrastructurePdfTitleColor                                       = Colore del testo utilizzato per i titoli nei PDF
 InfrastructurePdfTitleColorInfo                                   = Se impostato, sovrascrive il colore automatico (bianco su sfondo scuro, nero altrimenti).
 InfrastructurePdfTotalColor                                       = Colore del testo utilizzato per i subtotali nei PDF

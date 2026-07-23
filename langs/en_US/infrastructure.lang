@@ -78,6 +78,7 @@ InfrastructurePdfTotalBackgroundcolor                             = Background c
 InfrastructureTitleColorBloc                                      = Text color used for block action icons
 InfrastructureTitleColor                                          = Text color used for titles (text and action icons)
 InfrastructureTotalColor                                          = Text color used for totals (text and action icons)
+InfrastructureTextLineColor                                       = Text color used for free text lines (text and action icons)
 InfrastructurePdfTitleColor                                       = Text color used for titles in PDF
 InfrastructurePdfTitleColorInfo                                   = If set, overrides the automatic color (white on dark background, black otherwise).
 InfrastructurePdfTotalColor                                       = Text color used for subtotals in PDF output
