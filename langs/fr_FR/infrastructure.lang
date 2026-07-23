@@ -132,6 +132,7 @@ InfrastructureSupportInformation        = Informations
 ### Infrastructure actions ###
 infrastructure_ol_title                             = Opt
 infrastructure_ol_title_help                        = Permet de marquer des lignes ou des blocs comme « Optionnel(le)s » : leurs montants restent affichés mais sont exclus des sous-totaux et du total général
+InfrastructureOptionalTotalInLabel                  = options non incluses : %s
 InfrastructureTitle                                 = Titre du groupement
 InfrastructureSubtotal                              = Sous-total
 InfrastructureAddLineDescription                    = Description...
@@ -180,15 +181,19 @@ InfrastructureShowTvaOnTotalLines      = Afficher le taux de TVA avec les sous-t
 InfrastructureLimitTvaOnCondensedBlocs = Limiter l'affichage du taux de TVA aux blocs imprimées en condensé ou en liste.
 
 ### "Optional lines/blocks" (OL) management ###
-InfrastructureManageOptionalLines = Gestion des lignes optionnelles
-InfrastructureUpdateNcSuccess     = Total mis à jour
-InfrastructureUpdateNcError       = Erreur : total non mis à jour
-InfrastructureOlTitle             = Opt
-InfrastructureOlTitleHelp         = Gestion des lignes / blocs optionnel(le)s
-InfrastructureManageOL            = Permettre de marquer des lignes ou des blocs comme « Optionnel(le)s » : leurs montants restent affichés mais sont exclus des sous-totaux parents et du total général
-InfrastructureOlReducePa          = La gestion des lignes / blocs optionnel(le)s vide aussi le prix de revient
-InfrastructureOlReducePaInfo      = Attention, si vous rendez de nouveau la ligne / le bloc non optionnel(le), il faudra de nouveau saisir le(s) prix de revient
-Infrastructure_update_ol_success  = Lignes optionnelles réinitialisées
+InfrastructureManageOptionalLines  = Gestion des lignes optionnelles
+InfrastructureUpdateNcSuccess      = Total mis à jour
+InfrastructureUpdateNcError        = Erreur : total non mis à jour
+InfrastructureOlTitle              = Opt
+InfrastructureOlTitleHelp          = Gestion des lignes / blocs optionnel(le)s
+InfrastructureManageOL             = Permettre de marquer des lignes ou des blocs comme « Optionnel(le)s » : leurs montants restent affichés mais sont exclus des sous-totaux parents et du total général
+InfrastructureOlReducePa           = La gestion des lignes / blocs optionnel(le)s vide aussi le prix de revient
+InfrastructureOlReducePaInfo       = Attention, si vous rendez de nouveau la ligne / le bloc non optionnel(le), il faudra de nouveau saisir le(s) prix de revient
+InfrastructureOlShowDetails        = Afficher le cumul des montants optionnels sur le sous-total et la quantité des lignes optionnelles
+InfrastructureOlShowDetailsInfo    = Si désactivé, le sous-total n'affiche pas le cumul « options non incluses » et la quantité des lignes optionnelles reste masquée, comme les autres lignes « Option » natives Dolibarr
+InfrastructurePdfOlShowDetails     = Afficher le cumul des montants optionnels sur le sous-total et la quantité des lignes optionnelles dans les PDF
+InfrastructurePdfOlShowDetailsInfo = Si désactivé, le PDF n'affiche pas le cumul « options non incluses » dans le libellé du sous-total et la quantité des lignes optionnelles reste masquée, comme les autres lignes « Option » natives Dolibarr
+Infrastructure_update_ol_success   = Lignes optionnelles réinitialisées
 
 ### Summary ###
 InfrastructureRecap                            = Récapitulatif

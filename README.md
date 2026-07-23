@@ -79,7 +79,7 @@ Les options sont regroupées en trois sections dans la page d'administration du 
 		* ***3*** Texte des titres lors de la facturation via onglet client → bouton « Facturer commandes » (clés `__REFORDER__`, `__REFCUSTOMER__`)
 		* Gestion des lignes optionnelles
 			* ***4*** Permettre de marquer des lignes ou des blocs comme « Optionnel(le)s » : leurs montants restent affichés mais sont exclus des sous-totaux parents et du total général
-			* ***5*** Colonnes à conserver visibles sur les lignes « Optionnelles » (Qté, TVA, PU HT, Total HT, Total TTC, Unité, Remise)
+			* ***5*** Afficher le cumul des montants « Optionnels » sur le libellé du sous-total du bloc, ainsi que la quantité individuelle des lignes « Optionnelles » (désactivé, ces informations restent masquées, comme pour une ligne « Option » native Dolibarr classique)
 			* ***6*** La gestion des lignes / blocs optionnel(le)s vide aussi le prix de revient
 		* Paramètres liés aux champs complémentaires (ExtraFields)
 			* ***7*** Autoriser l'affichage des ExtraFields sur les titres
@@ -130,19 +130,20 @@ Les options sont regroupées en trois sections dans la page d'administration du 
 		* ***9*** Couleur de fond utilisée pour les sous-totaux dans les PDF
 		* ***10*** Couleur de texte utilisée pour les sous-totaux dans les PDF (écrase la couleur automatique)
 		* ***11*** Sur les lignes de sous-total des PDF, ajouter le libellé du titre auquel cette dernière est rattachée
-		* ***12*** Pourcentage de réduction de la luminosité entre chaque niveau de titres / sous-titres / sous-totaux dans les PDF
-		* ***13*** Augmentation de la hauteur du fond des titres sur les PDF
-		* ***14*** Décalage vertical du fond des titres dans les PDF
-		* ***15*** Augmentation de la hauteur du fond des sous-totaux dans les PDF
-		* ***16*** Décalage vertical du fond des sous-totaux dans les PDF
-		* ***17*** Activer l'affichage de la somme des quantités sur les lignes de sous-totaux dans les PDF par type de document (fallback sur la sélection écran si vide)
-		* ***18*** Afficher le taux de TVA avec les sous-totaux si toutes les lignes du bloc ont un taux identique
-		* ***19*** Limiter l'affichage du taux de TVA aux blocs imprimés en condensé ou en liste
+		* ***12*** Afficher le cumul des montants optionnels sur le sous-total et la quantité des lignes optionnelles dans les PDF (désactivé, ces informations restent masquées comme pour une ligne « Option » native Dolibarr classique)
+		* ***13*** Pourcentage de réduction de la luminosité entre chaque niveau de titres / sous-titres / sous-totaux dans les PDF
+		* ***14*** Augmentation de la hauteur du fond des titres sur les PDF
+		* ***15*** Décalage vertical du fond des titres dans les PDF
+		* ***16*** Augmentation de la hauteur du fond des sous-totaux dans les PDF
+		* ***17*** Décalage vertical du fond des sous-totaux dans les PDF
+		* ***18*** Activer l'affichage de la somme des quantités sur les lignes de sous-totaux dans les PDF par type de document (fallback sur la sélection écran si vide)
+		* ***19*** Afficher le taux de TVA avec les sous-totaux si toutes les lignes du bloc ont un taux identique
+		* ***20*** Limiter l'affichage du taux de TVA aux blocs imprimés en condensé ou en liste
 		* Génération d'un récapitulatif par titre
-			* ***20*** Conserver le PDF de récapitulation après la fusion
-			* ***21*** Activer la génération du récapitulatif sur les propositions commerciales
-			* ***22*** Activer la génération du récapitulatif sur les commandes
-			* ***23*** Activer la génération du récapitulatif sur les factures
+			* ***21*** Conserver le PDF de récapitulation après la fusion
+			* ***22*** Activer la génération du récapitulatif sur les propositions commerciales
+			* ***23*** Activer la génération du récapitulatif sur les commandes
+			* ***24*** Activer la génération du récapitulatif sur les factures
 
 
 

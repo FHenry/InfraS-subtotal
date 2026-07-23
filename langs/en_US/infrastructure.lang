@@ -132,6 +132,7 @@ InfrastructureSupportInformation        = Information
 ### Infrastructure actions ###
 infrastructure_ol_title                             = Opt
 infrastructure_ol_title_help                        = Allow marking lines or blocks as "Optional": their amounts remain displayed but are excluded from subtotals and grand total
+InfrastructureOptionalTotalInLabel                  = options not included: %s
 InfrastructureTitle                                 = Group title
 InfrastructureSubtotal                              = Subtotal
 InfrastructureAddLineDescription                    = Description...
@@ -180,15 +181,19 @@ InfrastructureShowTvaOnTotalLines      = Show VAT rate with subtotals if all row
 InfrastructureLimitTvaOnCondensedBlocs = Limit the display of the VAT rate to blocks printed in condensed or list format.
 
 ### "Optional lines/blocks" (OL) management ###
-InfrastructureManageOptionalLines = Management of optional lines
-InfrastructureUpdateNcSuccess     = Total updated
-InfrastructureUpdateNcError       = Error: total not updated
-InfrastructureOlTitle             = Opt
-InfrastructureOlTitleHelp         = Management of optional lines/blocks
-InfrastructureManageOL            = Allow marking lines or blocks as "Optional": their amounts remain displayed but are excluded from parent subtotals and grand total
-InfrastructureOlReducePa          = Managing optional lines/blocks also empties the cost price
-InfrastructureOlReducePaInfo      = Warning: if you set the line back to included, you will need to re-enter the cost price
-Infrastructure_update_ol_success  = Optional lines reset
+InfrastructureManageOptionalLines  = Management of optional lines
+InfrastructureUpdateNcSuccess      = Total updated
+InfrastructureUpdateNcError        = Error: total not updated
+InfrastructureOlTitle              = Opt
+InfrastructureOlTitleHelp          = Management of optional lines/blocks
+InfrastructureManageOL             = Allow marking lines or blocks as "Optional": their amounts remain displayed but are excluded from parent subtotals and grand total
+InfrastructureOlReducePa           = Managing optional lines/blocks also empties the cost price
+InfrastructureOlReducePaInfo       = Warning: if you set the line back to included, you will need to re-enter the cost price
+InfrastructureOlShowDetails        = Show the cumulated optional amount on the subtotal and the quantity of optional lines
+InfrastructureOlShowDetailsInfo    = If disabled, the subtotal does not show the "options not included" total and optional lines keep their quantity hidden, like other native Dolibarr "Option" lines
+InfrastructurePdfOlShowDetails     = Show the cumulated optional amount on the subtotal and the quantity of optional lines in PDF documents
+InfrastructurePdfOlShowDetailsInfo = If disabled, the PDF does not show the "options not included" total in the subtotal label and optional lines keep their quantity hidden, like other native Dolibarr "Option" lines
+Infrastructure_update_ol_success   = Optional lines reset
 
 ### Summary ###
 InfrastructureRecap                            = Summary

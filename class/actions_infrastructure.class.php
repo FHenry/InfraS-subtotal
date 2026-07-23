@@ -1131,6 +1131,12 @@
 					return 1;
 				}
 			} else {
+				if (!empty($line) && $line->special_code == 3 && getDolGlobalInt('INFRASTRUCTURE_PDF_OL_SHOW_DETAILS')) {
+					// Ligne optionnelle (special_code = 3) : on force l'affichage de la quantité, sans quoi
+					// pdf_getlineqty() (core, htdocs/core/lib/pdf.lib.php) la masquerait nativement.
+					$this->resprints = $line->qty;
+					return 1;
+				}
 				if ($this->infrastructure_sum_qty_enabled === true) {
 					// sum quantities by infrastructure level
 					if ($this->infrastructure_level_cur >= 1) {
@@ -1840,6 +1846,13 @@
 						$numerotation = infrastructure_getNumerotation($object, $line);
 						if ($numerotation !== '') {
 							$label .= ' '.$numerotation;
+						}
+					}
+					if (getDolGlobalInt('INFRASTRUCTURE_PDF_OL_SHOW_DETAILS')) {
+						$TInfoOl = infrastructure_get_totalLineFromObject($object, $line, false, 1);
+						if (!empty($TInfoOl[8])) {
+							$outputlangs->load('infrastructure@infrastructure');
+							$label .= ' ('.$outputlangs->transnoentities('InfrastructureOptionalTotalInLabel', price($TInfoOl[8], 0, '', 1, 0, getDolGlobalInt('MAIN_MAX_DECIMALS_TOT'))).')';
 						}
 					}
 					// FIX DA024845 : Le module sous total amène des erreurs dans les sauts de page lorsque l'on arrive tout juste en bas de page.

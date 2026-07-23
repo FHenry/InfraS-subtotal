@@ -241,11 +241,12 @@
 		$num	= infrastructure_print_input('INFRASTRUCTURE_MANAGE_OL', 'on_off', $langs->trans('InfrastructureManageOL'), '', [], 2, 1, '', $num);
 		// Options dépendant de la gestion des lignes optionnelles : masquées si la fonctionnalité est désactivée
 		if (getDolGlobalInt('INFRASTRUCTURE_MANAGE_OL')) {
+			$num	= infrastructure_print_input('INFRASTRUCTURE_OL_SHOW_DETAILS', 'on_off', $langs->trans('InfrastructureOlShowDetails'), 'InfrastructureOlShowDetailsInfo', [], 2, 1, '', $num);
 			$num	= infrastructure_print_input('INFRASTRUCTURE_OL_REDUCE_PA', 'on_off', $langs->trans('InfrastructureOlReducePa'), 'InfrastructureOlReducePaInfo', [], 2, 1, '', $num);
 		} else {
-			$num++;
+			$num	= $num + 2;
 		}
-		// num = 6
+		// num = 7
 		infrastructure_print_subTitle(4, 'InfrastructureSetupForExtrafields');
 		$metas	= ['class' => 'flat infrastructurewidth270 infrastructurefontsizeinherit'];
 		$num	= infrastructure_print_input('INFRASTRUCTURE_ALLOW_EXTRAFIELDS_ON_TITLE', 'on_off', $langs->trans('InfrastructureAllowExtrafieldsOnTitle'), '', [], 2, 1, '', $num);
@@ -255,14 +256,14 @@
 		$num	= infrastructure_print_input('', 'select', $langs->trans('InfrastructureListOfExtrafieldsCommandedet'), '', $metas, 1, 2, '', $num);
 		$metas	= $form->multiselectarray('INFRASTRUCTURE_LIST_OF_EXTRAFIELDS_FACTUREDET', infrastructure_getVisibleExtrafields('facturedet'), $invoiceSelected, 0, 0, 'flat infrastructurewidth270 infrastructurefontsizeinherit', 0, 0, '', '', '');
 		$num	= infrastructure_print_input('', 'select', $langs->trans('InfrastructureListOfExtrafieldsFacturedet'), '', $metas, 1, 2, '', $num);
-		// num = 10
+		// num = 11
 		infrastructure_print_subTitle(4, 'InfrastructureSetupForShipping');
 		$num	= infrastructure_print_input('INFRASTRUCTURE_NO_TITLE_SHOW_ON_EXPED_GENERATION', 'on_off', $langs->trans('InfrastructureNoTitleShowOnExpedGeneration'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_DEFAULT_CHECK_SHIPPING_LIST_FOR_TITLE_DESC', 'on_off', $langs->trans('InfrastructureDefaultCheckShippingListForTitleDesc'), 'InfrastructureDefaultCheckShippingListForTitleDescInfo', [], 2, 1, '', $num);
 		infrastructure_print_subTitle(4, 'InfrastructureSetupForSubBlocs');
 		$num	= infrastructure_print_input('INFRASTRUCTURE_HIDE_PRICE_DEFAULT_CHECKED', 'on_off', $langs->trans('InfrastructureHidePriceDefaultChecked'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_HIDE_DOCUMENT_TOTAL', 'on_off', $langs->trans('InfrastructureHideDocumentTotal'), '', [], 2, 1, '', $num);
-		// num = 14
+		// num = 15
 	}
 	print '		</table>';
 	print '	</div>';
@@ -360,10 +361,11 @@
 			$num	= infrastructure_print_input('INFRASTRUCTURE_PDF_TOTAL_BACKGROUND_COLOR', 'color', $langs->trans('InfrastructurePdfTotalBackgroundcolor'), '', [], 2, 1, '', $num);
 			$num	= infrastructure_print_input('INFRASTRUCTURE_PDF_TOTAL_COLOR', 'color', $langs->trans('InfrastructurePdfTotalColor'), 'InfrastructurePdfTotalColorInfo', [], 2, 1, '', $num);
 			$num	= infrastructure_print_input('INFRASTRUCTURE_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL', 'on_off', $langs->trans('InfrastructureConcatTitleLabelInTotalLabel'), '', [], 2, 1, '', $num);
+			$num	= infrastructure_print_input('INFRASTRUCTURE_PDF_OL_SHOW_DETAILS', 'on_off', $langs->trans('InfrastructurePdfOlShowDetails'), 'InfrastructurePdfOlShowDetailsInfo', [], 2, 1, '', $num);
 		} else {
-			$num	+= 3;
+			$num	+= 4;
 		}
-		// num = 12
+		// num = 13
 		$metas	= ['class' => 'right flat infrastructurewidth250 infrastructurefontsizeinherit'];
 		$num	= infrastructure_print_input('INFRASTRUCTURE_PDF_TITLE_AND_TOTAL_BRIGHTNESS_PERCENTAGE', 'input', $langs->trans('InfrastructurePdfTitleAndTotalBrightnessPercentage'), 'InfrastructurePdfTitleAndTotalBrightnessPercentageInfo', $metas, 1, 2, '&nbsp;&nbsp;%', $num);
 		$metas	= ['type' => 'number', 'step' => '0.01', 'class' => 'flat infrastructurewidth270 infrastructurefontsizeinherit'];
@@ -375,7 +377,7 @@
 		} else {
 			$num	+= 2;
 		}
-		// num = 17
+		// num = 18
 		$TField	= ['propal'				=> $langs->trans('Proposal'),
 					'commande'			=> $langs->trans('Order'),
 					'facture'			=> $langs->trans('Invoice'),
@@ -395,13 +397,13 @@
 		} else {
 			$num	+= 2;
 		}
-		// num = 20
+		// num = 21
 		infrastructure_print_subTitle(4, 'InfrastructureRecapGeneration');
 		$num	= infrastructure_print_input('INFRASTRUCTURE_KEEP_RECAP_FILE', 'on_off', $langs->trans('InfrastructureKeepRecapFile'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_PROPAL_ADD_RECAP', 'on_off', $langs->trans('InfrastructurePropalAddRecap'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_COMMANDE_ADD_RECAP', 'on_off', $langs->trans('InfrastructureCommandeAddRecap'), '', [], 2, 1, '', $num);
 		$num	= infrastructure_print_input('INFRASTRUCTURE_INVOICE_ADD_RECAP', 'on_off', $langs->trans('InfrastructureInvoiceAddRecap'), '', [], 2, 1, '', $num);
-		// $num = 24
+		// $num = 25
 	}
 	print '			</table>
 				</div>';

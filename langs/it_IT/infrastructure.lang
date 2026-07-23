@@ -132,6 +132,7 @@ InfrastructureSupportInformation        = Informazioni
 ### Infrastructure actions ###
 infrastructure_ol_title                             = Opt
 infrastructure_ol_title_help                        = Consentire di contrassegnare righe o blocchi come «Opzionali»: i loro importi restano visualizzati ma sono esclusi dai subtotali e dal totale generale
+InfrastructureOptionalTotalInLabel                  = opzioni non incluse: %s
 InfrastructureTitle                                 = Titolo del raggruppamento
 InfrastructureSubtotal                              = Subtotale
 InfrastructureAddLineDescription                    = Descrizione...
@@ -180,15 +181,19 @@ InfrastructureShowTvaOnTotalLines      = Visualizzare il tasso IVA con i subtota
 InfrastructureLimitTvaOnCondensedBlocs = Limitare la visualizzazione del tasso IVA ai blocchi stampati in forma condensata o elenco.
 
 ### "Optional lines/blocks" (OL) management ###
-InfrastructureManageOptionalLines = Gestione delle righe opzionali
-InfrastructureUpdateNcSuccess     = Totale aggiornato
-InfrastructureUpdateNcError       = Errore: totale non aggiornato
-InfrastructureOlTitle             = Opt
-InfrastructureOlTitleHelp         = Gestione delle righe / blocchi opzionali
-InfrastructureManageOL            = Consentire di contrassegnare righe o blocchi come «Opzionali»: i loro importi restano visualizzati ma sono esclusi dai subtotali padre e dal totale generale
-InfrastructureOlReducePa          = La gestione delle righe / blocchi opzionali svuota anche il prezzo di costo
-InfrastructureOlReducePaInfo      = Attenzione, se rendete di nuovo la riga inclusa, dovrete reinserire il prezzo di costo
-Infrastructure_update_ol_success  = Righe opzionali reimpostate
+InfrastructureManageOptionalLines  = Gestione delle righe opzionali
+InfrastructureUpdateNcSuccess      = Totale aggiornato
+InfrastructureUpdateNcError        = Errore: totale non aggiornato
+InfrastructureOlTitle              = Opt
+InfrastructureOlTitleHelp          = Gestione delle righe / blocchi opzionali
+InfrastructureManageOL             = Consentire di contrassegnare righe o blocchi come «Opzionali»: i loro importi restano visualizzati ma sono esclusi dai subtotali padre e dal totale generale
+InfrastructureOlReducePa           = La gestione delle righe / blocchi opzionali svuota anche il prezzo di costo
+InfrastructureOlReducePaInfo       = Attenzione, se rendete di nuovo la riga inclusa, dovrete reinserire il prezzo di costo
+InfrastructureOlShowDetails        = Mostrare il cumulo degli importi opzionali sul subtotale e la quantità delle righe opzionali
+InfrastructureOlShowDetailsInfo    = Se disattivato, il subtotale non mostra il cumulo «opzioni non incluse» e la quantità delle righe opzionali resta nascosta, come le altre righe «Opzionale» native di Dolibarr
+InfrastructurePdfOlShowDetails     = Mostrare il cumulo degli importi opzionali sul subtotale e la quantità delle righe opzionali nei PDF
+InfrastructurePdfOlShowDetailsInfo = Se disattivato, il PDF non mostra il cumulo «opzioni non incluse» nell'etichetta del subtotale e la quantità delle righe opzionali resta nascosta, come le altre righe «Opzionale» native di Dolibarr
+Infrastructure_update_ol_success   = Righe opzionali reimpostate
 
 ### Summary ###
 InfrastructureRecap                            = Riepilogo

@@ -528,7 +528,18 @@
 	<Version Number="21.2.0" MonthVersion="2026-07">
 		<change type='add'>Nouvelle option d'affichage écran INFRASTRUCTURE_SCREEN_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL (section « Paramètres d'affichage », juste avant INFRASTRUCTURE_TEXT_LINE_STYLE) : ajoute le libellé du titre parent en fin de libellé du sous-total sur l'écran de la fiche document, y compris quand le sous-total a déjà un libellé rempli (cas normal). Distincte de INFRASTRUCTURE_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL qui ne couvre que le PDF et les cas hérités de libellé vide à l'écran.</change>
 	</Version>
-	<InfraS Downloaded="20260720"/>
+	<Version Number="21.3.0" MonthVersion="2026-07">
+		<change type='fix'>Le total HT du sous-total de bloc affiché à l'écran (infrastructure_get_totalLineFromObject(), core/lib/infrastructure.lib.php) incluait toujours les montants des lignes marquées « Opt » (optionnelles), contrairement à ce qu'annonce l'aide de la case à cocher : ces montants étaient exclus du total général du devis/commande/facture mais pas du sous-total du bloc dans lequel ils se trouvent. Les lignes optionnelles sont désormais exclues du total HT du sous-total, cohérence rétablie avec le total général ; leur quantité reste en revanche cumulée normalement dans la quantité du sous-total (non masquée).</change>
+		<change type='fix'>Marge affichée sur la ligne de sous-total (INFRASTRUCTURE_DISPLAY_MARGIN_ON_TOTAL, core/tpl/infrastructureline_total.tpl.php) devenue incorrecte suite au correctif ci-dessus : le coût de revient cumulé des lignes du bloc continuait à inclure les lignes optionnelles alors que le total HT ne les inclut plus. Les lignes optionnelles sont désormais également exclues du calcul du coût de revient.</change>
+		<change type='add'>Le libellé du sous-total de bloc affiche désormais le cumul des montants HT des lignes optionnelles du bloc, exclu de ce sous-total, entre parenthèses (ex. « Sous-total : 250,00 € (options non incluses : 50,00 €) »), quand ce cumul est non nul.</change>
+	</Version>
+	<Version Number="21.4.0" MonthVersion="2026-07">
+		<change type='add'>Nouvelle option de configuration INFRASTRUCTURE_OL_SHOW_DETAILS (section « Gestion des lignes optionnelles », juste après INFRASTRUCTURE_MANAGE_OL) : conditionne l'affichage du cumul « options non incluses » sur le libellé du sous-total ainsi que l'affichage de la quantité individuelle des lignes optionnelles dans infrasproject/infraspackplus (fix 21.1.7 / v21.5.6). Désactivée par défaut à l'activation du module, comme les autres options dépendantes d'INFRASTRUCTURE_MANAGE_OL.</change>
+	</Version>
+	<Version Number="21.5.0" MonthVersion="2026-07">
+		<change type='add'>Nouvelle option de configuration INFRASTRUCTURE_PDF_OL_SHOW_DETAILS (section « PARAMÈTRES D'IMPRESSION PDF », juste après l'option qui ajoute le libellé du titre au sous-total sur le PDF) : équivalent PDF d'INFRASTRUCTURE_OL_SHOW_DETAILS. Ajoute le cumul « options non incluses » dans le libellé du sous-total sur le PDF (hook pdf_writelinedesc()) et force l'affichage de la quantité des lignes optionnelles en PDF (hook pdf_getlineqty(), qui bypasse le masquage natif Dolibarr des lignes special_code=3). Désactivée par défaut.</change>
+	</Version>
+	<InfraS Downloaded="20260722"/>
 	<Dolibarr minVersion="21.0.0" maxVersion="24.x.x"/>
 	<PHP minVersion="7.4" maxVersion="8.4"/>
 </changelog>

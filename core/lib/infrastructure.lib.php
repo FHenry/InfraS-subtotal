@@ -887,7 +887,7 @@
 	*/
 	function infrastructure_updateLineOL($element, $elementid, $lineid, $infrastructure_ol=null, $notrigger = 0)
 	{
-		global $db, $langs, $tmp_object_ol;
+		global $db, $langs, $tmp_object_ol, $hookmanager;
 
 		$error = 0;
 		if (empty($element)) {
@@ -938,6 +938,25 @@
 					}
 				} else {
 					$res = infrastructure_doUpdate($object, $line, $infrastructure_ol, $notrigger);
+				}
+				// update_price() délègue l'exclusion des lignes optionnelles (special_code = 3) au hook
+				// updateTotalPrice (ActionsInfrastructure::updateTotalPrice). Ce hook n'est déclenché que si
+				// le contexte carte correspondant a été initialisé sur $hookmanager : sans ce init (cas des
+				// appelants hors page carte, ex. l'endpoint AJAX script/interface.php), le total du document
+				// resterait calculé par le code standard Dolibarr sans exclusion. initHooks() est idempotent
+				// (voir HookManager::initHooks()) : rien ne se passe si le contexte est déjà initialisé.
+				if (is_object($hookmanager)) {
+					$TElementToHookContext	= [
+						'propal'				=> 'propalcard',
+						'commande'				=> 'ordercard',
+						'facture'				=> 'invoicecard',
+						'supplier_proposal'	=> 'supplier_proposalcard',
+						'order_supplier'		=> 'ordersuppliercard',
+						'invoice_supplier'		=> 'invoicesuppliercard',
+					];
+					if (!empty($TElementToHookContext[$element])) {
+						$hookmanager->initHooks([$TElementToHookContext[$element]]);
+					}
 				}
 				$res	= $object->update_price(1);
 				if ($res <= 0) {
@@ -1236,16 +1255,18 @@
 				return $object->context['infrastructureCache']['totalLineByKey'][$memoKey];
 			}
 		}
-		$title_break				= TInfrastructure::getParentTitleOfLine($object, $rang, $lvl);
-		$total						= 0;
-		$total_tva					= 0;
-		$total_ttc					= 0;
-		$total_qty					= 0;
-		$TTotal_tva					= [];
-		$TTotal_tva_array			= [];
-		$multicurrency_total_ht		= 0;
-		$multicurrency_total_ttc	= 0;
-		$sign						= 1;
+		$title_break					= TInfrastructure::getParentTitleOfLine($object, $rang, $lvl);
+		$total							= 0;
+		$total_tva						= 0;
+		$total_ttc						= 0;
+		$total_qty						= 0;
+		$total_options					= 0;
+		$multicurrency_total_options	= 0;
+		$TTotal_tva						= [];
+		$TTotal_tva_array				= [];
+		$multicurrency_total_ht			= 0;
+		$multicurrency_total_ttc		= 0;
+		$sign							= 1;
 		if ($memoEnabled) {
 			if (!isset($object->context['infrastructureCache']['linesReversed']) || !is_array($object->context['infrastructureCache']['linesReversed'])) {
 				$object->context['infrastructureCache']['linesReversed']	= array_reverse($object->lines);
@@ -1280,6 +1301,12 @@
 			}
 			if (!empty($title_break) && $title_break->id == $l->id) {
 				break;
+			} elseif (!empty($l->array_options['options_infrastructure_ol'])) {
+				// Ligne marquée optionnelle : montant exclu du total du bloc, cumulé séparément pour l'annotation du sous-total.
+				// La quantité reste, elle, cumulée normalement (non masquée).
+				$total_qty						+= $l->qty;
+				$total_options					+= $l->total_ht;
+				$multicurrency_total_options	+= $l->multicurrency_total_ht;
 			} elseif (!TInfrastructure::isModInfrastructureLine($l) && empty($isOuvrage)) {
 				$totalQty	= !empty($listOuvrages) && !empty($l->fk_parent_line) && array_key_exists($l->fk_parent_line, $listOuvrages) ? $listOuvrages[$l->fk_parent_line] : 1;
 				$total_qty += $l->qty;
@@ -1351,7 +1378,7 @@
 		if (!$return_all) {
 			$result	= $total;
 		} else {
-			$result	= [$total, $total_tva, $total_ttc, $TTotal_tva, $total_qty, $TTotal_tva_array, $multicurrency_total_ht, $multicurrency_total_ttc];
+			$result	= [$total, $total_tva, $total_ttc, $TTotal_tva, $total_qty, $TTotal_tva_array, $multicurrency_total_ht, $multicurrency_total_ttc, $total_options, $multicurrency_total_options];
 		}
 		if ($memoEnabled) {
 			$object->context['infrastructureCache']['totalLineByKey'][$memoKey]	= $result;
