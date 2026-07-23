@@ -60,6 +60,9 @@ INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRAS
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_OL_SHOW_DETAILS',											'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_NO_TITLE_SHOW_ON_EXPED_GENERATION',						'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_PDF_OL_SHOW_DETAILS',										'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
+INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_PDF_OL_SHOW_TOTAL_HT_AFTER_DESC',							'__ENTITY__', '0',		'chaine', '0', 'Infrastructure module');
+INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_PDF_OL_STYLE',												'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
+INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_PDF_OL_COLOR',												'__ENTITY__', '000000',	'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_PDF_TITLE_AND_TOTAL_BRIGHTNESS_PERCENTAGE',				'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_PDF_TITLE_BACKGROUND_CELL_HEIGHT_OFFSET',					'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
 INSERT INTO llx_const (name, entity, value, type, visible, note) VALUES ('INFRASTRUCTURE_PDF_TITLE_BACKGROUND_CELL_POS_Y_OFFSET',					'__ENTITY__', '',		'chaine', '0', 'Infrastructure module');
