@@ -931,11 +931,16 @@
 			}
 			empty($pdf->page_largeur) ? $pdf->page_largeur = 0 : '';
 			empty($pdf->marge_droite) ? $pdf->marge_droite = 0 : '';
-			// Étendre le titre de la marge gauche à la marge droite du PDF (couvre toutes les colonnes : Réf → Total HT/TTC).
+			// Étendre le BANDEAU DE FOND de la marge gauche à la marge droite du PDF (couvre toutes les colonnes : Réf → Total HT/TTC).
 			$pdfMargins			= $pdf->getMargins();
 			$titleBlockX		= isset($pdfMargins['left']) ? $pdfMargins['left'] : $posx;
 			$titleBlockRight	= isset($pdfMargins['right']) ? $pdfMargins['right'] : 0;
 			$titleBlockW		= $pdf->getPageWidth() - $titleBlockX - $titleBlockRight;
+			// Le TEXTE du titre, lui, démarre à $posx (position réelle de la colonne Désignation, calculée par le modèle
+			// PDF appelant) et non à la marge brute : sans ça, le libellé chevauche la colonne Num/Réf quand celle-ci
+			// est positionnée en rang 1 (INFRASPLUS_PDF_WITH_NUM_COLUMN + INFRASPLUS_PDF_NUMCOL_REF=1).
+			$titleTextX			= !empty($posx) ? $posx : $titleBlockX;
+			$titleTextW			= $titleBlockX + $titleBlockW - $titleTextX;
 			// Manage background color
 			$fillDescBloc				= false;
 			$bgStyle					= infrastructure_getPdfBackgroundStyle($pdf, 'INFRASTRUCTURE_PDF_TITLE_BACKGROUND_COLOR', 'INFRASTRUCTURE_PDF_TITLE_BACKGROUND_CELL_HEIGHT_OFFSET', 'INFRASTRUCTURE_PDF_TITLE_BACKGROUND_CELL_POS_Y_OFFSET', $line);
@@ -964,7 +969,7 @@
 			}
 			$pdf->SetAutoPageBreak(false, 0);
 			$infrastructure_last_title_posy	= $posy;
-			$pdf->SetXY($titleBlockX, $posy);
+			$pdf->SetXY($titleTextX, $posy);
 			$hideInnerLines			= GETPOST('hideInnerLines', 'int');
 			$style					= getDolGlobalString('INFRASTRUCTURE_PDF_TITLE_STYLE');
 			$size_title = 9;
@@ -983,20 +988,23 @@
 			$pdf->setCellPaddings($curentCellPaddinds['L'], 1, $curentCellPaddinds['R'], 1);
 			$posYBeforeTile = $pdf->GetY();
 			if ($label === strip_tags($label) && $label === dol_html_entity_decode($label, ENT_QUOTES)) {
-				$pdf->MultiCell($titleBlockW, $h, $label, 0, 'L', $fillDescBloc); // Pas de HTML dans la chaine
+				$pdf->MultiCell($titleTextW, $h, $label, 0, 'L', $fillDescBloc); // Pas de HTML dans la chaine
 			} else {
-				$pdf->writeHTMLCell($titleBlockW, $h, $titleBlockX, $posy, $label, 0, 1, $fillDescBloc, true, 'J', true); // et maintenant avec du HTML
+				$pdf->writeHTMLCell($titleTextW, $h, $titleTextX, $posy, $label, 0, 1, $fillDescBloc, true, 'J', true); // et maintenant avec du HTML
 			}
 			$posYBeforeDesc = $pdf->GetY();
 			if ($description && !($hidedesc ?? 0)) {
 				$pdf->setColor('text', 0, 0, 0);
 				$pdf->SetFont('', '', $size_title - 1);
-				$pdf->writeHTMLCell($titleBlockW, $h, $titleBlockX, $posYBeforeDesc + 1, $description, 0, 1, $fillDescBloc, true, 'J', true);
+				$pdf->writeHTMLCell($titleTextW, $h, $titleTextX, $posYBeforeDesc + 1, $description, 0, 1, $fillDescBloc, true, 'J', true);
 			}
 			//background color
 			if ($fillBackground) {
 				$posYAfterDesc	= $pdf->GetY();
-				$cell_height	= $pdf->getStringHeight($titleBlockW, $label) + $backgroundCellHeightOffset;
+				// getStringHeight() doit utiliser la même largeur que celle utilisée pour le rendu réel du libellé
+				// ($titleTextW, potentiellement plus étroite que le bandeau de fond $titleBlockW) : sinon, en cas de
+				// retour à la ligne différent entre les deux largeurs, la hauteur du bandeau de fond serait sous-estimée.
+				$cell_height	= $pdf->getStringHeight($titleTextW, $label) + $backgroundCellHeightOffset;
 				$bgStartX		= $titleBlockX;
 				$bgW			= $titleBlockW;
 				// POUR LES PDF DE TYPE PDF_EVOLUTION (ceux avec les colonnes configurables)

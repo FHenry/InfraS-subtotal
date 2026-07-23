@@ -19,7 +19,7 @@ Informations module (issues du code et du changelog local) :
 - Licence : GPL v3+
 - Compatibilité Dolibarr : `21.0.0` à `24.x.x`
 - Compatibilité PHP : `7.4` à `8.4`
-- Dernière version locale : `21.7.0` (2026-07)
+- Dernière version locale : `21.7.1` (2026-07)
 - Schéma de numérotation : depuis `18.1.0`, le module aligne sa version majeure sur la version minimale de Dolibarr supportée (même convention que `infraspackplus`). Format : `<dolibarrMin>.<mineur>.<patch>`. Les versions antérieures (jusqu'à `3.30.1`) suivaient une numérotation indépendante.
 - Dépendance obligatoire : aucune
 - Conflit : module **Milestone/Jalon** (iNodbox) — les deux modules ne peuvent pas être activés simultanément
@@ -776,6 +776,10 @@ Les modèles PDF InfraSPlus (propal, facture, commande, etc.) intègrent nativem
 - page récap optionnelle (`INFRASTRUCTURE_*_ADD_RECAP`).
 
 InfraSPackPlus 18.16.0 ajoute une exclusion explicite des lignes infrastructure du bloc `INFRASPLUS_PDF_SHOW_DISCOUNT_OPT` pour éviter le double affichage du template d'édition.
+
+**Chevauchement du libellé de titre avec la colonne « Num » (fix 21.7.1 / InfraSPackPlus v21.5.8)** : quand InfraSPackPlus est actif avec sa colonne « Num » activée et positionnée en 1ère colonne (`INFRASPLUS_PDF_WITH_NUM_COLUMN` + `INFRASPLUS_PDF_NUMCOL_REF=1`, valeur par défaut), le libellé des titres de niveau 1 chevauchait visuellement le numéro de ligne. Deux causes cumulatives :
+1. **`pdfAddTitle()`** (ce module) : le texte du titre démarrait toujours à `$pdf->getMargins()['left']` (marge brute TCPDF) au lieu de `$posx` (position réelle de la colonne Désignation, calculée dynamiquement par InfraSPackPlus et reçue en paramètre, mais jamais utilisée). Corrigé : le texte démarre désormais à `$posx` ; le bandeau de fond reste volontairement pleine largeur marge à marge (comportement inchangé, distinction faite via 2 jeux de variables `$titleBlockX/$titleBlockW` pour le fond et `$titleTextX/$titleTextW` pour le texte — la hauteur du fond, `getStringHeight()`, doit utiliser la même largeur que le texte réellement rendu, sans quoi le retour à la ligne diffère et le bandeau serait sous-dimensionné).
+2. **Modèles PDF `pdf_InfraSPlus_*.modules.php`** (InfraSPackPlus) : le contenu de la colonne Num (`$i + 1`) n'était vidé que pour les titres/sous-totaux du module Sous-Total (ATM), jamais pour ceux du module infrastructure — une variable `$isInfraSLine` calculée dans 7 modèles mais jamais branchée dans cette condition (code mort), absente des 3 autres (`CBL`, `OM`, `OF`, ajoutée à cette occasion).
 
 ### Compatibilité avec InfraSDiscount (Discount exclusion)
 
