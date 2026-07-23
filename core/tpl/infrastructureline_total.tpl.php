@@ -135,11 +135,7 @@
 				if (!empty($l->array_options['options_infrastructure_ol'])) {
 					continue; // Ligne optionnelle déjà exclue de $total_line : exclure aussi son coût de revient pour garder une marge cohérente
 				}
-				$product	= new Product($db);
-				$res		= $product->fetch($l->fk_product);
-				if ($res) {
-					$totalCostPrice	+= $product->cost_price * $l->qty;
-				}
+				$totalCostPrice	+= $l->pa_ht * $l->qty;
 			}
 		}
 		$marge	= $total_line - $totalCostPrice;

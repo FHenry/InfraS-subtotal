@@ -794,7 +794,8 @@
 			$pdf->setCellPaddings($curentCellPaddinds['L'], $infrastructureDefaultTopPadding, $curentCellPaddinds['R'], $infrastructureDefaultBottomPadding);
 			$pdf->writeHTMLCell($w, $h, $posx, $posy, $label, 0, 1, false, true, 'R', true);
 			$pageAfter			= $pdf->getPage();
-			$cell_height		= $pdf->getStringHeight($w, $label);	//Print background
+			// getStringHeight() ne parse pas le HTML : un '<br />' littéral (ex. cumul des montants optionnels) n'est pas compté comme un retour à la ligne, contrairement à writeHTMLCell() ci-dessus. On le convertit en saut de ligne réel (\n, code 10) uniquement pour ce calcul de hauteur.
+			$cell_height		= $pdf->getStringHeight($w, preg_replace('/<br\s*\/?>/i', "\n", $label));	//Print background
 			// Étendre le bandeau du sous-total de la marge gauche à la marge droite du PDF (couvre toutes les colonnes : Réf → Total HT/TTC).
 			$pdfMarginsForBg	= $pdf->getMargins();
 			$totalBgStartX		= isset($pdfMarginsForBg['left']) ? $pdfMarginsForBg['left'] : $posx;
@@ -1069,6 +1070,34 @@
 		}
 
 		/**
+		* Applique le style et la couleur PDF dédiés aux lignes optionnelles (case « Opt », extrafield
+		* options_infrastructure_ol) sur la colonne courante, si INFRASTRUCTURE_PDF_OL_SHOW_DETAILS est actif.
+		* Appelée depuis chaque hook pdf_getline... et pdf_writelinedesc pour que le style/la couleur s'applique
+		* à toutes les colonnes de la ligne, pas seulement à sa description.
+		*
+		* @param	TCPDF|ModelePDFStatic	$pdf		Instance PDF courante
+		* @param	CommonObject			$object		Document en cours de génération
+		* @param	int						$i			Index de la ligne dans $object->lines
+		* @return	bool								true si le style/la couleur a été appliqué
+		*/
+		private function applyOlPdfStyle(&$pdf, &$object, $i)
+		{
+			if (empty($object->lines[$i]) || !getDolGlobalInt('INFRASTRUCTURE_PDF_OL_SHOW_DETAILS')) {
+				return false;
+			}
+			$line	= $object->lines[$i];
+			if (empty($line->array_options)) {
+				$line->fetch_optionals();
+			}
+			if (empty($line->array_options['options_infrastructure_ol']) || !is_object($pdf)) {
+				return false;
+			}
+			$pdf->SetFont('', getDolGlobalString('INFRASTRUCTURE_PDF_OL_STYLE'));
+			infrastructure_setPdfTextColor($pdf, 'INFRASTRUCTURE_PDF_OL_COLOR');
+			return true;
+		}
+
+		/**
 		* Before percent calculation
 		*
 		* @param	array			$parameters Parameters
@@ -1140,8 +1169,10 @@
 				}
 			} else {
 				if (!empty($line) && $line->special_code == 3 && getDolGlobalInt('INFRASTRUCTURE_PDF_OL_SHOW_DETAILS')) {
-					// Ligne optionnelle (special_code = 3) : on force l'affichage de la quantité, sans quoi
-					// pdf_getlineqty() (core, htdocs/core/lib/pdf.lib.php) la masquerait nativement.
+					// Ligne optionnelle (special_code = 3, aussi posé par la case « Opt » du module infrastructure) : on force
+					// l'affichage de la quantité, sans quoi pdf_getlineqty() (core, htdocs/core/lib/pdf.lib.php) la masquerait
+					// nativement. Ce retour anticipé court-circuitait l'application du style/couleur OL plus bas dans la méthode.
+					$this->applyOlPdfStyle($pdf, $object, $i);
 					$this->resprints = $line->qty;
 					return 1;
 				}
@@ -1170,6 +1201,7 @@
 			/** Attention, ici on peut ce retrouver avec un objet de type stdClass à cause de l'option cacher le détail des ensembles avec la notion d'option (@see beforePDFCreation()) et dû à l'appel de TInfrastructure::hasOlTitle() */
 			if (empty($object->lines[$i]->id)) return 0; // hideInnerLines => override $object->lines et Dolibarr ne nous permet pas de mettre à jour la variable qui conditionne la boucle sur les lignes (PR faite pour 6.0)
 			if (empty($object->lines[$i]->array_options)) $object->lines[$i]->fetch_optionals();
+			$this->applyOlPdfStyle($pdf, $object, $i);
 			return 0;
 		}
 
@@ -1258,6 +1290,7 @@
 					return $this->callHook($object, $hookmanager, $action, $params); // return 1 (qui est la valeur par défaut) OU -1 si erreur OU overrideReturn (contient -1 ou 0 ou 1)
 				}
 			}
+			$this->applyOlPdfStyle($pdf, $object, $i);
 			return 0;
 		}
 
@@ -1355,6 +1388,7 @@
 				$this->resprints	= !empty($total_to_print) ? $total_to_print : ' ';
 				return 1;
 			}
+			$this->applyOlPdfStyle($pdf, $object, $i);
 			return 0;
 		}
 
@@ -1368,7 +1402,7 @@
 		*/
 		public function pdf_getlineunit($parameters = [], &$object, &$action = '')
 		{
-			global $conf;
+			global $conf, $pdf;
 
 			$i		= intval($parameters['i']);
 			$line	= isset($object->lines[$i]) ? $object->lines[$i] : null;
@@ -1382,6 +1416,7 @@
 			} else {
 				$i = (int) $parameters;
 			}
+			$this->applyOlPdfStyle($pdf, $object, $i);
 			return 0;
 		}
 
@@ -1434,6 +1469,7 @@
 					return $this->callHook($object, $hookmanager, $action, $params); // return 1 (qui est la valeur par défaut) OU -1 si erreur OU overrideReturn (contient -1 ou 0 ou 1)
 				} //
 			}
+			$this->applyOlPdfStyle($pdf, $object, $i);
 			return 0;
 		}
 
@@ -1447,7 +1483,7 @@
 		*/
 		public function pdf_getlineremisepercent($parameters = [], &$object, &$action = '')
 		{
-			global $conf, $hideqtys, $hideprices, $hidedetails, $hookmanager, $langs;
+			global $conf, $hideqtys, $hideprices, $hidedetails, $hookmanager, $langs, $pdf;
 
 			$i		= intval($parameters['i']);
 			$line	= isset($object->lines[$i]) ? $object->lines[$i] : null;
@@ -1481,6 +1517,7 @@
 					return 1;
 				}
 			}
+			$this->applyOlPdfStyle($pdf, $object, $i);
 			return 0;
 		}
 
@@ -1494,7 +1531,7 @@
 		*/
 		public function pdf_getlineupwithtax($parameters = [], &$object, &$action = '')
 		{
-			global $conf, $hideqtys, $hideprices;
+			global $conf, $hideqtys, $hideprices, $pdf;
 
 			$i		= intval($parameters['i']);
 			$line	= isset($object->lines[$i]) ? $object->lines[$i] : null;
@@ -1513,11 +1550,13 @@
 				// hideprices : ne s'applique que sur les lignes de détail d'un bloc/sous-bloc qui possède un sous-total en aval (de même niveau ou de niveau supérieur).
 				$lineTitle = (!empty($object->lines[$i])) ? infrastructure_getCachedParentTitle($object, $object->lines[$i]->rang) : '';
 				if (empty($lineTitle) || !infrastructure_getCachedTitleHasTotal($object, $lineTitle, false)) {
+					$this->applyOlPdfStyle($pdf, $object, $i);
 					return 0; // pas dans un bloc avec sous-total en aval → ne rien faire
 				}
 				$this->resprints = ' ';
 				return 1;
 			}
+			$this->applyOlPdfStyle($pdf, $object, $i);
 			return 0;
 		}
 
@@ -1602,6 +1641,7 @@
 					return $this->callHook($object, $hookmanager, $action, $params); // return 1 (qui est la valeur par défaut) OU -1 si erreur OU overrideReturn (contient -1 ou 0 ou 1)
 				}
 			}
+			$this->applyOlPdfStyle($pdf, $object, $i);
 			return 0;
 		}
 
@@ -1860,7 +1900,7 @@
 						$TInfoOl = infrastructure_get_totalLineFromObject($object, $line, false, 1);
 						if (!empty($TInfoOl[8])) {
 							$outputlangs->load('infrastructure@infrastructure');
-							$label .= ' ('.$outputlangs->transnoentities('InfrastructureOptionalTotalInLabel', price($TInfoOl[8], 0, '', 1, 0, getDolGlobalInt('MAIN_MAX_DECIMALS_TOT'))).')';
+							$label .= '<br />('.$outputlangs->transnoentities('InfrastructureOptionalTotalInLabel', price($TInfoOl[8], 0, '', 1, 0, getDolGlobalInt('MAIN_MAX_DECIMALS_TOT'))).')';
 						}
 					}
 					// FIX DA024845 : Le module sous total amène des erreurs dans les sauts de page lorsque l'on arrive tout juste en bas de page.
@@ -1901,6 +1941,18 @@
 					return 1;
 				}
 				return 0;
+			} elseif ($this->applyOlPdfStyle($pdf, $object, $parameters['i'])) {
+				// Ligne optionnelle (case « Opt », extrafield options_infrastructure_ol) : rendu standard de la description, avec style/couleur dédiés, et ajout optionnel du Total HT juste en dessous.
+				$optionalLine			= $object->lines[$parameters['i']];
+				$labelproductservice	= pdf_getlinedesc($object, $parameters['i'], $outputlangs, $parameters['hideref'], $parameters['hidedesc'], $parameters['issupplierline']);
+				$labelproductservice	= preg_replace('/(<img[^>]*src=")([^"]*)(&amp;)([^"]*")/', '\1\2&\4', $labelproductservice, -1, $nbrep);
+				if (getDolGlobalInt('INFRASTRUCTURE_PDF_OL_SHOW_TOTAL_HT_AFTER_DESC')) {
+					$labelproductservice	.= '<br />'.$outputlangs->transnoentities('TotalHT').' : '.price($optionalLine->total_ht, 0, '', 1, 0, getDolGlobalInt('MAIN_MAX_DECIMALS_TOT'));
+				}
+				$pdf->writeHTMLCell($parameters['w'], $parameters['h'], $parameters['posx'], $posy, $outputlangs->convToOutputCharset($labelproductservice), 0, 1, false, true, 'J', true);
+				$pdf->SetFont('', '');
+				$pdf->setColor('text', 0, 0, 0);
+				return 1;
 			} elseif (empty($object->lines[$parameters['i']])) {
 				$this->resprints = -1;
 			}

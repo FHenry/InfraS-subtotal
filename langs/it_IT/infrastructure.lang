@@ -182,19 +182,25 @@ InfrastructureShowTvaOnTotalLines      = Visualizzare il tasso IVA con i subtota
 InfrastructureLimitTvaOnCondensedBlocs = Limitare la visualizzazione del tasso IVA ai blocchi stampati in forma condensata o elenco.
 
 ### "Optional lines/blocks" (OL) management ###
-InfrastructureManageOptionalLines  = Gestione delle righe opzionali
-InfrastructureUpdateNcSuccess      = Totale aggiornato
-InfrastructureUpdateNcError        = Errore: totale non aggiornato
-InfrastructureOlTitle              = Opt
-InfrastructureOlTitleHelp          = Gestione delle righe / blocchi opzionali
-InfrastructureManageOL             = Consentire di contrassegnare righe o blocchi come «Opzionali»: i loro importi restano visualizzati ma sono esclusi dai subtotali padre e dal totale generale
-InfrastructureOlReducePa           = La gestione delle righe / blocchi opzionali svuota anche il prezzo di costo
-InfrastructureOlReducePaInfo       = Attenzione, se rendete di nuovo la riga inclusa, dovrete reinserire il prezzo di costo
-InfrastructureOlShowDetails        = Mostrare il cumulo degli importi opzionali sul subtotale e la quantità delle righe opzionali
-InfrastructureOlShowDetailsInfo    = Se disattivato, il subtotale non mostra il cumulo «opzioni non incluse» e la quantità delle righe opzionali resta nascosta, come le altre righe «Opzionale» native di Dolibarr
-InfrastructurePdfOlShowDetails     = Mostrare il cumulo degli importi opzionali sul subtotale e la quantità delle righe opzionali nei PDF
-InfrastructurePdfOlShowDetailsInfo = Se disattivato, il PDF non mostra il cumulo «opzioni non incluse» nell'etichetta del subtotale e la quantità delle righe opzionali resta nascosta, come le altre righe «Opzionale» native di Dolibarr
-Infrastructure_update_ol_success   = Righe opzionali reimpostate
+InfrastructureManageOptionalLines           = Gestione delle righe opzionali
+InfrastructureUpdateNcSuccess               = Totale aggiornato
+InfrastructureUpdateNcError                 = Errore: totale non aggiornato
+InfrastructureOlTitle                       = Opt
+InfrastructureOlTitleHelp                   = Gestione delle righe / blocchi opzionali
+InfrastructureManageOL                      = Consentire di contrassegnare righe o blocchi come «Opzionali»: i loro importi restano visualizzati ma sono esclusi dai subtotali padre e dal totale generale
+InfrastructureOlReducePa                    = La gestione delle righe / blocchi opzionali svuota anche il prezzo di costo
+InfrastructureOlReducePaInfo                = Attenzione, se rendete di nuovo la riga inclusa, dovrete reinserire il prezzo di costo
+InfrastructureOlShowDetails                 = Mostrare il cumulo degli importi opzionali sul subtotale e la quantità delle righe opzionali
+InfrastructureOlShowDetailsInfo             = Se disattivato, il subtotale non mostra il cumulo «opzioni non incluse» e la quantità delle righe opzionali resta nascosta, come le altre righe «Opzionale» native di Dolibarr
+InfrastructurePdfOlShowDetails              = Mostrare il cumulo degli importi opzionali sul subtotale e la quantità delle righe opzionali nei PDF
+InfrastructurePdfOlShowDetailsInfo          = Se disattivato, il PDF non mostra il cumulo «opzioni non incluse» nell'etichetta del subtotale e la quantità delle righe opzionali resta nascosta, come le altre righe «Opzionale» native di Dolibarr. Se attivato, questo cumulo viene visualizzato su una nuova riga, sotto l'etichetta del subtotale
+InfrastructurePdfOlShowTotalHtAfterDesc     = Mostrare il totale imponibile delle righe opzionali dopo la sua descrizione
+InfrastructurePdfOlShowTotalHtAfterDescInfo = Attivo solo se «Mostrare il cumulo degli importi opzionali sul subtotale e la quantità delle righe opzionali nei PDF» è attivo. Aggiunge il Totale imponibile di ogni riga opzionale su una nuova riga, subito dopo la sua descrizione
+InfrastructurePdfOlStyle                    = Stile delle righe opzionali nei PDF (B = grassetto, U = sottolineato, I = corsivo)
+InfrastructurePdfOlStyleInfo                = Stile applicato alle righe opzionali (casella «Opt») nel PDF. Se lasciato vuoto, non viene applicato alcuno stile (grassetto / sottolineato / corsivo) — il font PDF viene reso in regular.
+InfrastructurePdfOlColor                    = Colore del testo utilizzato per le righe opzionali nei PDF
+InfrastructurePdfOlColorInfo                = Se impostato, sostituisce il colore del testo predefinito del documento per le righe opzionali.
+Infrastructure_update_ol_success            = Righe opzionali reimpostate
 
 ### Summary ###
 InfrastructureRecap                            = Riepilogo

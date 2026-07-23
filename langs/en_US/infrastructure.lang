@@ -182,19 +182,25 @@ InfrastructureShowTvaOnTotalLines      = Show VAT rate with subtotals if all row
 InfrastructureLimitTvaOnCondensedBlocs = Limit the display of the VAT rate to blocks printed in condensed or list format.
 
 ### "Optional lines/blocks" (OL) management ###
-InfrastructureManageOptionalLines  = Management of optional lines
-InfrastructureUpdateNcSuccess      = Total updated
-InfrastructureUpdateNcError        = Error: total not updated
-InfrastructureOlTitle              = Opt
-InfrastructureOlTitleHelp          = Management of optional lines/blocks
-InfrastructureManageOL             = Allow marking lines or blocks as "Optional": their amounts remain displayed but are excluded from parent subtotals and grand total
-InfrastructureOlReducePa           = Managing optional lines/blocks also empties the cost price
-InfrastructureOlReducePaInfo       = Warning: if you set the line back to included, you will need to re-enter the cost price
-InfrastructureOlShowDetails        = Show the cumulated optional amount on the subtotal and the quantity of optional lines
-InfrastructureOlShowDetailsInfo    = If disabled, the subtotal does not show the "options not included" total and optional lines keep their quantity hidden, like other native Dolibarr "Option" lines
-InfrastructurePdfOlShowDetails     = Show the cumulated optional amount on the subtotal and the quantity of optional lines in PDF documents
-InfrastructurePdfOlShowDetailsInfo = If disabled, the PDF does not show the "options not included" total in the subtotal label and optional lines keep their quantity hidden, like other native Dolibarr "Option" lines
-Infrastructure_update_ol_success   = Optional lines reset
+InfrastructureManageOptionalLines           = Management of optional lines
+InfrastructureUpdateNcSuccess               = Total updated
+InfrastructureUpdateNcError                 = Error: total not updated
+InfrastructureOlTitle                       = Opt
+InfrastructureOlTitleHelp                   = Management of optional lines/blocks
+InfrastructureManageOL                      = Allow marking lines or blocks as "Optional": their amounts remain displayed but are excluded from parent subtotals and grand total
+InfrastructureOlReducePa                    = Managing optional lines/blocks also empties the cost price
+InfrastructureOlReducePaInfo                = Warning: if you set the line back to included, you will need to re-enter the cost price
+InfrastructureOlShowDetails                 = Show the cumulated optional amount on the subtotal and the quantity of optional lines
+InfrastructureOlShowDetailsInfo             = If disabled, the subtotal does not show the "options not included" total and optional lines keep their quantity hidden, like other native Dolibarr "Option" lines
+InfrastructurePdfOlShowDetails              = Show the cumulated optional amount on the subtotal and the quantity of optional lines in PDF documents
+InfrastructurePdfOlShowDetailsInfo          = If disabled, the PDF does not show the "options not included" total in the subtotal label and optional lines keep their quantity hidden, like other native Dolibarr "Option" lines. If enabled, this total is displayed on a new line, below the subtotal label
+InfrastructurePdfOlShowTotalHtAfterDesc     = Show the total excl. tax of optional lines after their description
+InfrastructurePdfOlShowTotalHtAfterDescInfo = Only active when "Show the cumulated optional amount on the subtotal and the quantity of optional lines in PDF documents" is enabled. Adds each optional line's total excl. tax on a new line, right after its description
+InfrastructurePdfOlStyle                    = Optional lines style in PDF output (B = bold, U = underline, I = italic)
+InfrastructurePdfOlStyleInfo                = Style applied to optional lines ("Opt" checkbox) in PDF. If left empty, no style (bold / underline / italic) is applied — the PDF font is rendered in regular.
+InfrastructurePdfOlColor                    = Text color used for optional lines in PDF
+InfrastructurePdfOlColorInfo                = If set, replaces the document's default text color for optional lines.
+Infrastructure_update_ol_success            = Optional lines reset
 
 ### Summary ###
 InfrastructureRecap                            = Summary

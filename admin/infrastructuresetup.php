@@ -91,7 +91,8 @@
 													'INFRASTRUCTURE_PDF_TITLE_COLOR',					'INFRASTRUCTURE_PDF_TOTAL_COLOR',
 													'INFRASTRUCTURE_PDF_TITLE_AND_TOTAL_BRIGHTNESS_PERCENTAGE',
 													'INFRASTRUCTURE_PDF_TITLE_BACKGROUND_CELL_HEIGHT_OFFSET','INFRASTRUCTURE_PDF_TITLE_BACKGROUND_CELL_POS_Y_OFFSET',
-													'INFRASTRUCTURE_PDF_TOTAL_BACKGROUND_CELL_HEIGHT_OFFSET','INFRASTRUCTURE_PDF_TOTAL_BACKGROUND_CELL_POS_Y_OFFSET'
+													'INFRASTRUCTURE_PDF_TOTAL_BACKGROUND_CELL_HEIGHT_OFFSET','INFRASTRUCTURE_PDF_TOTAL_BACKGROUND_CELL_POS_Y_OFFSET',
+													'INFRASTRUCTURE_PDF_OL_STYLE',						'INFRASTRUCTURE_PDF_OL_COLOR'
 													]
 									];
 		$confkey			= $reg[1];
@@ -135,6 +136,7 @@
 	$selected			= explode(',', getDolGlobalString('INFRASTRUCTURE_DEFAULT_DISPLAY_QTY_FOR_TOTAL_ON_ELEMENTS'));
 	$selectedPdf		= explode(',', getDolGlobalString('INFRASTRUCTURE_DEFAULT_DISPLAY_QTY_FOR_TOTAL_ON_ELEMENTS_PDF'));
 	$titleWithTotal		= getDolGlobalInt('INFRASTRUCTURE_PDF_TITLE_WITH_TOTAL');
+	$pdfOlShowDetails	= getDolGlobalInt('INFRASTRUCTURE_PDF_OL_SHOW_DETAILS');
 	if (getDolGlobalInt('INFRASTRUCTURE_MANAGE_OL') > 0) {
 		infrastructure_createOlExtrafields();
 	}
@@ -363,8 +365,16 @@
 			$num	= infrastructure_print_input('INFRASTRUCTURE_PDF_TOTAL_COLOR', 'color', $langs->trans('InfrastructurePdfTotalColor'), 'InfrastructurePdfTotalColorInfo', [], 2, 1, '', $num);
 			$num	= infrastructure_print_input('INFRASTRUCTURE_CONCAT_TITLE_LABEL_IN_TOTAL_LABEL', 'on_off', $langs->trans('InfrastructureConcatTitleLabelInTotalLabel'), '', [], 2, 1, '', $num);
 			$num	= infrastructure_print_input('INFRASTRUCTURE_PDF_OL_SHOW_DETAILS', 'on_off', $langs->trans('InfrastructurePdfOlShowDetails'), 'InfrastructurePdfOlShowDetailsInfo', [], 2, 1, '', $num);
+			if (!empty($pdfOlShowDetails)) {
+				$num	= infrastructure_print_input('INFRASTRUCTURE_PDF_OL_SHOW_TOTAL_HT_AFTER_DESC', 'on_off', $langs->trans('InfrastructurePdfOlShowTotalHtAfterDesc'), 'InfrastructurePdfOlShowTotalHtAfterDescInfo', [], 2, 1, '', $num);
+				$metas	= ['class' => 'flat infrastructurewidth270 infrastructurefontsizeinherit'];
+				$num	= infrastructure_print_input('INFRASTRUCTURE_PDF_OL_STYLE', 'input', $langs->trans('InfrastructurePdfOlStyle'), 'InfrastructurePdfOlStyleInfo', $metas, 1, 2, '', $num);
+				$num	= infrastructure_print_input('INFRASTRUCTURE_PDF_OL_COLOR', 'color', $langs->trans('InfrastructurePdfOlColor'), 'InfrastructurePdfOlColorInfo', [], 2, 1, '', $num);
+			} else {
+				$num	+= 3;
+			}
 		} else {
-			$num	+= 4;
+			$num	+= 7;
 		}
 		// num = 13
 		$metas	= ['class' => 'right flat infrastructurewidth250 infrastructurefontsizeinherit'];
